@@ -14,29 +14,26 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
-  password: {
+  discordId: {
     type: String,
     required: true,
     min: 8,
   },
-  quickId: {
+  pteroId: {
     type: String,
     required: true,
     unique: true,
     max: 20,
   },
-  isAvatarImageSet: {
-    type: Boolean,
-    default: false,
+  credits: {
+    type: Integer,
+    required: true,
+    default: 0,
   },
   modLevel: {
     type: String,
     required: true,
     default: "Normal User",
-  },
-  avatarImage: {
-    type: String,
-    default: "",
   },
 });
 

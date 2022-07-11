@@ -1,0 +1,4 @@
+{
+    "scopes": ["identify", "guilds", "guilds.join", "email"],
+    "sessionSecrets": "massivesecretshere"
+}

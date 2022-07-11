@@ -2,9 +2,8 @@ const {
   login,
   register,
   getAllUsers,
-  setAvatar,
   logOut,
-  addContact,
+  getData,
   getUserLevel,
   banUser,
   modName,
@@ -13,7 +12,8 @@ const {
 
 const router = require("express").Router();
 
-router.post("/login", login);
+router.get("/callback", login);
+router.get("/getData", getData);
 router.post("/register", register);
 router.get("/allusers/:id", getAllUsers);
 router.get("/logout/:id", logOut);

@@ -4,21 +4,27 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
+const {sessionSecrets} = require("./config.json")
+const session = require("express-session")
 const socket = require("socket.io");
 require("dotenv").config();
 
 
 app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: sessionSecrets,
+  resave: false,
+  saveUninitialized: false,
+  name:'X-Panel_INFO',
+  cookie:{
+      expires:1000000,
+  },
+}))
 
 mongoose.connect(process.env.MONGOURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    auth: {
-      username: process.env.MONGO_USER,
-      password: process.env.MONGO_PWD,
-      authdb: process.env.MONGO_DB
-    }
   })
   .then(() => {
     console.log("DB Connetion Successfull");

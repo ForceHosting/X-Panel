@@ -6,6 +6,8 @@ const uid = new ShortUniqueId({ length: 10 });
 const express = require("express");
 const app = express();
 const socket = require("socket.io");
+const { scopes } = require("../config.json");
+const fetch = require('node-fetch')
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT} (User Controller)`)
 );
@@ -16,14 +18,27 @@ const io = socket(server, {
   },
 });
 
+module.exports.getData = async (req, res, next) => {
+    if(!req.session.userdata){
+        res.json({
+        login : false,
+      })
+    }
+    else{
+      res.json({
+        login : true,
+        username : username,
+      })
+    }
+  };
+
 module.exports.login = async (req, res, next) => {
-  try {
     const accessCode = req.query.code
     if(!accessCode){
       res.send("No access code returned from discord")
     }else{
       // making form data 
-      const data = new formData();
+      const data = new URLSearchParams();
       data.append("client_id", process.env.AUTH_ID)
       data.append("client_secret", process.env.AUTH_SECRET)
       data.append("grant_type", "authorization_code")
@@ -59,13 +74,24 @@ module.exports.login = async (req, res, next) => {
         .then(res2 => res2.json())
         .then(gResponse => {
           req.session.guilds = gResponse;
-          res.redirect(process.env.AUTH_REDIRECT_PROXY)
+
+          const usernameCheck = await User.findOne({ username });
+          if (usernameCheck){
+            res.redirect(process.env.AUTH_REDIRECT_PROXY)
+          }else{
+            const user = await User.create({
+              username: username,
+              email: email,
+              discordId: id,
+              pteroId: 1,
+              credits: 0,
+              modLevel: "Customer",
+            });
+            res.redirect(process.env.AUTH_REDIRECT_PROXY)
+          }
           });
       })
     }
-  } catch (ex) {
-    next(ex);
-  }
 };
 
 module.exports.getUserLevel = async (req, res, next) => {
