@@ -8,15 +8,19 @@ const {sessionSecrets} = require("./config.json")
 const session = require("express-session")
 const socket = require("socket.io");
 require("dotenv").config();
+var cookieParser = require('cookie-parser')
 
+var MemoryStore = session.MemoryStore
 
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(session({
   secret: sessionSecrets,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   name:'X-Panel_INFO',
+  store: new MemoryStore(),
   cookie:{
       expires:1000000,
   },

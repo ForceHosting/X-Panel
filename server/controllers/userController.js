@@ -8,91 +8,49 @@ const app = express();
 const socket = require("socket.io");
 const { scopes } = require("../config.json");
 const fetch = require('node-fetch')
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Server started on ${process.env.PORT} (User Controller)`)
-);
-const io = socket(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
-});
+const Client = require('discord-oauth2-api');
+
 
 module.exports.getData = async (req, res, next) => {
-    if(!req.session.userdata){
-        res.json({
-        login : false,
-      })
+  console.log(req.session.user)
+    if(!req.session.user){
+      return res.json({ status: false });
     }
     else{
-      res.json({
-        login : true,
-        username : username,
-      })
+      const userData = req.session.user
+      return res.json({ status: true, user: userData });
     }
   };
 
-module.exports.login = async (req, res, next) => {
-    const accessCode = req.query.code
-    if(!accessCode){
-      res.send("No access code returned from discord")
-    }else{
-      // making form data 
-      const data = new URLSearchParams();
-      data.append("client_id", process.env.AUTH_ID)
-      data.append("client_secret", process.env.AUTH_SECRET)
-      data.append("grant_type", "authorization_code")
-      data.append("redirect_uri", process.env.REDIRECT_URI)
-      data.append("scopes",scopes.join(" "))
-      data.append("code",accessCode)
-      
-      //fetching data
-      fetch("https://discordapp.com/api/oauth2/token",{
-        method: 'POST',
-        body: data
-      })
-      .then(res =>res.json())
-      .then(response =>{
-        fetch("https://discordapp.com/api/users/@me",{
-          method: 'GET',
-          headers:{
-            authorization: `${response.token_type} ${response.access_token}`
-          }
-        })
-        .then(res2 => res2.json())
-        .then(userResponse =>{
-          username = `${userResponse.username}#${userResponse.discriminator}`
-          req.session.userdata = userResponse
-          //userhit(username)
-        })
-        fetch('https://discordapp.com/api/users/@me/guilds', {
-          method: 'GET',
-          headers: {
-            authorization: `${response.token_type} ${response.access_token}`
-          },
-        })
-        .then(res2 => res2.json())
-        .then(gResponse => {
-          req.session.guilds = gResponse;
+  module.exports.login = async (req, res, next) => {
+    try {
+      const client = new Client({
+        clientID: '995725017985851462',
+        clientSecret: 'ohxgr0MYx-6r28edKrxclgcmeMIgatpd',
+        scopes: ['identify', 'guilds'],
+        redirectURI: 'http://localhost:5000/api/auth/callback'
+    });
+    let userToken = client.getAccessToken(req.query.code).then(token => 
+      client.getUser(token.accessToken).then(user =>{ 
+        
+          const newUser = User.create({
+            username: user.username,
+            email: user.email,
+            discordId: user.id,
+            pteroId: 'ptero_'+Math.random(),
+            credits: '0',
+            modLevel: 'Customer'
+          })
+          req.session.user = user;
+          console.log(req.session.user)
+          res.redirect(process.env.AUTH_REDIRECT_PROXY)
+      }));
+    
 
-          const usernameCheck = await User.findOne({ username });
-          if (usernameCheck){
-            res.redirect(process.env.AUTH_REDIRECT_PROXY)
-          }else{
-            const user = await User.create({
-              username: username,
-              email: email,
-              discordId: id,
-              pteroId: 1,
-              credits: 0,
-              modLevel: "Customer",
-            });
-            res.redirect(process.env.AUTH_REDIRECT_PROXY)
-          }
-          });
-      })
+    } catch (ex) {
+      next(ex);
     }
-};
+  };
 
 module.exports.getUserLevel = async (req, res, next) => {
   try{
