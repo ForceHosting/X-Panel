@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+  uid: {
+    type: String,
+    required: true,
+    unique: true,
+    max: 50,
+  },
   username: {
     type: String,
     required: true,
@@ -14,7 +20,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
-  discordId: {
+  password: {
     type: String,
     required: true,
     min: 8,
@@ -25,15 +31,39 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 20,
   },
+  pteroPwd: {
+    type: String,
+    required: true,
+  },
   credits: {
     type: String,
     required: true,
     default: 0,
   },
-  modLevel: {
+  availMem: {
+    type: Number,
+    required: true,
+    default: 1024
+  },
+  availDisk: {
+    type: Number,
+    required: true,
+    default: 10240
+  },
+  availCPU: {
+    type: Number,
+    required: true,
+    default: 50
+  },
+  availSlots: {
+    type: Number,
+    required: true,
+    default: 2
+  },
+  role: {
     type: String,
     required: true,
-    default: "Normal User",
+    default: "Customer",
   },
 });
 

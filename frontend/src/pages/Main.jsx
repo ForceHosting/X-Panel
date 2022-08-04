@@ -1,137 +1,87 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Stats from 'components/Stats';
 import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
+import { siteName } from "config";
 
-export default function Main() {
+export default function Main(currentUser, socket) {
 
-    const [userInfo, setInfo] = useState(undefined);
+    useEffect(()=>{
+        document.title = siteName+ " - Home"
+    })
 
     const navigate = useNavigate();
+    const [username, setUsername] = useState(undefined)
+
     useEffect(() => {
         (async function() {
           
       if (!localStorage.getItem(process.env.USER_KEY)) {
         navigate("/login");
       } else {
-        setInfo(
-          await JSON.parse(
-            localStorage.getItem(process.env.USER_KEY)
-          )
-        );
+        const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+        setUsername(data.username)
       }
     })();
     }, [navigate]);
 
+
     return (
         <>
-        <Nav/>
-        <main class="container mx-w-6xl mx-auto py-4">
-            
-        <div class="flex flex-col space-y-8">
-            <Stats />
-            <div class="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
-                <div class="col-start-1 col-end-5">
-                    <h2 class="text-xs md:text-sm text-gray-300 font-bold tracking-wide">Summary Transactions</h2>
-                </div>
-                <div class="col-span-2 bg-gray-600 p-6 rounded-xl border border-gray-600 flex flex-col space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex justify-between items-center">
-                        <div class="p-4 cursor-pointer border">
-                            <span class="text-xs text-gray-300 font-semibold">Daily</span>
-                            <h2 class="text-gray-100 font-bold tracking-wider">$ 27.80</h2>
-                        </div>
-                        <div class="p-4 cursor-pointer border">
-                            <span class="text-xs text-gray-300 font-semibold">Weekly</span>
-                            <h2 class="text-gray-100 font-bold tracking-wider">$ 192.92</h2>
-                        </div>
-                        <div class="p-4 cursor-pointer border">
-                            <span class="text-xs text-gray-300 font-semibold">Monthly</span>
-                            <h2 class="text-gray-100 font-bold tracking-wider">$ 501.10</h2>
-                        </div>
-                    </div>
-                    <canvas id="myChart"></canvas>
-                </div>
-                <div class="col-span-3 bg-gray-600 p-6 rounded-xl border border-gray-600 flex flex-col space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-sm text-gray-300 font-bold tracking-wide">Latest Transactions</h2>
-                        <a href="#"
-                            class="px-4 py-2 text-xs bg-blue-100 text-blue-500 rounded uppercase tracking-wider font-semibold hover:bg-blue-300">More</a>
-                    </div>
-                    <ul class="divide-y-2 divide-gray-100 overflow-x-auto w-full">
-                    <li class="py-3 flex justify-between text-sm text-gray-500 font-semibold">
-                            <p class="px-4 text-gray-300 font-semibold">Today</p>
-                            <p class="px-4 text-gray-100">McDonald</p>
-                            <p class="px-4 text-gray-100 tracking-wider">Cash</p>
-                            <p class="px-4 text-blue-400">Food</p>
-                            <p class="md:text-base text-gray-100 flex items-center gap-2">
-                                16.90
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </p>
-                        </li>
-                        <li class="py-3 flex justify-between text-sm text-gray-500 font-semibold">
-                            <p class="px-4 text-gray-300 font-semibold">Today</p>
-                            <p class="px-4 text-gray-100">McDonald</p>
-                            <p class="px-4 text-gray-100 tracking-wider">Cash</p>
-                            <p class="px-4 text-blue-400">Food</p>
-                            <p class="md:text-base text-gray-100 flex items-center gap-2">
-                                16.90
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </p>
-                        </li>
-                        <li class="py-3 flex justify-between text-sm text-gray-500 font-semibold">
-                            <p class="px-4 text-gray-300 font-semibold">Today</p>
-                            <p class="px-4 text-gray-100">McDonald</p>
-                            <p class="px-4 text-gray-100 tracking-wider">Cash</p>
-                            <p class="px-4 text-blue-400">Food</p>
-                            <p class="md:text-base text-gray-100 flex items-center gap-2">
-                                16.90
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </p>
-                        </li>
-                        <li class="py-3 flex justify-between text-sm text-gray-500 font-semibold">
-                            <p class="px-4 text-gray-300 font-semibold">Today</p>
-                            <p class="px-4 text-gray-100">McDonald</p>
-                            <p class="px-4 text-gray-100 tracking-wider">Cash</p>
-                            <p class="px-4 text-blue-400">Food</p>
-                            <p class="md:text-base text-gray-100 flex items-center gap-2">
-                                16.90
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </p>
-                        </li>
-                        <li class="py-3 flex justify-between text-sm text-gray-500 font-semibold">
-                            <p class="px-4 text-gray-300 font-semibold">Today</p>
-                            <p class="px-4 text-gray-100">McDonald</p>
-                            <p class="px-4 text-gray-100 tracking-wider">Cash</p>
-                            <p class="px-4 text-blue-400">Food</p>
-                            <p class="md:text-base text-gray-100 flex items-center gap-2">
-                                16.90
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
+        <Nav username={username} />
+        <main className="container mx-w-6xl mx-auto py-4">
+        <div class="w-full xl:w-full mb-12 xl:mb-0 px-4 mx-auto mt-24">
+        <div class="relative flex flex-col min-w-0 break-words bg-gray-600 w-full mb-6 shadow-lg rounded ">
+          <div class="rounded-t mb-0 px-4 py-3 border-0">
+            <div class="flex flex-wrap items-center">
+              <div class="relative w-full px-1 max-w-full flex-grow flex-1">
+                <h3 class="font-semibold text-base  text-white">Your Servers</h3>
+              </div>
+              
             </div>
+          </div>
+
+          <div class="block w-full overflow-x-auto">
+            <table class="items-center bg-transparent w-full border-collapse ">
+              <thead>
+                <tr>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Id
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Server Name
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Server Memory
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Server CPU
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Server Disk
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Next Renew
+                  </th>
+                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Actions </th>
+                </tr>
+              </thead>
+
+              <tbody>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              </tbody>
+
+            </table>
+          </div>
         </div>
+      </div>
     </main>
     </>
     )

@@ -1,14 +1,9 @@
 const User = require("../models/userModel");
-const Contact = require("../models/contacts");
+const Servers = require("../models/servers");
 const bcrypt = require("bcrypt");
 const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 10 });
-const express = require("express");
-const app = express();
-const socket = require("socket.io");
-const { scopes } = require("../config.json");
-const fetch = require('node-fetch')
-const Client = require('discord-oauth2-api');
+const { makeid } = require('../functions')
 
 
 module.exports.getData = async (req, res, next) => {
@@ -24,29 +19,15 @@ module.exports.getData = async (req, res, next) => {
 
   module.exports.login = async (req, res, next) => {
     try {
-      const client = new Client({
-        clientID: '995725017985851462',
-        clientSecret: 'ohxgr0MYx-6r28edKrxclgcmeMIgatpd',
-        scopes: ['identify', 'guilds'],
-        redirectURI: 'http://localhost:5000/api/auth/callback'
-    });
-    let userToken = client.getAccessToken(req.query.code).then(token => 
-      client.getUser(token.accessToken).then(user =>{ 
-        
-          const newUser = User.create({
-            username: user.username,
-            email: user.email,
-            discordId: user.id,
-            pteroId: 'ptero_'+Math.random(),
-            credits: '0',
-            modLevel: 'Customer'
-          })
-          req.session.user = user;
-          console.log(req.session.user)
-          res.redirect(process.env.AUTH_REDIRECT_PROXY)
-      }));
-    
-
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
+      if (!user)
+        return res.json({ msg: "Incorrect Username or Password", status: false });
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid)
+        return res.json({ msg: "Incorrect Username or Password", status: false });
+      delete user.password;
+      return res.json({ status: true, user });
     } catch (ex) {
       next(ex);
     }
@@ -64,23 +45,6 @@ module.exports.getUserLevel = async (req, res, next) => {
   }catch(ex) {
     next(ex);
   }
-}
-
-module.exports.addContact = async (req, res, next) => {
-  try{
-    const { fromId, id } = req.body;
-    const findUserName = await User.find({ id }).select([
-      "username",
-    ]);
-    const contact = await Contact.create({
-      userFrom: fromId,
-      userTo: id,
-      userName: findUserName,
-    });
-    return res.json({ status: true, contact });
-  }catch(ex){
-    next(ex);
-  }
 };
 
 module.exports.register = async (req, res, next) => {
@@ -96,12 +60,18 @@ module.exports.register = async (req, res, next) => {
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
+    const pteroUID = makeid(10);
+    var rawPteroPass = Buffer.from(makeid(15));
+    var encryptedPteroPass = rawPteroPass.toString('base64');
     const user = await User.create({
-      email,
-      username,
+      uid: userUid,
+      username: username,
+      email: email,
+      pteroId: pteroUID,
+      pteroPwd: encryptedPteroPass,
+      credits: 0,
       password: hashedPassword,
-      quickId: userUid,
-      modLevel: "Normal User",
+      role: "Customer",
     });
     delete user.password;
     return res.json({ status: true, user });

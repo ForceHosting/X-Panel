@@ -1,6 +1,9 @@
-import {siteName } from '../config';
-
+import {siteName, siteLogo } from '../config';
+import React, { useEffect } from "react";
 function Login() {
+  useEffect(()=>{
+    document.title = siteName+ " - Login"
+})
   return (
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div class="py-12">
@@ -11,7 +14,7 @@ function Login() {
                 <div>
                   <img
                     class="mx-auto h-12 w-auto rounded-xl"
-                    src="../assets/force.png"
+                    src={siteLogo}
                     alt="Workflow"
                   />
                   <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
