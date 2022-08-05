@@ -8,4 +8,3 @@ module.exports.makeid = function makeid(length) {
    }
    return result;
 };
-
