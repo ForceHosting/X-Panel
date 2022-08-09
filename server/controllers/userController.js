@@ -7,15 +7,16 @@ const { makeid } = require('../functions')
 
 
 module.exports.getData = async (req, res, next) => {
-  console.log(req.session.user)
-    if(!req.session.user){
-      return res.json({ status: false });
-    }
-    else{
-      const userData = req.session.user
-      return res.json({ status: true, user: userData });
-    }
-  };
+  try {
+    const userId = req.params.uid;
+    const userData = await User.findOne({ userId })
+    console.log(userData)
+    delete userData.password;
+    return res.json({ userData })
+  } catch(ex){
+    next(ex)
+  }
+};
 
   module.exports.login = async (req, res, next) => {
     try {

@@ -3,6 +3,8 @@ import Stats from 'components/Stats';
 import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
+import axios from "axios";
+import { getUserDataRoute } from "utils/APIRoutes";
 
 export default function Main(currentUser, socket) {
 
@@ -12,6 +14,10 @@ export default function Main(currentUser, socket) {
 
     const navigate = useNavigate();
     const [username, setUsername] = useState(undefined)
+    const [userMem, setMemory] = useState(undefined)
+    const [userCPU, setCPU] = useState(undefined)
+    const [userDisk, setDisk] = useState(undefined)
+    const [userSlots, setSlots] = useState(undefined)
 
     useEffect(() => {
         (async function() {
@@ -20,15 +26,20 @@ export default function Main(currentUser, socket) {
         navigate("/login");
       } else {
         const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+        //console.log(data)
         setUsername(data.username)
+        const userStats = await axios.get(`${getUserDataRoute}/${data.uid}`);
+        setMemory(userStats.data.userData.availMem)
+        setCPU(userStats.data.userData.availCPU)
+        setDisk(userStats.data.userData.availDisk)
+        setSlots(userStats.data.userData.availSlots)
       }
     })();
     }, [navigate]);
-
-
     return (
         <>
         <Nav username={username} />
+        <Stats memory={userMem} cpu={userCPU} disk={userDisk} slots={userSlots} />
         <main className="container mx-w-6xl mx-auto py-4">
         <div class="w-full xl:w-full mb-12 xl:mb-0 px-4 mx-auto mt-24">
         <div class="relative flex flex-col min-w-0 break-words bg-gray-600 w-full mb-6 shadow-lg rounded ">

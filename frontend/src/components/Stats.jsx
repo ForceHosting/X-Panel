@@ -1,7 +1,7 @@
-import { FaCoins } from "react-icons/fa";
+import { FaMicrochip, FaMemory, FaHdd, FaServer } from "react-icons/fa";
 
 
-export default function Stats() {
+export default function Stats({ memory, cpu, disk, slots }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 xl:p-0 gap-4 xl:gap-6">
                 <div className="col-span-1 md:col-span-2 lg:col-span-4 flex justify-between">
@@ -11,48 +11,44 @@ export default function Stats() {
                 <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
-                            <p className="text-xs text-gray-300 tracking-wide">Credits</p>
-                            <h3 className="mt-1 text-lg text-blue-500 font-bold">123</h3>
-                            <span className="mt-4 text-xs text-gray-300"></span>
+                            <p className="text-xs text-gray-300 tracking-wide">Memory</p>
+                            <h3 className="mt-1 text-lg text-blue-500 font-bold">{memory}<small>mb</small></h3>
                         </div>
                         <div className="bg-blue-500 p-2 md:p-1 xl:p-2 rounded-md">
-                            <FaCoins className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
+                            <FaMemory className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
                         </div>
                     </div>
                 </div>
                 <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
-                            <p className="text-xs text-gray-300 tracking-wide">Groceries</p>
-                            <h3 className="mt-1 text-lg text-green-500 font-bold">$8,918</h3>
-                            <span className="mt-4 text-xs text-gray-300">Last Transaction 3 Days ago</span>
+                            <p className="text-xs text-gray-300 tracking-wide">CPU</p>
+                            <h3 className="mt-1 text-lg text-green-500 font-bold">{cpu}<small>%</small></h3>
                         </div>
                         <div className="bg-green-500 p-2 md:p-1 xl:p-2 rounded-md">
-                            <img src="./assets/crocery.png" alt="icon" className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
+                            <FaMicrochip className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
                         </div>
                     </div>
                 </div>
                 <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
-                            <p className="text-xs text-gray-300 tracking-wide">Gaming</p>
-                            <h3 className="mt-1 text-lg text-yellow-500 font-bold">$1,223</h3>
-                            <span className="mt-4 text-xs text-gray-300">Last Transaction 4 Days ago</span>
+                            <p className="text-xs text-gray-300 tracking-wide">Disk Space</p>
+                            <h3 className="mt-1 text-lg text-yellow-500 font-bold">{disk}<small>mb</small></h3>
                         </div>
                         <div className="bg-yellow-500 p-2 md:p-1 xl:p-2 rounded-md">
-                            <img src="./assets/gaming.png" alt="icon" className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
+                        <FaHdd className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
                         </div>
                     </div>
                 </div>
                 <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
-                            <p className="text-xs text-gray-300 tracking-wide">Trip & Holiday</p>
-                            <h3 className="mt-1 text-lg text-indigo-500 font-bold">$5,918</h3>
-                            <span className="mt-4 text-xs text-gray-300">Last Transaction 1 Month ago</span>
+                            <p className="text-xs text-gray-300 tracking-wide">Server Slots</p>
+                            <h3 className="mt-1 text-lg text-indigo-500 font-bold">{slots}</h3>
                         </div>
                         <div className="bg-indigo-500 p-2 md:p-1 xl:p-2 rounded-md">
-                            <img src="./assets/holiday.png" alt="icon" className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
+                        <FaServer className="w-auto h-8 md:h-6 xl:h-8 object-cover"/>
                         </div>
                     </div>
                 </div>
