@@ -4,7 +4,7 @@ import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
 import axios from "axios";
-import { getUserDataRoute } from "utils/APIRoutes";
+import { getUserDataRoute, getServersRoute } from "utils/APIRoutes";
 
 export default function Main(currentUser, socket) {
 
@@ -18,6 +18,7 @@ export default function Main(currentUser, socket) {
     const [userCPU, setCPU] = useState(undefined)
     const [userDisk, setDisk] = useState(undefined)
     const [userSlots, setSlots] = useState(undefined)
+    const [userServers, setServers] = useState([])
 
     useEffect(() => {
         (async function() {
@@ -36,6 +37,22 @@ export default function Main(currentUser, socket) {
       }
     })();
     }, [navigate]);
+
+
+    useEffect(() => {
+      (async function() {
+        try {
+          const uData = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+          const data = await axios.get(`${getServersRoute}/${uData._id}`);
+              console.log(data.data.servers)
+              setServers(data.data.servers);
+            
+            } catch (err) {
+              console.error(err.message);
+            }
+      })();
+    })
+
     return (
         <>
         <Nav username={username} />
@@ -57,9 +74,6 @@ export default function Main(currentUser, socket) {
               <thead>
                 <tr>
                   <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Id
-                  </th>
-                  <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                     Server Name
                   </th>
                   <th class=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -80,13 +94,19 @@ export default function Main(currentUser, socket) {
               </thead>
 
               <tbody>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
-              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">hey!</td>
+              {userServers.map((server) => {
+      return (
+        <>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">{server.serverName}</td>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">{server.serverMemory}mb</td>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">{server.serverCPU}%</td>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">{server.serverDisk}mb</td>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">In Queue</td>
+  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white">Soon!</td>
+  </>
+      );
+    })}
+              
               </tbody>
 
             </table>

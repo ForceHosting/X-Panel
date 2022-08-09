@@ -1,5 +1,21 @@
+import axios from 'axios';
 import {siteName} from 'config';
+import { useNavigate } from 'react-router-dom';
+import { logoutRoute } from 'utils/APIRoutes';
 export default function Nav({ username }){
+    const navigate = useNavigate()
+    const logout = async () => {
+        const id = await JSON.parse(
+            localStorage.getItem(process.env.USER_KEY)
+        )._id;
+        const data = await axios.get(`${logoutRoute}/${id}`);
+        if(data.status === 200){
+            localStorage.clear();
+            navigate("/login")
+        }
+    }
+
+
     return (
         <nav className="p-4 md:py-8 xl:px-0 md:container md:mx-w-6xl md:mx-auto">
         <div className="hidden lg:flex lg:justify-between lg:items-center">
@@ -31,7 +47,7 @@ export default function Nav({ username }){
                     </a>
                 </li>
                 <li>
-                    <a href="/logout">
+                    <a onClick={logout}>
                         <div className="p-2 rounded hover:bg-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 stroke-current text-gray-300"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">

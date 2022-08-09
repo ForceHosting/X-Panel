@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const MessageSchema = mongoose.Schema(
   {
+    ticketId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tickets",
+      required: true,
+    },
     message: {
       text: { type: String, required: true },
     },

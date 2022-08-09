@@ -1,10 +1,73 @@
 import {siteName, siteLogo } from '../config';
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { loginRoute } from 'utils/APIRoutes';
+
 function Login() {
   useEffect(()=>{
     document.title = siteName+ " - Login"
 })
+
+const navigate = useNavigate();
+const [values, setValues] = useState({ email: "", password: "" });
+const toastOptions = {
+  position: "bottom-right",
+  autoClose: 8000,
+  pauseOnHover: true,
+  draggable: true,
+  theme: "dark",
+};
+useEffect(() => {
+  if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+    navigate("/");
+  }
+}, [navigate]);
+
+const handleChange = (event) => {
+  setValues({ ...values, [event.target.name]: event.target.value });
+};
+
+const validateForm = () => {
+  const { email, password } = values;
+  if (email === "") {
+    toast.error("Email and Password is required.", toastOptions);
+    return false;
+  } else if (password === "") {
+    toast.error("Email and Password is required.", toastOptions);
+    return false;
+  }
+  return true;
+};
+
+const handleSubmit = async (event) => {
+  const { email, password } = values;
+  event.preventDefault();
+
+  if (validateForm()) {
+    
+    const { data } = await axios.post(loginRoute, {
+      email,
+      password,
+    });
+    if (data.status === false) {
+      toast.error(data.msg, toastOptions);
+    }
+    if (data.status === true) {
+      localStorage.setItem(
+        process.env.REACT_APP_LOCALHOST_KEY,
+        JSON.stringify(data.user)
+      );
+
+      navigate("/");
+    }
+  }
+};
+
   return (
+    <>
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -22,19 +85,14 @@ function Login() {
                   </h2>
                 </div>
                 <div>
-                <form>
+                <form action="" onSubmit={(event) => handleSubmit(event)}>
   <div class="mb-6">
     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Your email</label>
-    <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="contact@example.com" required/>
+    <input type="email" name="email" onChange={(e) => handleChange(e)} id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="contact@example.com" required/>
   </div>
   <div class="mb-6">
     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Your password</label>
-    <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-  </div>
-  <div class="flex items-start mb-6">
-    <div class="flex items-center h-5">
-      <input id="remember" type="checkbox" value="" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required />
-    </div>
+    <input type="password" name="password" onChange={(e) => handleChange(e)} id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
   </div>
   <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
 </form>
@@ -55,6 +113,8 @@ function Login() {
         </div>
       </div>
     </div>
+    <ToastContainer/>
+    </>
   );
 }
 

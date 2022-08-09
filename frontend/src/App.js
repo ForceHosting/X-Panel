@@ -7,6 +7,7 @@ import Main from "./pages/Main";
 import NotFound from 'pages/NotFound';
 import Register from 'pages/Register';
 import CreateServer from 'pages/CreateServer';
+import NewTicket from 'pages/Tickets/NewTicket';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Main socket={socket} currentUser={currentUser} />} />
         <Route path="/server/create" element={<CreateServer socket={socket} currentUser={currentUser} />} />
+        <Route path="/support/new" element={<NewTicket socket={socket} currentUser={currentUser} />} />
         <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>

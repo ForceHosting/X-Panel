@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 10 });
 const { makeid } = require('../functions')
+const { userLogin, userRegister } = require('../bot/index');
 
 
 module.exports.getData = async (req, res, next) => {
@@ -20,14 +21,15 @@ module.exports.getData = async (req, res, next) => {
 
   module.exports.login = async (req, res, next) => {
     try {
-      const { username, password } = req.body;
-      const user = await User.findOne({ username });
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
       if (!user)
-        return res.json({ msg: "Incorrect Username or Password", status: false });
+        return res.json({ msg: "Incorrect Email or Password", status: false });
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
-        return res.json({ msg: "Incorrect Username or Password", status: false });
+        return res.json({ msg: "Incorrect Email or Password", status: false });
       delete user.password;
+      userLogin(user.username)
       return res.json({ status: true, user });
     } catch (ex) {
       next(ex);
@@ -75,6 +77,7 @@ module.exports.register = async (req, res, next) => {
       role: "Customer",
     });
     delete user.password;
+    userRegister(user.username)
     return res.json({ status: true, user });
   } catch (ex) {
     next(ex);

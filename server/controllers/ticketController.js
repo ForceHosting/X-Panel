@@ -1,5 +1,27 @@
 const Messages = require("../models/messageModel");
+const Ticket = require("../models/ticketModel");
 const Filter = require("badwords-filter");
+const { newTicketAlert } = require('../bot/index')
+
+module.exports.newTicket = async (req, res, next) => {
+
+  try {
+    const { userUid, reason, sid } = req.body;
+    const newTicket = await Ticket.create({
+      owner: userUid,
+      ticketReason: reason,
+      serverId: sid,
+      ticketStatus: "Open",
+    });
+    newTicketAlert(newTicket._id, reason);
+    return res.json({status: true, newTicket})
+  }catch(ex){
+    next(ex);
+  }
+
+};
+
+
 module.exports.getMessages = async (req, res, next) => {
   try {
     const { from, to } = req.body;

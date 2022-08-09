@@ -12,7 +12,7 @@ const {
 
 const router = require("express").Router();
 
-router.get("/callback", login);
+router.post("/login", login);
 router.get("/getData/:uid", getData);
 router.post("/register", register);
 router.get("/allusers/:id", getAllUsers);

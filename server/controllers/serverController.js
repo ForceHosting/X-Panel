@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
-const { makeid } = require('../functions')
+const { makeid } = require('../functions');
+const { addedToQueue } = require("../bot");
 
 
 module.exports.addToQueue = async (req, res, next) => {
@@ -18,7 +19,19 @@ module.exports.addToQueue = async (req, res, next) => {
             serverOwner: userUid
           });
           delete user.password
+          addedToQueue(user.username, name, memory, cpu, disk)
         return res.json({ added: true, server });
+      } catch (ex) {
+        next(ex);
+      }
+  };
+
+  module.exports.getServers = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const servers = await Queue.find({ serverOwner: userId })
+        console.log(servers)
+        return res.json({ servers });
       } catch (ex) {
         next(ex);
       }
