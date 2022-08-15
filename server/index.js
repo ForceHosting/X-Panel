@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const serverRoutes = require('./routes/servers');
 const ticketRoutes = require("./routes/tickets");
+const paymentRoutes = require("./routes/payments");
 const app = express();
 const {sessionSecrets} = require("./config.json")
 const session = require("express-session")
@@ -41,6 +42,7 @@ mongoose.connect(process.env.MONGOURL, {
 app.use("/api/auth", authRoutes);
 app.use("/api/server", serverRoutes);
 app.use("/api/ticket", ticketRoutes);
+app.use("/api/payments", paymentRoutes);
 
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)

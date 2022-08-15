@@ -1,4 +1,4 @@
 {
-    "scopes": ["identify", "guilds", "guilds.join", "email"],
+    "token": "ODk1Njk0MzE1NDkyMzQzODMy.Gfc2Rv.nBRFQjNCvUOKsP6GIOnrWWvXFISHWupPu71Ihk",
     "sessionSecrets": "massivesecretshere"
 }
