@@ -11,7 +11,6 @@ module.exports.getData = async (req, res, next) => {
   try {
     const userId = req.params.uid;
     const userData = await User.findOne({ userId })
-    console.log(userData)
     delete userData.password;
     return res.json({ userData })
   } catch(ex){
@@ -43,7 +42,6 @@ module.exports.getUserLevel = async (req, res, next) => {
       "_id",
       "modLevel"
     ]);
-    console.log(user);
     return res.json(user);
   }catch(ex) {
     next(ex);
@@ -63,14 +61,16 @@ module.exports.register = async (req, res, next) => {
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
-    const pteroUID = makeid(10);
+    const pteroIdu = makeid(10);
+    const pteroUid = makeid(5)
     var rawPteroPass = Buffer.from(makeid(15));
     var encryptedPteroPass = rawPteroPass.toString('base64');
     const user = await User.create({
       uid: userUid,
       username: username,
       email: email,
-      pteroId: pteroUID,
+      pteroUserId: pteroUid,
+      pteroId: pteroIdu,
       pteroPwd: encryptedPteroPass,
       credits: 0,
       password: hashedPassword,

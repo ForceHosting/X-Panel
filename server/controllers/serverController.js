@@ -8,7 +8,6 @@ module.exports.addToQueue = async (req, res, next) => {
     try {
         const { userUid, name, location, software, memory, disk, cpu } = req.body;
         const user = await User.findOne({ userUid });
-        console.log(req.body)
         const server = await Queue.create({
             serverName: name,
             serverSoftware: software,
@@ -30,7 +29,6 @@ module.exports.addToQueue = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const servers = await Queue.find({ serverOwner: userId })
-        console.log(servers)
         return res.json({ servers });
       } catch (ex) {
         next(ex);

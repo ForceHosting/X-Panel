@@ -1,14 +1,6 @@
 const {
-    login,
-    register,
-    getAllUsers,
-    logOut,
-    getData,
-    getUserLevel,
-    banUser,
-    modName,
-    getUName,
-  } = require("../controllers/userController");
+    newPayPalPayment
+  } = require("../controllers/paymentController");
   
   const router = require("express").Router();
   

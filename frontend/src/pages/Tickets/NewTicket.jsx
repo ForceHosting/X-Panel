@@ -58,13 +58,12 @@ const handleChange = (event) => {
             reason,
             sid,
           });
-          console.log(data)
           if (data.added === false) {
             toast.error(data.msg, toastOptions);
           }
           if (data.status === true) {
             toast.success("Ticket created. You will be redirected to it shortly.")
-            setTimeout(() => { navigate("/support") }, 8000);
+            setTimeout(() => { navigate("/support/"+data.newTicket._id) }, 8000);
           }
       };
 

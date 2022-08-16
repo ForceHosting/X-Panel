@@ -16,6 +16,10 @@ const MessageSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
+    senderName: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,

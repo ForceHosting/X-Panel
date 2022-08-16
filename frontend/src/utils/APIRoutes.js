@@ -7,3 +7,5 @@ export const addToQueueRoute = `${serverIP}/api/server/create`;
 export const createCase = `${serverIP}/api/ticket/create`;
 export const logoutRoute = `${serverIP}/api/auth/logout`;
 export const getServersRoute = `${serverIP}/api/server/getServers`
+export const getTicketMessageRoute = `${serverIP}/api/ticket/getmsg`
+export const sendTicketMessageRoute = `${serverIP}/api/ticket/addmsg`

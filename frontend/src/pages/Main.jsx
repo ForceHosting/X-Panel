@@ -39,18 +39,16 @@ export default function Main(currentUser, socket) {
     }, [navigate]);
 
 
-    useEffect(() => {
-      (async function() {
-        try {
-          const uData = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+    
+    useEffect(() => {  
+setInterval(()=>{
+  (async function() {
+  const uData = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
           const data = await axios.get(`${getServersRoute}/${uData._id}`);
               console.log(data.data.servers)
               setServers(data.data.servers);
-            
-            } catch (err) {
-              console.error(err.message);
-            }
-      })();
+            })();
+}, 60000)
     })
 
     return (

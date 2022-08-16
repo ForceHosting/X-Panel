@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     min: 8,
   },
+  pteroUserId: {
+    type: String,
+  },
   pteroId: {
     type: String,
     required: true,

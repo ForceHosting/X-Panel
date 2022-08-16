@@ -9,6 +9,8 @@ import Register from 'pages/Register';
 import CreateServer from 'pages/CreateServer';
 import NewTicket from 'pages/Tickets/NewTicket';
 import Payment from 'pages/Payment';
+import Account from 'pages/Account';
+import Ticket from 'pages/Tickets/Ticket';
 
 
 function App() {
@@ -26,7 +28,7 @@ function App() {
   useEffect(() => {
     if (currentUser) {
       socket.current = io(serverIP);
-      socket.current.emit("add-user", currentUser._id);
+      
     }
     if (socket.current) {
       socket.current.on("bannedUser", (data) => {
@@ -49,8 +51,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Main socket={socket} currentUser={currentUser} />} />
         <Route path="/server/create" element={<CreateServer socket={socket} currentUser={currentUser} />} />
-        <Route path="/support/new" element={<NewTicket socket={socket} currentUser={currentUser} />} />
+        <Route path="/support" element={<NewTicket socket={socket} currentUser={currentUser} />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/account" element={<Account socket={socket} currentUser={currentUser} />} />
+        <Route path="/support/:id" element={<Ticket socket={socket} currentUser={currentUser} />} />
         <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>

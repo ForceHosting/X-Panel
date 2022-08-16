@@ -55,15 +55,22 @@ const io = socket(server, {
 });
 
 global.onlineUsers = new Map();
-io.on("connection", (socket) => {
-  global.chatSocket = socket;
-  socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
+global.openTickets = new Map();
+io.on("connection", (socketdata) => {
+  global.chatSocket = socketdata;
+  socketdata.on("add-user", (userId, ticketid) => {
+    onlineUsers.set(userId, data.id, ticketid);
   });
-  socket.on("banUser", (data) => {
+  socketdata.on("banUser", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("bannedUser", { msg: 'You\'ve been banned.', from: 'System' });
+      socketdata.to(sendUserSocket).emit("bannedUser", { msg: 'You\'ve been banned.', from: 'System' });
+    }
+  });
+  socketdata.on("send-ticket-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.ticket);
+    if (sendUserSocket) {
+      socketdata.to(sendUserSocket).emit("msg-recieve", { msg: data.cleaned, from: data.userfrom });
     }
   });
 });
