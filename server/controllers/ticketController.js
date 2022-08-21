@@ -64,6 +64,7 @@ module.exports.addMessage = async (req, res, next) => {
 
     const cleanedMessage = filter.clean(message);
     const data = await Messages.create({
+      ticketId: ticket,
       message: { text: cleanedMessage },
       users: [from, ticket],
       sender: from,

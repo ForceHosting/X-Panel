@@ -1,4 +1,7 @@
 {
-    "token": "",
-    "sessionSecrets": "massivesecretshere"
+    "token": "Bot Token",
+    "sessionSecrets": "massivesecretshere",
+    "paypal_cid": "PayPal client id",
+    "paypal_secret": "PayPal secret",
+    "paypal_mode": "sandbox"
 }

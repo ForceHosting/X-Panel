@@ -10,8 +10,21 @@ const { userLogin, userRegister } = require('../bot/index');
 module.exports.getData = async (req, res, next) => {
   try {
     const userId = req.params.uid;
-    const userData = await User.findOne({ userId })
-    delete userData.password;
+    let userData = await User.findOne({ userId }).select([
+      "_id",
+      "uid",
+      "username",
+      "email",
+      "pteroUserId",
+      "pteroId",
+      "pteroPwd",
+      "credits",
+      "availMem",
+      "availDisk",
+      "availCPU",
+      "availSlots",
+      "role",
+    ]);
     return res.json({ userData })
   } catch(ex){
     next(ex)
@@ -27,9 +40,23 @@ module.exports.getData = async (req, res, next) => {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         return res.json({ msg: "Incorrect Email or Password", status: false });
-      delete user.password;
+        const userData = await User.findOne({ email }).select([
+          "_id",
+          "uid",
+          "username",
+          "email",
+          "pteroUserId",
+          "pteroId",
+          "pteroPwd",
+          "credits",
+          "availMem",
+          "availDisk",
+          "availCPU",
+          "availSlots",
+          "role",
+        ]);
       userLogin(user.username)
-      return res.json({ status: true, user });
+      return res.json({ status: true, userData });
     } catch (ex) {
       next(ex);
     }
@@ -76,9 +103,23 @@ module.exports.register = async (req, res, next) => {
       password: hashedPassword,
       role: "Customer",
     });
-    delete user.password;
+    const userData = await User.findOne({ email }).select([
+      "_id",
+      "uid",
+      "username",
+      "email",
+      "pteroUserId",
+      "pteroId",
+      "pteroPwd",
+      "credits",
+      "availMem",
+      "availDisk",
+      "availCPU",
+      "availSlots",
+      "role",
+    ]);
     userRegister(user.username)
-    return res.json({ status: true, user });
+    return res.json({ status: true, userData });
   } catch (ex) {
     next(ex);
   }

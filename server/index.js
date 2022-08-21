@@ -59,7 +59,8 @@ global.openTickets = new Map();
 io.on("connection", (socketdata) => {
   global.chatSocket = socketdata;
   socketdata.on("add-user", (userId, ticketid) => {
-    onlineUsers.set(userId, data.id, ticketid);
+    onlineUsers.set(userId, ticketid);
+    socketdata.join(ticketid)
   });
   socketdata.on("banUser", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
@@ -68,9 +69,7 @@ io.on("connection", (socketdata) => {
     }
   });
   socketdata.on("send-ticket-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.ticket);
-    if (sendUserSocket) {
-      socketdata.to(sendUserSocket).emit("msg-recieve", { msg: data.cleaned, from: data.userfrom });
-    }
+      console.log(data)
+      socketdata.to(data.ticket).emit("msg-recieve", { msg: data.msg, user: data.fromUser });
   });
 });
