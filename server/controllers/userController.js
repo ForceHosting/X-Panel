@@ -3,14 +3,15 @@ const Servers = require("../models/servers");
 const bcrypt = require("bcrypt");
 const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 10 });
-const { makeid } = require('../functions')
-const { userLogin, userRegister } = require('../bot/index');
-
+const { makeid, getIP } = require('../functions')
+const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
+const fetch = require('node-fetch');
+const {pteroKey} = require('../config.json');
 
 module.exports.getData = async (req, res, next) => {
   try {
-    const userId = req.params.uid;
-    let userData = await User.findOne({ userId }).select([
+    const userId = req.params.id;
+    let userData = await User.findById(userId).select([
       "_id",
       "uid",
       "username",
@@ -34,12 +35,16 @@ module.exports.getData = async (req, res, next) => {
   module.exports.login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
+    const userIP = getIP()
       const user = await User.findOne({ email });
       if (!user)
         return res.json({ msg: "Incorrect Email or Password", status: false });
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         return res.json({ msg: "Incorrect Email or Password", status: false });
+      const checkIP = await User.find({ userIP }).count();
+      if(checkIP > 1)
+         return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
         const userData = await User.findOne({ email }).select([
           "_id",
           "uid",
@@ -55,6 +60,7 @@ module.exports.getData = async (req, res, next) => {
           "availSlots",
           "role",
         ]);
+        console.log(userData)
       userLogin(user.username)
       return res.json({ status: true, userData });
     } catch (ex) {
@@ -79,6 +85,9 @@ module.exports.register = async (req, res, next) => {
   try {
     const userUid = uid()
     const { username, email, password } = req.body;
+    const {ip} = await fetch('https://api.ipify.org?format=json', { method: 'GET' })
+      .then(res => res.json())
+      .catch(error => console.error(error));
     if (username == '[Banned]')
       return res.json({ msg: "Sorry, you can't use that username. Please try a different one.", status: false });
     const usernameCheck = await User.findOne({ username });
@@ -87,15 +96,40 @@ module.exports.register = async (req, res, next) => {
     const emailCheck = await User.findOne({ email });
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
+    const checkIP = await User.find({ lastIP: ip }).count();
+    if(checkIP > 0)
+      return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
     const pteroIdu = makeid(10);
     const pteroUid = makeid(5)
-    var rawPteroPass = Buffer.from(makeid(15));
+    const pteroPass = makeid(15)
+    var rawPteroPass = Buffer.from(pteroPass);
     var encryptedPteroPass = rawPteroPass.toString('base64');
+
+    const pteroData = await fetch('https://panel.forcehost.net/api/application/users', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+      body: JSON.stringify({
+        username: pteroIdu,
+        email: email,
+        first_name: 'Force Host',
+        last_name: 'Registered User',
+        password: pteroPass
+      })
+    });
+    if(pteroData.status != 201){
+      const errorCode = makeid(5)
+      sendErrorCode(errorCode, 'Pterodactyl account creation issue')
+      return res.json({ msg: `There was an issue with creating your account. Please contact support. Err code: ${errorCode}`, status: false});
+    }
     const user = await User.create({
       uid: userUid,
       username: username,
       email: email,
+      lastIP: ip,
       pteroUserId: pteroUid,
       pteroId: pteroIdu,
       pteroPwd: encryptedPteroPass,
@@ -140,27 +174,6 @@ module.exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-module.exports.setAvatar = async (req, res, next) => {
-  try {
-    const userId = req.params.id;
-    const avatarImage = req.body.image;
-    const userData = await User.findByIdAndUpdate(
-      userId,
-      {
-        isAvatarImageSet: true,
-        avatarImage,
-      },
-      { new: true }
-    );
-    return res.json({
-      isSet: userData.isAvatarImageSet,
-      image: userData.avatarImage,
-    });
-  } catch (ex) {
-    next(ex);
-  }
-};
-
 module.exports.banUser = async (req, res, next) => {
   try {
     const bannedUid = uid()
@@ -174,23 +187,6 @@ module.exports.banUser = async (req, res, next) => {
     }
     onlineUsers.delete(req.params.id);
     const userData = await User.findByIdAndUpdate(req.params.id, { username: '[Banned User '+bannedUid+']', modLevel: 'Banned' });
-    return res.status(200).send();
-  } catch (ex) {
-    next(ex);
-  }
-};
-
-module.exports.modName = async (req, res, next) => {
-  try {
-    const bannedUid = uid()
-    const user = await User.findById({_id: req.params.id}).select([
-      "_id",
-      "modLevel"
-    ]);
-    if(user.modLevel !== 'Normal User'){
-      return res.json({ error: "You can't ban another staff.", status: false});
-    }
-    const userData = await User.findByIdAndUpdate(req.params.id, { username: '[Moderated Username '+bannedUid+']', modLevel: 'Normal User' });
     return res.status(200).send();
   } catch (ex) {
     next(ex);

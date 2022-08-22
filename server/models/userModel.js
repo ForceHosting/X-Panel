@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
+  lastIP: {
+    type: String,
+    required: true
+  },
   password: {
     type: String,
     required: true,

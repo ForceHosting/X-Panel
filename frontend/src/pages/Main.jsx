@@ -32,7 +32,7 @@ export default function Main(currentUser, socket) {
         const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
         //console.log(data)
         setUsername(data.username)
-        const userStats = await axios.get(`${getUserDataRoute}/${data.uid}`);
+        const userStats = await axios.get(`${getUserDataRoute}/${data._id}`);
         setMemory(userStats.data.userData.availMem)
         setCPU(userStats.data.userData.availCPU)
         setDisk(userStats.data.userData.availDisk)
@@ -69,8 +69,8 @@ setInterval(()=>{
     return (
         <>
         <Nav username={username} />
-        <Stats memory={userMem} cpu={userCPU} disk={userDisk} slots={userSlots} />
         <main className="container mx-w-6xl mx-auto py-4">
+        <Stats memory={userMem} cpu={userCPU} disk={userDisk} slots={userSlots} />
         <div className="w-full xl:w-full mb-12 xl:mb-0 px-4 mx-auto mt-24">
         <div className="relative flex flex-col min-w-0 break-words bg-gray-600 w-full mb-6 shadow-lg rounded ">
           <div className="rounded-t mb-0 px-4 py-3 border-0">

@@ -4,6 +4,22 @@ const User = require('../models/userModel');
 const Filter = require("badwords-filter");
 const { newTicketAlert } = require('../bot/index');
 
+
+module.exports.getTicket = async (req, res, next) => {
+  try{
+    const ticketId = req.params.id;
+    let ticketData = await Ticket.findOne({ ticketId }).select([
+      "owner",
+      "ticketReason",
+      "severId",
+      "ticketStatus"
+    ]);
+    return res.json({ ticketData })
+  }catch(ex){
+    next(ex)
+  }
+}
+
 module.exports.newTicket = async (req, res, next) => {
 
   try {
@@ -17,8 +33,8 @@ module.exports.newTicket = async (req, res, next) => {
     await Messages.create({
       ticketId: newTicket._id,
       message: { text: "Thank you for creating a ticket. One of our staff members will be with you shortly. To avoid wasting our staffs time, please let us know what your issue is." },
-      users: ["62fae95322b1e1358a0205b5", newTicket._id],
-      sender: "62fae95322b1e1358a0205b5",
+      users: ["6303d48ec8570a595d0606fa", newTicket._id],
+      sender: "6303d48ec8570a595d0606fa",
       senderName: "System"
     });
     newTicketAlert(newTicket._id, reason);

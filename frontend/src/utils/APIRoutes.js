@@ -9,3 +9,4 @@ export const logoutRoute = `${serverIP}/api/auth/logout`;
 export const getServersRoute = `${serverIP}/api/server/getServers`
 export const getTicketMessageRoute = `${serverIP}/api/ticket/getmsg`
 export const sendTicketMessageRoute = `${serverIP}/api/ticket/addmsg`
+export const getTicketInformationRoute = `${serverIP}/api/ticket/information`

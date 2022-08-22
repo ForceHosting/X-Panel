@@ -24,6 +24,19 @@ function userLogin(username){
 	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006667890604388403').send({embeds: [newLoginEmbed]})
 }
+function sendErrorCode(code, message){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('New Error')
+	.setDescription(`A new error has been thrown. Information below.`)
+	.addFields(
+		{ name: 'Error Code', value: `${code}`, inline:true},
+		{ name: 'Message', value: `${message}`, inline:true},
+	)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1011324472864808980').send({embeds: [newLoginEmbed]})
+}
 function newTicketAlert(ticketid, reason){
     const newTicketEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
@@ -54,4 +67,4 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
 }
 
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue };
+module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode };

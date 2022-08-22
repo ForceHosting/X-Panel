@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const ticketSchema = new mongoose.Schema({
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
   ticketReason: {
