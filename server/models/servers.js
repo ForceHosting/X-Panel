@@ -26,9 +26,9 @@ const serversSechma = new mongoose.Schema({
         required: true,
     },
     serverSuspended: {
-        type: String,
+        type: Boolean,
         required: true,
-        default: "Not Suspended"
+        default: false
     },
     serverOwner: {
         type: mongoose.Schema.Types.ObjectId,

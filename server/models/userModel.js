@@ -72,6 +72,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "Customer",
   },
+  discordId: {
+    type: Number,
+    required: true,
+    default: "Customer",
+  },
 });
 
 module.exports = mongoose.model("Users", userSchema);
