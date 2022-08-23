@@ -6,6 +6,7 @@ const { token } = require("../config.json");
 
 const commands = [
 	new SlashCommandBuilder().setName('resources').setDescription('Replies with your Resources!'),
+	new SlashCommandBuilder().setName('acclink').setDescription('Link your client area account to Discord!').addStringOption((option) => option.setName('code').setDescription('The unique code generated in the client area')),
 ]
 	.map(command => command.toJSON());
 

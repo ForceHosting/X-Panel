@@ -72,6 +72,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "Customer",
   },
+  linkId: {
+    type: String,
+    unique: true,
+  },
   discordId: {
     type: Number,
     required: false,

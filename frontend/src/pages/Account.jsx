@@ -3,6 +3,9 @@ import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
 import RocketImg from 'assets/rocket.png';
+import axios from "axios";
+import { generateDiscordLinkIdRoute } from "utils/APIRoutes";
+
 export default function NewTicket(currentUser, socket) {
 
     useEffect(()=>{
@@ -14,6 +17,8 @@ export default function NewTicket(currentUser, socket) {
     //const [userUid, setUid] = useState(undefined)
     const [pteroUser, setPteroUser] = useState(undefined)
     const [pteroPwd, setPteroPwd] = useState(undefined)
+    const [showModal, setShowModal] = useState(false)
+    const [discordLink, setLinkId] = useState(undefined)
 
 
     useEffect(() => {
@@ -23,7 +28,6 @@ export default function NewTicket(currentUser, socket) {
         navigate("/login");
       } else {
         const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
-        console.log(data)
         setUsername(data.username)
         setPteroUser(data.pteroId)
         setPteroPwd(data.pteroPwd)
@@ -32,7 +36,16 @@ export default function NewTicket(currentUser, socket) {
     })();
     }, [navigate]);
 
-
+    const handleGenerate = async (event) => {
+        event.preventDefault()
+        const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+        const linkId = await axios.post(generateDiscordLinkIdRoute, {
+            accountId: data._id
+          });
+          console.log(linkId.data)
+        setLinkId(linkId.data)
+        setShowModal(true)
+    }
 
 
     return (
@@ -94,7 +107,66 @@ export default function NewTicket(currentUser, socket) {
                 </div>
 
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-5 p-4 xl:p-0 gap-y-4 md:gap-6 mt-5">
+                <div class="col-span-2 p-6 rounded-2xl bg-gradient-to-r from-green-800 to-cyan-800 flex flex-col justify-between">
+                    <div class="flex flex-col">
+                        <h2 class="text-white font-bold text-lg">Discord Account</h2>
+                        <p class="mt-1 text-md md:text-md text-gray-50 font-light leading-tight max-w-sm">Want to view your resources, manage your account, and even look at the queue from Discord? If so just press the link account button below and a unique code will be generated.</p>
+                    </div>
+                    <div class="flex justify-between items-end mt-4">
+                        <button onClick={(event) => handleGenerate(event)}
+                            class="bg-blue-600 px-4 py-3 rounded-lg text-white text-xs tracking-wider font-semibold hover:bg-blue-600 hover:text-white">
+                            Generate Code
+                        </button>
+                    </div>
+                </div>
+
+            </div>
     </main>
+    {showModal ? (
+        <>
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none bg-slate-700">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold text-white">
+                    How to Link
+                  </h3>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <p className="my-4 text-lg leading-relaxed text-white">
+                    To link your account to Discord, please run the following command in one of our channels.
+                  </p>
+                  <code className="text-lg leading-relaxed rounded bg-slate-800 text-red-600 text-bold">
+                       /acclink {discordLink}
+                    </code>
+                    <p className="my-4 text-lg leading-relaxed text-white">
+                        Once you've ran this command, you're all set! You can run commands such as <code className="text-lg leading-relaxed rounded bg-slate-800 text-red-600 text-bold">
+                       /resources
+                    </code> to view your current resources.
+                    </p>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </>
     )
 }
