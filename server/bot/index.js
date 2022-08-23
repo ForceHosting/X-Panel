@@ -1,11 +1,13 @@
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const { token } = require("../config.json");
+const User = require("../models/userModel");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
 })
+
 function userRegister(username){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
@@ -65,6 +67,37 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
 	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
+
+client.on('interactionCreate', interaction => {
+	if (!interaction.isChatInputCommand()) return;
+	console.log(interaction);
+	if (interaction.commandName === 'Resources') {
+        // Gives us 15 mins to get data instend of 5 seconds
+		await interaction.reply({ content: 'Please wait, we are getting your info', ephemeral: true });
+		userid = int(interaction.user.id);
+		User.findOne({ 'discordId': userid }, function (err, User) {
+			if (err) return handleError(err);
+			const { credits, availMem, availDisk, availCPU, availSlots  } = User;
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('User resources!')
+			.setDescription(`Your resource info.`)
+			.addFields(
+				{ name: 'Credits', value: `${credits}`, inline: true},
+				{ name: 'Memory', value: `${availMem}`, inline: true},
+				{ name: 'CPU', value: `${availCPU}`, inline: true},
+				{ name: 'Disk', value: `${availDisk}`, inline: true},
+				{ name: 'Creds', value: `${availSlots}`, inline: true}
+			)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+
+		  });
+		  
+	    
+	}
+});
+
 
 client.login(token);
 module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode };
