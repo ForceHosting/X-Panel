@@ -18,18 +18,18 @@
   "resolved" "https://registry.npmjs.org/@discordjs/collection/-/collection-1.0.1.tgz"
   "version" "1.0.1"
 
-"@discordjs/rest@^1.0.1":
-  "integrity" "sha512-w08CTKVzzYYvKxEjXKOs9AdS7KQ1J502TrPfF8eCZ2lF6AfKuMP/32YgDakiwIyYTDjEQS/v0nKLSFcncHRMtg=="
-  "resolved" "https://registry.npmjs.org/@discordjs/rest/-/rest-1.0.1.tgz"
-  "version" "1.0.1"
+"@discordjs/rest@^1.0.1", "@discordjs/rest@^1.1.0":
+  "integrity" "sha512-yCrthRTQeUyNThQEpCk7bvQJlwQmz6kU0tf3dcWBv2WX3Bncl41x7Wc+v5b5OsIxfNYq38PvVtWircu9jtYZug=="
+  "resolved" "https://registry.npmjs.org/@discordjs/rest/-/rest-1.1.0.tgz"
+  "version" "1.1.0"
   dependencies:
     "@discordjs/collection" "^1.0.1"
-    "@sapphire/async-queue" "^1.3.2"
+    "@sapphire/async-queue" "^1.5.0"
     "@sapphire/snowflake" "^3.2.2"
-    "discord-api-types" "^0.36.3"
-    "file-type" "^17.1.4"
+    "discord-api-types" "^0.37.3"
+    "file-type" "^17.1.6"
     "tslib" "^2.4.0"
-    "undici" "^5.8.0"
+    "undici" "^5.9.1"
 
 "@mapbox/node-pre-gyp@^1.0.0":
   "integrity" "sha512-CMGKi28CF+qlbXh26hDe6NxCd7amqeAzEqnS6IHeO6LoaKyM/n+Xw3HT1COdq8cuioOdlKdqn/hCmqPUOMOywg=="
@@ -46,10 +46,10 @@
     "semver" "^7.3.5"
     "tar" "^6.1.11"
 
-"@sapphire/async-queue@^1.3.2":
-  "integrity" "sha512-1npoLO1YPPXCsWCfuonsSdtHbPUo6dvjWUJtmUHiK8yDTmy00LbkpRkdV/UycA1fh+QsxwOPhgx2zu64Z+19ww=="
-  "resolved" "https://registry.npmjs.org/@sapphire/async-queue/-/async-queue-1.4.0.tgz"
-  "version" "1.4.0"
+"@sapphire/async-queue@^1.5.0":
+  "integrity" "sha512-JkLdIsP8fPAdh9ZZjrbHWR/+mZj0wvKS5ICibcLrRI1j84UmLMshx5n9QmL8b95d4onJ2xxiyugTgSAX7AalmA=="
+  "resolved" "https://registry.npmjs.org/@sapphire/async-queue/-/async-queue-1.5.0.tgz"
+  "version" "1.5.0"
 
 "@sapphire/shapeshift@^3.5.1":
   "integrity" "sha512-7JFsW5IglyOIUQI1eE0g6h06D/Far6HqpcowRScgCiLSqTf3hhkPWCWotVTtVycnDCMYIwPeaw6IEPBomKC8pA=="
@@ -593,6 +593,11 @@
   "resolved" "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.36.3.tgz"
   "version" "0.36.3"
 
+"discord-api-types@^0.37.3":
+  "integrity" "sha512-QgqYlUokWM++hdwvAtgVNLjmFumPBzFy+uWnnfVDiwBXKm+5jXHJPk2lx2eilkv/706UpAJPLSk/uVCY9NocjA=="
+  "resolved" "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.4.tgz"
+  "version" "0.37.4"
+
 "discord.js@^14.1.2":
   "integrity" "sha512-apdWNLkjAkeEnuNpB8H6rS/4OgrXQlSAjuuzeodjCOdIXy3OwOjD314V/HiSttcAlr9+r3ONhaT5qvbDad5SIg=="
   "resolved" "https://registry.npmjs.org/discord.js/-/discord.js-14.1.2.tgz"
@@ -742,7 +747,7 @@
   "resolved" "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
   "version" "3.1.3"
 
-"file-type@^17.1.4":
+"file-type@^17.1.6":
   "integrity" "sha512-hlDw5Ev+9e883s0pwUsuuYNu4tD7GgpUnOvykjv1Gya0ZIjuKumthDRua90VUn6/nlRKAjcxLUnHNTIUWwWIiw=="
   "resolved" "https://registry.npmjs.org/file-type/-/file-type-17.1.6.tgz"
   "version" "17.1.6"
@@ -1826,10 +1831,10 @@
   "resolved" "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz"
   "version" "2.0.5"
 
-"undici@^5.8.0":
-  "integrity" "sha512-3KLq3pXMS0Y4IELV045fTxqz04Nk9Ms7yfBBHum3yxsTR4XNn+ZCaUbf/mWitgYDAhsplQ0B1G4S5D345lMO3A=="
-  "resolved" "https://registry.npmjs.org/undici/-/undici-5.8.2.tgz"
-  "version" "5.8.2"
+"undici@^5.8.0", "undici@^5.9.1":
+  "integrity" "sha512-6fB3a+SNnWEm4CJbgo0/CWR8RGcOCQP68SF4X0mxtYTq2VNN8T88NYrWVBAeSX+zb7bny2dx2iYhP3XHi00omg=="
+  "resolved" "https://registry.npmjs.org/undici/-/undici-5.9.1.tgz"
+  "version" "5.9.1"
 
 "unique-string@^2.0.0":
   "integrity" "sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg=="

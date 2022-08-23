@@ -74,8 +74,7 @@ const userSchema = new mongoose.Schema({
   },
   discordId: {
     type: Number,
-    required: true,
-    default: "Customer",
+    required: false,
   },
 });
 
