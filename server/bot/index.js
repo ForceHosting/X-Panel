@@ -76,6 +76,7 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'Gathering your data. This will take up to 5 seconds.', ephemeral: true });
 		userid = interaction.user.id;
 		const userInfo = await User.findOne({ 'discordId': userid })
+		if (!userInfo.result === null) {
 			const newEmbed = new EmbedBuilder()
 			.setColor(0x0099FF)
 			.setTitle('User resources!')
@@ -91,6 +92,16 @@ client.on('interactionCreate', async interaction => {
 			.setTimestamp()
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		await interaction.editReply({ content: '', embeds: [newEmbed]})
+			}
+		else {
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`You have not linked your discord account to your account on the panel. You can find how to do this on our wiki!`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}
 		  
 	    
 	}
