@@ -69,9 +69,8 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
 }
 
 client.on('interactionCreate', interaction => {
-	if (!interaction.isChatInputCommand()) return;
 	console.log(interaction);
-	if (interaction.commandName === 'Resources') {
+	if (interaction.commandName === 'resources') {
         // Gives us 15 mins to get data instend of 5 seconds
 		await interaction.reply({ content: 'Please wait, we are getting your info', ephemeral: true });
 		userid = int(interaction.user.id);
