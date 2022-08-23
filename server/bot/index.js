@@ -68,30 +68,29 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
 
-client.on('interactionCreate', interaction => {
-	console.log(interaction);
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
 	if (interaction.commandName === 'resources') {
         // Gives us 15 mins to get data instend of 5 seconds
-		await interaction.reply({ content: 'Please wait, we are getting your info', ephemeral: true });
-		userid = int(interaction.user.id);
-		User.findOne({ 'discordId': userid }, function (err, User) {
-			if (err) return handleError(err);
-			const { credits, availMem, availDisk, availCPU, availSlots  } = User;
+		await interaction.reply({ content: 'Gathering your data. This will take up to 5 seconds.', ephemeral: true });
+		userid = interaction.user.id;
+		const userInfo = await User.findOne({ 'discordId': userid })
 			const newEmbed = new EmbedBuilder()
 			.setColor(0x0099FF)
 			.setTitle('User resources!')
-			.setDescription(`Your resource info.`)
+			.setDescription(`Your current resource information.`)
 			.addFields(
-				{ name: 'Credits', value: `${credits}`, inline: true},
-				{ name: 'Memory', value: `${availMem}`, inline: true},
-				{ name: 'CPU', value: `${availCPU}`, inline: true},
-				{ name: 'Disk', value: `${availDisk}`, inline: true},
-				{ name: 'Creds', value: `${availSlots}`, inline: true}
+				{ name: 'Credits', value: `${userInfo.credits}`, inline: true},
+				{ name: 'Memory', value: `${userInfo.availMem}mb`, inline: true},
+				{ name: 'CPU', value: `${userInfo.availCPU}%`, inline: true},
+				{ name: 'Disk', value: `${userInfo.availDisk}mb`, inline: true},
+				{ name: 'Slots', value: `${userInfo.availSlots}`, inline: true},
+				{ name: 'Role', value: `${userInfo.role}`, inline: true}
 			)
 			.setTimestamp()
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
-
-		  });
+		await interaction.editReply({ content: '', embeds: [newEmbed]})
 		  
 	    
 	}

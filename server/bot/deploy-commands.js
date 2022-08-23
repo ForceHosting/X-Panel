@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, Routes } = require('discord.js');
 const { REST } = require('@discordjs/rest');
-const clientId = 895694315492343832
-const guildId = 783416129908899860
+const clientId = '895694315492343832'
+const guildId = '783416129908899860'
 const { token } = require("../config.json");
 
 const commands = [
