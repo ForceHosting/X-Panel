@@ -125,6 +125,7 @@ module.exports.register = async (req, res, next) => {
       sendErrorCode(errorCode, 'Pterodactyl account creation issue')
       return res.json({ msg: `There was an issue with creating your account. Please contact support. Err code: ${errorCode}`, status: false});
     }
+    const newLinkId = makeid(10)
     const user = await User.create({
       uid: userUid,
       username: username,
@@ -136,6 +137,7 @@ module.exports.register = async (req, res, next) => {
       credits: 0,
       password: hashedPassword,
       role: "Customer",
+      linkId: newLinkId,
     });
     const userData = await User.findOne({ email }).select([
       "_id",
