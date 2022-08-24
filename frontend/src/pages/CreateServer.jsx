@@ -89,25 +89,25 @@ const handleChange = (event) => {
                     <div className="mt-5 md:mt-0 md:col-start-3 col-span-2">
                         <form action="" onSubmit={(event) => handleSubmit(event)}>
                             <div className="shadow overflow-hidden sm:rounded-md">
-                                <div className="px-4 py-5 bg-gray-600 sm:p-6">
+                                <div className="px-4 py-5 bg-gray-700 sm:p-6">
                                     <div className="grid grid-cols-6 gap-6">
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="first-name" className="block text-sm font-medium text-gray-300">Server Name</label>
-                                            <input type="text" name="name" onChange={(e) => handleChange(e)} id="first-name" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-700 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm" />
+                                            <input type="text" name="name" onChange={(e) => handleChange(e)} id="first-name" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm" />
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="location" className="block text-sm font-medium text-gray-300">Server Location</label>
-                                            <select id="location" onChange={(e) => handleChange(e)} name="location" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-700 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm">
-                                                <option value="1">DEFR1 (Germany)</option>
-                                                <option value="2">DEFR2 (Germany)</option>
-                                                <option value="5">DEFR3 (Germany)</option>
-                                                <option value="3">USFR1 (United States)</option>
-                                                <option value="4">USFR2 (United States)</option>
+                                            <select id="location" onChange={(e) => handleChange(e)} name="location" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm">
+                                                <option value="1">Stormbreaker (Germany)</option>
+                                                <option value="2">Curiosity (Germany)</option>
+                                                <option value="5">Omega (Germany)</option>
+                                                <option value="3">Optimus (United States)</option>
+                                                <option value="4">Odin (United States)</option>
                                             </select>
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="location" className="block text-sm font-medium text-gray-300">Server Software</label>
-                                            <select id="location" name="software" onChange={(e) => handleChange(e)} className="mt-1 block w-full py-2 px-3 border  rounded-md shadow-sm focus:outline-none border-gray-700 text-white bg-gray-700 sm:text-sm">
+                                            <select id="location" name="software" onChange={(e) => handleChange(e)} className="mt-1 block w-full py-2 px-3 border  rounded-md shadow-sm focus:outline-none border-gray-300 text-white bg-gray-700 sm:text-sm">
                                                 <option value="1">PaperMC</option>
                                                 <option value="2">Forge</option>
                                                 <option value="3">Bungeecord</option>
@@ -120,24 +120,24 @@ const handleChange = (event) => {
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="last-name" className="block text-sm font-medium text-gray-300">Server Memory</label>
-                                            <input type="number" name="memory" onChange={(e) => handleChange(e)} id="last-name" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-700 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
+                                            <input type="number" name="memory" onChange={(e) => handleChange(e)} id="last-name" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
                                         </div>
 
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="email-address" className="block text-sm font-medium text-gray-300">Server CPU</label>
-                                            <input type="number" name="cpu" onChange={(e) => handleChange(e)} id="email-address" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-700 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
+                                            <input type="number" name="cpu" onChange={(e) => handleChange(e)} id="email-address" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="email-address" className="block text-sm font-medium text-gray-300">Server Disk</label>
-                                            <input type="number" name="disk" onChange={(e) => handleChange(e)} id="email-address" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-700 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
+                                            <input type="number" name="disk" onChange={(e) => handleChange(e)} id="email-address" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="px-4 py-3 bg-gray-600 text-right sm:px-6">
+                                <div className="px-4 py-3 bg-gray-700 text-right sm:px-6">
                                     <button type="reset" name="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400 hover:bg-yelredlow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                         Reset
                                     </button>
-                                    <button type="submit" name="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <button type="submit" name="submit" className="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Add to Queue
                                     </button>
                                 </div>

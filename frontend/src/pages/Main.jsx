@@ -72,7 +72,7 @@ setInterval(()=>{
         <main className="container mx-w-6xl mx-auto py-4">
         <Stats memory={userMem} cpu={userCPU} disk={userDisk} slots={userSlots} />
         <div className="w-full xl:w-full mb-12 xl:mb-0 px-4 mx-auto mt-24">
-        <div className="relative flex flex-col min-w-0 break-words bg-gray-600 w-full mb-6 shadow-lg rounded ">
+        <div className="relative flex flex-col min-w-0 break-words bg-gray-700 w-full mb-6 shadow-lg rounded ">
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-1 max-w-full flex-grow flex-1">

@@ -87,7 +87,7 @@ export default function Ticket(currentUser) {
         <Nav username={username} />
         <main className="container mx-w-6xl mx-auto py-4">
         
-        <div className="main flex-1 flex flex-col bg-gray-600 rounded-lg m-2 pl-4 pt-2 pr-2 pb-2">
+        <div className="main flex-1 flex flex-col bg-gray-700 rounded-lg m-2 pl-4 pt-2 pr-2 pb-2">
 
         <div className="flex-1 flex h-56 max-h-[35rem]">
                             {currentTicket === undefined ? (
