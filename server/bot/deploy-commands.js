@@ -4,12 +4,16 @@ const { REST } = require('@discordjs/rest');
 const clientId = '895694315492343832'
 const guildId = '783416129908899860'
 const { token } = require("../config.json");
-const data = new ContextMenuCommandBuilder()
+const data1 = new ContextMenuCommandBuilder()
 	.setName('Give coins to user')
-	.setType(ApplicationCommandType.User);
+	.setType(ApplicationCommandType.User)
+
+const data2 = new SlashCommandBuilder()
+	.setName('resources')
+	.setDescription('Replies with your input!')
 
 const commands = [
-	data,
+	data1, data2
 ]
 	.map(command => command.toJSON());
 
