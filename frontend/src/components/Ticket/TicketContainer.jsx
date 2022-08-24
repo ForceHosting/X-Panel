@@ -78,13 +78,13 @@ export default function TicketContainer({ticketid, socket, currentUser}) {
                                                   <div className="inline-block bg-blue-600 rounded-full p-2 px-6 text-white">
                                                       <span>{message.message}</span>
                                                   </div>
-                                                  <div className="pr-4"><small className="text-gray-500">You • June 23</small></div>
+                                                  <div className="pr-4"><small className="text-gray-300">You • June 23</small></div>
                                               </div>
                                           </div>
                                             : 
                                             <div ref={scrollRef} key={uuidv4()} className="message mb-4 flex">
                                             <div className="flex-1 px-2">
-                                                <div className="inline-block bg-gray-300 rounded-full p-2 px-6 text-gray-700">
+                                                <div className="inline-block bg-gray-400 rounded-full p-2 px-6 text-gray-700">
                                                     <span>{message.message}</span>
                                                 </div>
                                                 <div className="pl-4"><small className="text-gray-300">{message.user} • June 22</small></div>
@@ -98,10 +98,10 @@ export default function TicketContainer({ticketid, socket, currentUser}) {
                                 </div>
                                 <div className="flex-2 pt-4 pb-10">
                                 <form action="" onSubmit={(event) => handleSendMsg(event)}>
-                                    <div className="write bg-gray-500 shadow flex rounded-lg">
+                                    <div className="write bg-gray-600 shadow flex rounded-lg">
                                     
                                         <div className="flex-1">
-                                            <input type="text" value={msg} onChange={(e) => setMsg(e.target.value)} id="msg" name="message" className="w-full block outline-none py-4 px-4 bg-transparent" rows="1" placeholder="Type a message..." autoFocus/>
+                                            <input type="text" value={msg} onChange={(e) => setMsg(e.target.value)} id="msg" name="message" className="text-gray-200 w-full block outline-none py-4 px-4 bg-transparent" rows="1" placeholder="Type a message..." autoFocus/>
                                         </div>
                                         <div className="flex-2 w-32 p-2 flex content-center items-center">
                                             <div className="flex-1 text-center">

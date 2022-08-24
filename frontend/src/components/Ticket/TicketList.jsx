@@ -1,9 +1,6 @@
-import axios from "axios";
-import { getUserDataRoute } from "utils/APIRoutes";
+//planned for future implementation
 
-export default function TicketList({currentUser, isStaff}) {
-
-
+export default function TicketList() {
     return (
         <div className="sidebar hidden lg:flex w-1/3 flex-2 flex-col pr-6">
                             <div className="search flex-2 pb-6 px-2">

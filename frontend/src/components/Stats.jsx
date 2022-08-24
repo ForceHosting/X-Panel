@@ -8,7 +8,7 @@ export default function Stats({ memory, cpu, disk, slots }) {
                     <h2 className="text-xs md:text-sm text-gray-300 font-bold tracking-wide md:tracking-wider">
                         Your Statistics</h2>
                 </div>
-                <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
+                <div className="bg-gray-700 p-6 rounded-xl border border-gray-700">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
                             <p className="text-xs text-gray-300 tracking-wide">Memory</p>
@@ -19,7 +19,7 @@ export default function Stats({ memory, cpu, disk, slots }) {
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
+                <div className="bg-gray-700 p-6 rounded-xl border border-gray-700">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
                             <p className="text-xs text-gray-300 tracking-wide">CPU</p>
@@ -30,7 +30,7 @@ export default function Stats({ memory, cpu, disk, slots }) {
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
+                <div className="bg-gray-700 p-6 rounded-xl border border-gray-700">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
                             <p className="text-xs text-gray-300 tracking-wide">Disk Space</p>
@@ -41,7 +41,7 @@ export default function Stats({ memory, cpu, disk, slots }) {
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-600 p-6 rounded-xl border border-gray-600">
+                <div className="bg-gray-700 p-6 rounded-xl border border-gray-700">
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col">
                             <p className="text-xs text-gray-300 tracking-wide">Server Slots</p>

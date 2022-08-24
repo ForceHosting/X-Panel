@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import { addToQueueRoute } from "utils/APIRoutes";
 
 export default function Payment() {
 
@@ -15,25 +11,6 @@ export default function Payment() {
 
     const navigate = useNavigate();
     const [username, setUsername] = useState(undefined)
-    const [userUid, setUid] = useState(undefined)
-
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      };
-
-    const [values, setValues] = useState({
-        uid: "",
-        name: "",
-        location: "",
-        software: "",
-        memory: "",
-        cpu: "",
-        disk: "",
-      });
 
     useEffect(() => {
         (async function() {
@@ -43,41 +20,9 @@ export default function Payment() {
       } else {
         const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
         setUsername(data.username)
-        setUid(data._id)
       }
     })();
     }, [navigate]);
-
-
-
-const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const { name, location, software, memory, cpu, disk } = values;
-          
-          const { data } = await axios.post(addToQueueRoute, {
-            userUid,
-            name,
-            location,
-            software,
-            memory,
-            disk,
-            cpu,
-          });
-          console.log(data)
-          if (data.added === false) {
-            toast.error(data.msg, toastOptions);
-          }
-          if (data.status === true) {
-            toast.success("Server added to queue!")
-            navigate("/");
-          }
-      };
-
-
     return (
         <>
 
@@ -105,9 +50,9 @@ const handleChange = (event) => {
           <h1 className="text-4xl text-center font-bold">$3/mo</h1>
           <p className="px-4 text-center text-sm ">Iron is made for a small community or just for friends. This server is perfect for running a few plugins with no lag.</p>
           <ul className="text-center">
-            <li><a className="font-semibold">6GB Memory</a></li>
-            <li><a className="font-semibold">50GB SSD Storage</a></li>
-            <li><a className="font-semibold">70% CPU</a></li>
+            <li><button className="font-semibold">6GB Memory</button></li>
+            <li><button className="font-semibold">50GB SSD Storage</button></li>
+            <li><button className="font-semibold">70% CPU</button></li>
           </ul>
           <div className="text-center bg-gray-200 ">
         <button className="inline-block my-6 font-bold text-gray-800">Purchase Now</button>
@@ -124,9 +69,9 @@ const handleChange = (event) => {
           <h1 className="text-4xl text-center font-bold">$5/mo</h1>
           <p className="px-4 text-center text-sm ">Need a server for modded Minecraft? Diamond plan is made for you! With this plan you can easily run 200 mods all while having a lag-free experience.</p>
           <ul className="text-center">
-            <li><a className="font-semibold">10GB Memory</a></li>
-            <li><a className="font-semibold">75GB SSD Storage</a></li>
-            <li><a className="font-semibold">90% CPU</a></li>
+            <li><button className="font-semibold">10GB Memory</button></li>
+            <li><button className="font-semibold">75GB SSD Storage</button></li>
+            <li><button className="font-semibold">90% CPU</button></li>
           </ul>
           <div className="text-center bg-pink-600 ">
         <button className="inline-block my-6 font-bold text-white">Purchase Now</button>
@@ -144,9 +89,9 @@ const handleChange = (event) => {
           <h1 className="text-4xl text-center font-bold">$8.50/mo</h1>
           <p className="px-4 text-center text-sm ">Planning a server for a medium sized community? This plan is perfect for you! Netherite plan can easily handle 350+ mods.</p>
           <ul className="text-center">
-            <li><a className="font-semibold">14GB Memory</a></li>
-            <li><a className="font-semibold">120GB SSD Storage</a></li>
-            <li><a className="font-semibold">150% CPU</a></li>
+            <li><button className="font-semibold">14GB Memory</button></li>
+            <li><button className="font-semibold">120GB SSD Storage</button></li>
+            <li><button className="font-semibold">150% CPU</button></li>
           </ul>
           <div className="text-center bg-gray-200 ">
         <button className="inline-block my-6 font-bold text-gray-800">Purchase Now</button>
@@ -157,7 +102,6 @@ const handleChange = (event) => {
   </div>
 </div>
     </main>
-    <ToastContainer/>
     </>
     )
 }
