@@ -1,21 +1,10 @@
 const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType } = require('discord.js');
 const { token } = require("../config.json");
 const User = require("../models/userModel");
-const mongoose = require("mongoose")
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
-	mongoose.connect("mongodb://localhost:27017/X-Panel?readPreference=primary&directConnection=true&ssl=false", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("DB Connetion Successfull");
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
   client.user.setActivity('my users data burn', { type: ActivityType.Watching });
 
 })
