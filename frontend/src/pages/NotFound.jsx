@@ -1,5 +1,6 @@
 import {siteName } from '../config';
 import React, { useEffect } from "react";
+import PageNotFound from 'assets/404.jpg';
 export default function NotFound(){
   useEffect(()=>{
     document.title = siteName+ " - 404"
@@ -12,12 +13,11 @@ export default function NotFound(){
               <div class="p-6 bg-white border-b border-white">
                 <div class="max-w-md w-full space-y-8">
                   <div>
-                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                      404
-                    </h2>
-                    <p class="my-2 text-center text-xs font-extrabold text-gray-900">
-                    Uh Oh! The page you requested seems to not be found! Contact support if you think this is an issue.
+                    <img src={PageNotFound}/>
+                    <p class="my-2 text-center text-lg text-gray-900">
+                    The page you are trying to reach does not exist or has been removed. 
                   </p>
+                  <p className="my-2 text-center text-lg text-gray-900">Please contact support if you believe this is an issue.</p>
                   </div>
                   <div>
                   </div>
