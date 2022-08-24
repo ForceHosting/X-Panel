@@ -80,6 +80,20 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
 
+function Addedcoins(giver,accepter,coins){
+    const newTicketEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Coins added')
+	.setDescription('A user got coins!')
+	.addFields(
+		{ name: 'Giver', value: `<@${giver}>`, inline: true },
+		{ name: 'Accepter', value: `<@${accepter}>`, inline: true},
+		{ name: 'Coins given', value: `${coins}`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
+}
+
 client.on('interactionCreate', async interaction => {
 	console.log(interaction)
 	if (!interaction.isChatInputCommand()) return;
@@ -124,13 +138,22 @@ client.on('interactionCreate', async interaction => {
 	if (interaction.commandName === 'Give coins to user') {
 		const userid = interaction.user.id
 		const userInfo = await User.findOne({ 'discordId': userid })
+		const coinInfo = await User.findOne({ 'discordId': interaction.targetUser.id })
 		console.log(userid)
 		if (!userInfo) { 
 			interaction.reply("Im sorry, but you can not use this command")
 			return
 		}
 		 if (userInfo.staffRank >= 3) {
-			if (User.findOne({ 'discordId': interaction.member.id })) {
+			if (!coinInfo) {
+				const newEmbed = new EmbedBuilder()
+				.setColor(0x0099FF)
+				.setTitle('Error')
+				.setDescription(`This user isnt linked to the panel, so you cant give them coins`)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.Reply({ content: '', embeds: [newEmbed]})	
+			}
 			const modal = new ModalBuilder()
 			.setCustomId('addcoin'+interaction.targetUser.id)
 			.setTitle('Add coins to '+interaction.targetUser.username);
@@ -167,11 +190,8 @@ client.on('interactionCreate', async interaction => {
 		}
 			
 		}
-		else {
-			interaction.reply("Im sorry, but you can not use this command")
-		}
    } 
-});
+);
 
 client.on('interactionCreate', async interaction => {
 	if (interaction.type !== InteractionType.ModalSubmit) return;
@@ -190,6 +210,7 @@ client.on('interactionCreate', async interaction => {
 			let doc = await User.findOneAndUpdate(filter, update, {
 				new: true
 			  });
+			  Addedcoins(interaction.user.id, interaction.customId.replace("addcoin", ""), cointoadd)
 			interaction.reply("Coins added to "+interaction.customId.replace("addcoin", "")+", i think... they have "+ doc.credits+ " coins")	
 			
 		}
