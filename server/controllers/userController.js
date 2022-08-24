@@ -215,3 +215,14 @@ module.exports.logOut = (req, res, next) => {
     next(ex);
   }
 };
+
+module.exports.generateAccLink = async (req, res, next) => {
+  try{
+    const {accountId} = req.body;
+    const newLinkId = makeid(10)
+    let userData = await User.findByIdAndUpdate(accountId, {'linkId': newLinkId });
+    return res.json(newLinkId)
+  }catch(ex){
+    next(ex);
+  }
+}

@@ -10,3 +10,4 @@ export const getServersRoute = `${serverIP}/api/server/getServers`
 export const getTicketMessageRoute = `${serverIP}/api/ticket/getmsg`
 export const sendTicketMessageRoute = `${serverIP}/api/ticket/addmsg`
 export const getTicketInformationRoute = `${serverIP}/api/ticket/information`
+export const generateDiscordLinkIdRoute = `${serverIP}/api/auth/link/generate`

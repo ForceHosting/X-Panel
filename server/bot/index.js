@@ -86,6 +86,41 @@ function Addedcoins(giver,accepter,coins){
 client.on('interactionCreate', async interaction => {
 	console.log(interaction)
 	if (!interaction.isChatInputCommand()) return;
+	if (interaction.commandName === 'acclink') {
+        // Gives us 15 mins to get data instend of 5 seconds
+		await interaction.reply({ content: 'Linking your account. This make take a few seconds.', ephemeral: true });
+		const linkId = interaction.options.getString('code');
+		userid = interaction.user.id;
+		const longId = await User.findOne({ 'linkId': linkId })
+		if(!longId){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`An error occured. Please contact support.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+		const userInfo = await User.findByIdAndUpdate(longId._id, {'discordId': userid});
+		if (linkId && userInfo) {
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Account Linked!')
+			.setDescription(`Your account is now linked! You can now run commands to view your resources, servers, etc.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+		await interaction.editReply({ content: '', embeds: [newEmbed]})
+			}else {
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`An error occured. Please contact support.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}
+	}
+	}
 	if (interaction.commandName === 'resources') {
         // Gives us 15 mins to get data instend of 5 seconds
 		await interaction.reply({ content: 'Gathering your data. This will take up to 5 seconds.', ephemeral: true });
@@ -107,12 +142,11 @@ client.on('interactionCreate', async interaction => {
 			.setTimestamp()
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		await interaction.editReply({ content: '', embeds: [newEmbed]})
-			}
-		else {
+			}else {
 			const newEmbed = new EmbedBuilder()
 			.setColor(0x0099FF)
 			.setTitle('Error!')
-			.setDescription(`You have not linked your discord account to your account on the panel. You can find how to do this on our wiki!`)
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})

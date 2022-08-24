@@ -11,6 +11,8 @@ import NewTicket from 'pages/Tickets/NewTicket';
 import Payment from 'pages/Payment';
 import Account from 'pages/Account';
 import Ticket from 'pages/Tickets/Ticket';
+import ToS from 'pages/Legal/ToS';
+import PrivacyPolicy from 'pages/Legal/PrivacyPolicy';
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account socket={socket} currentUser={currentUser} />} />
         <Route path="/support/:id" element={<Ticket socket={socket} currentUser={currentUser} />} />
+        <Route path="/legal/tos" element={<ToS/>}/>
+        <Route path="/legal/privacy" element={<PrivacyPolicy/>} />
         <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>

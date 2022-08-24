@@ -11,9 +11,14 @@ const data1 = new ContextMenuCommandBuilder()
 const data2 = new SlashCommandBuilder()
 	.setName('resources')
 	.setDescription('Replies with your input!')
-
+const data3 = new SlashCommandBuilder()
+.setName('acclink')
+.setDescription('Link your client area account to Discord!')
+.addStringOption((option) => option.setName('code')
+                 .setDescription('The unique code generated in the client area'))
+      
 const commands = [
-	data1, data2
+	data1, data2, data3
 ]
 	.map(command => command.toJSON());
 
