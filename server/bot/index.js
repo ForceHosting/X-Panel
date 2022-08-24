@@ -1,12 +1,12 @@
 const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType } = require('discord.js');
 const { token } = require("../config.json");
+const mongoose = require("mongoose")
 const User = require("../models/userModel");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
   client.user.setActivity('my users data burn', { type: ActivityType.Watching });
-
 })
 
 function userRegister(username){

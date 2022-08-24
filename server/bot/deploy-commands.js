@@ -15,7 +15,8 @@ const data3 = new SlashCommandBuilder()
 .setName('acclink')
 .setDescription('Link your client area account to Discord!')
 .addStringOption((option) => option.setName('code')
-                 .setDescription('The unique code generated in the client area'))
+                 .setDescription('The unique code generated in the client area')
+				 .setRequired(true));
       
 const commands = [
 	data1, data2, data3
