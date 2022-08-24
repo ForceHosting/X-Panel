@@ -1,11 +1,21 @@
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const { token } = require("../config.json");
 const User = require("../models/userModel");
-
+const mongoose = require("mongoose")
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
+	mongoose.connect("mongodb://localhost:27017/X-Panel?readPreference=primary&directConnection=true&ssl=false", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("DB Connetion Successfull");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 })
 
 function userRegister(username){
@@ -69,8 +79,8 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
 }
 
 client.on('interactionCreate', async interaction => {
+	console.log(interaction)
 	if (!interaction.isChatInputCommand()) return;
-
 	if (interaction.commandName === 'resources') {
         // Gives us 15 mins to get data instend of 5 seconds
 		await interaction.reply({ content: 'Gathering your data. This will take up to 5 seconds.', ephemeral: true });
@@ -105,8 +115,23 @@ client.on('interactionCreate', async interaction => {
 		  
 	    
 	}
+	if (interaction.commandName === 'qwertyuiopasdfghjkzxcvbnm') {
+
+	}
 });
 
+client.on('interactionCreate', async interaction => {
+	if (interaction.commandName = "Give coins to user") {
+		const userid = interaction.user.id
+		const userInfo = await User.findOne({ 'discordId': userid })
+		if (userInfo.staffRank >= 3) {
+			interaction.reply("You are aloud to use this command")
+		}
+		else {
+			interaction.reply("Im sorry, but you can not use this command")
+		}
+	}
+})
 
 client.login(token);
 module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode };
