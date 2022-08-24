@@ -76,6 +76,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  staffRank: {
+    type: Number,
+    required: true,
+    default: 0
+  },
   discordId: {
     type: Number,
     required: false,

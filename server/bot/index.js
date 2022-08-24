@@ -1,11 +1,12 @@
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType } = require('discord.js');
 const { token } = require("../config.json");
 const User = require("../models/userModel");
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
+  client.user.setActivity('my users data burn', { type: ActivityType.Watching });
+
 })
 
 function userRegister(username){
@@ -68,7 +69,22 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
 
+function Addedcoins(giver,accepter,coins){
+    const newTicketEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Coins added')
+	.setDescription('A user got coins!')
+	.addFields(
+		{ name: 'Giver', value: `<@${giver}>`, inline: true },
+		{ name: 'Accepter', value: `<@${accepter}>`, inline: true},
+		{ name: 'Coins given', value: `${coins}`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
+}
+
 client.on('interactionCreate', async interaction => {
+	console.log(interaction)
 	if (!interaction.isChatInputCommand()) return;
 	if (interaction.commandName === 'acclink') {
         // Gives us 15 mins to get data instend of 5 seconds
@@ -140,6 +156,89 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isUserContextMenuCommand()) return;
+	if (interaction.commandName === 'Give coins to user') {
+		const userid = interaction.user.id
+		const userInfo = await User.findOne({ 'discordId': userid })
+		const coinInfo = await User.findOne({ 'discordId': interaction.targetUser.id })
+		console.log(userid)
+		if (!userInfo) { 
+			interaction.reply("Im sorry, but you can not use this command")
+			return
+		}
+		 if (userInfo.staffRank >= 3) {
+			if (!coinInfo) {
+				const newEmbed = new EmbedBuilder()
+				.setColor(0x0099FF)
+				.setTitle('Error')
+				.setDescription(`This user isnt linked to the panel, so you cant give them coins`)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.Reply({ content: '', embeds: [newEmbed]})	
+			}
+			const modal = new ModalBuilder()
+			.setCustomId('addcoin'+interaction.targetUser.id)
+			.setTitle('Add coins to '+interaction.targetUser.username);
+
+		// Add components to modal
+
+		// Create the text input components
+		const favoriteColorInput = new TextInputBuilder()
+			.setCustomId('Coins')
+		    // The label is the prompt the user sees for this input
+			.setLabel("How many coins to add")
+		    // Short means only a single line of text
+			.setStyle(TextInputStyle.Short);
+
+
+		// An action row only holds one text input,
+		// so you need one action row per text input.
+		const firstActionRow = new ActionRowBuilder().addComponents(favoriteColorInput);
+
+		// Add inputs to the modal
+		modal.addComponents(firstActionRow);
+
+		// Show the modal to the user
+		await interaction.showModal(modal)
+			}
+		else {
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error')
+			.setDescription(`This user isnt linked to the panel, so you cant give them coins`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+		await interaction.Reply({ content: '', embeds: [newEmbed]})
+		}
+			
+		}
+   } 
+);
+
+client.on('interactionCreate', async interaction => {
+	if (interaction.type !== InteractionType.ModalSubmit) return;
+	if (interaction.customId.includes("addcoin")) {
+		const cointoadd = interaction.fields.getTextInputValue('Coins');
+		if (isNaN(cointoadd)) {
+			await interaction.reply({ content: 'That is not a number, please use a number next time.' });
+			return;
+		}
+		const userInfo = await User.findOne({ 'discordId': interaction.user.id })
+		const coinInfo = await User.findOne({ 'discordId': interaction.customId.replace("addcoin", "") })
+		if (userInfo.staffRank >= 3) {
+			newcoins = Number(cointoadd) + Number(coinInfo.credits)
+			const filter = { 'discordId': Number(interaction.customId.replace("addcoin", "")) };
+			const update = { credits : newcoins };
+			let doc = await User.findOneAndUpdate(filter, update, {
+				new: true
+			  });
+			  Addedcoins(interaction.user.id, interaction.customId.replace("addcoin", ""), cointoadd)
+			interaction.reply("Coins added to "+interaction.customId.replace("addcoin", "")+", i think... they have "+ doc.credits+ " coins")	
+			
+		}
+	}
+})
 
 client.login(token);
 module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode };
