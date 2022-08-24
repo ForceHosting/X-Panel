@@ -7,7 +7,6 @@ import TicketContainer from "components/Ticket/TicketContainer";
 import { io } from "socket.io-client";
 import { serverIP } from "config";
 import axios from "axios";
-import TicketList from "components/Ticket/TicketList";
 import { getTicketInformationRoute, getUserDataRoute } from "utils/APIRoutes";
 
 export default function Ticket(currentUser) {
@@ -41,7 +40,6 @@ export default function Ticket(currentUser) {
     const navigate = useNavigate();
     const [username, setUsername] = useState(undefined)
     const [currentTicket, setTicket] = useState(undefined)
-    const [isStaff, setStaff] = useState(undefined)
     //const [userUid, setUid] = useState(undefined
 
     useEffect(() => {
@@ -52,14 +50,13 @@ export default function Ticket(currentUser) {
             if(ticketInformation.data.ticketData.owner === data._id){
             }else{
                 if(userData.data.userData.role === "Staff"){
-                    setStaff(true)
                 }else{
                     navigate("/")
                 }
             }
 
         })();
-    }, [navigate])
+    }, [navigate, params])
 
     useEffect(() => {
         setTicket(params.id);
