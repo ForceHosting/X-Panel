@@ -27,6 +27,15 @@ function userLogin(username){
 	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006667890604388403').send({embeds: [newLoginEmbed]})
 }
+function newWebUser(username, domain){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('New Web Hosting Account')
+	.setDescription(`${username} just created a free webhosting account. Domain: \`${domain}\``)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1012424743347040256').send({embeds: [newLoginEmbed]})
+}
 function sendErrorCode(code, message){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
@@ -241,4 +250,4 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode };
+module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser };

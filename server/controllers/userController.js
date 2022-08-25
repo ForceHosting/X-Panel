@@ -42,9 +42,6 @@ module.exports.getData = async (req, res, next) => {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         return res.json({ msg: "Incorrect Email or Password", status: false });
-      const checkIP = await User.find({ userIP }).count();
-      if(checkIP > 1)
-         return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
         const userData = await User.findOne({ email }).select([
           "_id",
           "uid",
