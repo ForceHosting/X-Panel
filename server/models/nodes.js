@@ -6,7 +6,7 @@ const serversSechma = new mongoose.Schema({
         required: true,
     },
     pteroId: {
-        type: Number,
+        type: String,
         required: true,
     },
     nodeSlots: {
@@ -15,4 +15,4 @@ const serversSechma = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Servers", serversSechma);
+module.exports = mongoose.model("Nodes", serversSechma);

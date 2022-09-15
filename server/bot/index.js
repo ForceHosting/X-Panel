@@ -78,6 +78,40 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
 
+function createdServer(username, servername, servermem, servercpu, serverdisk, node, pteroId){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('New Server Created')
+	.setDescription(`The user ${username} just created their server.`)
+    .addFields(
+        { name: 'Name', value: `${servername}`, inline: true},
+        { name: 'Memory', value: `${servermem}`, inline: true},
+        { name: 'CPU', value: `${servercpu}`, inline: true},
+        { name: 'Disk', value: `${serverdisk}`, inline: true},
+		{ name: 'Node', value: `${node}`, inline: true},
+		{ name: 'Pterodactyl ID', value: `${pteroId}`, inline: true}
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
+}
+
+function deletedServer(username, servermem, servercpu, serverdisk, node){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor('DarkRed')
+	.setTitle('Server Deleted')
+	.setDescription(`The user ${username} just deleted their server.`)
+    .addFields(
+        { name: 'Memory', value: `${servermem}`, inline: true},
+        { name: 'CPU', value: `${servercpu}`, inline: true},
+        { name: 'Disk', value: `${serverdisk}`, inline: true},
+		{ name: 'Node', value: `${node}`, inline: true},
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
+}
+
 function Addedcoins(giver,accepter,coins){
     const newTicketEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
@@ -250,4 +284,4 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser };
+module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer };

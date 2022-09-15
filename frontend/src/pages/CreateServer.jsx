@@ -71,9 +71,9 @@ const handleChange = (event) => {
           if (data.added === false) {
             toast.error(data.msg, toastOptions);
           }
-          if (data.status === true) {
-            toast.success("Server added to queue!")
-            navigate("/");
+          if (data.added === true) {
+            toast.success("Server created!", toastOptions)
+            setTimeout(() => { navigate("/") }, 8000);
           }
       };
 
@@ -114,7 +114,7 @@ const handleChange = (event) => {
                                                 <option value="4" disabled>Teamspeak3 (Coming Soon!)</option>
                                                 <option value="5">Mumble</option>
                                                 <option value="6">Python</option>
-                                                <option value="7">NodeJS</option>
+                                                <option value="22">NodeJS</option>
                                                 <option value="8">LavaLink</option>
                                             </select>
                                         </div>
@@ -138,7 +138,7 @@ const handleChange = (event) => {
                                         Reset
                                     </button>
                                     <button type="submit" name="submit" className="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Add to Queue
+                                        Create Server
                                     </button>
                                 </div>
                             </div>

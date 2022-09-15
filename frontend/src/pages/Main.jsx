@@ -4,8 +4,10 @@ import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
 import axios from "axios";
-import { getUserDataRoute, getServersRoute } from "utils/APIRoutes";
+import { getUserDataRoute, getServersRoute, renewServerRoute, deleteServerRoute } from "utils/APIRoutes";
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export default function Main(currentUser, socket) {
@@ -13,6 +15,14 @@ export default function Main(currentUser, socket) {
     useEffect(()=>{
         document.title = siteName+ " - Home"
     })
+
+    const toastOptions = {
+      position: "bottom-right",
+      autoClose: 8000,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "dark",
+    };
 
     const navigate = useNavigate();
     const [username, setUsername] = useState(undefined)
@@ -65,6 +75,19 @@ setInterval(()=>{
                 }
 
           })
+
+const deleteServer = async (event,server) => {
+  const data = await JSON.parse(localStorage.getItem(process.env.USER_KEY));
+  console.log(data._id)
+  console.log(server._id)
+  const getDeleteData = await axios.get(`${deleteServerRoute}/${data._id}/${server._id}`);
+  console.log(getDeleteData)
+  if(getDeleteData.status === 200){
+    toast.success('Server deleted successfully.', toastOptions)
+  }else{
+    toast.error(getDeleteData.msg, toastOptions)
+  }
+}
       
     return (
         <>
@@ -114,8 +137,8 @@ setInterval(()=>{
   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}>{server.serverMemory}mb</td>
   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}>{server.serverCPU}%</td>
   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}>{server.serverDisk}mb</td>
-  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}>In Queue</td>
   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}>Soon!</td>
+  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white" key={uuidv4()}><button onClick={(event) => deleteServer(event, server)} className="bg-red-500 hover:bg-red-400 rounded py-2 px-4 text-md font-semibold">Delete</button></td>
   </tr>
       );
     })}
@@ -127,6 +150,7 @@ setInterval(()=>{
         </div>
       </div>
     </main>
+    <ToastContainer />
     </>
     )
 }

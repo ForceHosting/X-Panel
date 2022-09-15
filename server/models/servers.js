@@ -31,8 +31,7 @@ const serversSechma = new mongoose.Schema({
         default: false
     },
     serverOwner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
         required: true,
     }
 });
