@@ -13,7 +13,7 @@ export default function NotFound(){
               <div class="p-6 bg-white border-b border-white">
                 <div class="max-w-md w-full space-y-8">
                   <div>
-                    <img src={PageNotFound}/>
+                    <img src={PageNotFound} alt="not found"/>
                     <p class="my-2 text-center text-lg text-gray-900">
                     The page you are trying to reach does not exist or has been removed. 
                   </p>

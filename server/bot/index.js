@@ -6,7 +6,23 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
-  client.user.setActivity('my users data burn', { type: ActivityType.Watching });
+	
+	setInterval(
+		() => {
+			var statusArray = [
+				`my.forcehost.net`,
+				`What is DAv2?`,
+				`When will the host be up?`,
+				`Happy Hosting`,
+				`Sept 23`,
+				`where is the client panel?`,
+				`If FH made an onlyfans, would you buy?`
+			]
+			var randomNumber = Math.floor(Math.random()*statusArray.length);
+			client.user.setActivity(statusArray[randomNumber], { type: ActivityType.Playing });
+		}, 5000
+	)
+
 })
 
 function userRegister(username){
