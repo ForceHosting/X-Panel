@@ -4,11 +4,11 @@ import Nav from 'components/Nav';
 import { useNavigate } from "react-router-dom";
 import { siteName } from "config";
 import axios from "axios";
-import { getUserDataRoute, getServersRoute, renewServerRoute, deleteServerRoute } from "utils/APIRoutes";
+import { getUserDataRoute, getServersRoute, deleteServerRoute } from "utils/APIRoutes";
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Link } from 'react-router-dom';
 
 export default function Main(currentUser, socket) {
 
@@ -100,13 +100,14 @@ const deleteServer = async (event,server) => {
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-1 max-w-full flex-grow flex-1">
                 <h3 className="font-semibold text-base  text-white">Your Servers</h3>
+                <p className="text-left text-white">Don't have any servers? Create one <Link className="text-blue-500" to="/server/create">here!</Link></p>
               </div>
               
             </div>
           </div>
 
           <div className="block w-full overflow-x-auto">
-            <table className="items-center bg-transparent w-full border-collapse ">
+            <table className="items-center bg-transparent w-full border-collapse mb-10">
               <thead>
                 <tr>
                   <th className=" text-white px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">

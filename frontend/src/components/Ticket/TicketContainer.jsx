@@ -75,7 +75,7 @@ export default function TicketContainer({ticketid, socket, currentUser}) {
                                             (message.fromSelf ?
                                               <div ref={scrollRef} key={uuidv4()} className="message me mb-4 flex text-right">
                                               <div className="flex-1 px-2">
-                                                  <div className="inline-block bg-blue-600 rounded-full p-2 px-6 text-white">
+                                                  <div className="inline-block bg-blue-600 rounded-lg p-2 px-3 text-white">
                                                       <span>{message.message}</span>
                                                   </div>
                                                   <div className="pr-4"><small className="text-gray-300">You • June 23</small></div>
@@ -84,7 +84,7 @@ export default function TicketContainer({ticketid, socket, currentUser}) {
                                             : 
                                             <div ref={scrollRef} key={uuidv4()} className="message mb-4 flex">
                                             <div className="flex-1 px-2">
-                                                <div className="inline-block bg-gray-400 rounded-full p-2 px-6 text-gray-700">
+                                                <div className="inline-block bg-gray-400 rounded-lg p-2 px-3 text-gray-700">
                                                     <span>{message.message}</span>
                                                 </div>
                                                 <div className="pl-4"><small className="text-gray-300">{message.user} • June 22</small></div>

@@ -57,7 +57,6 @@ const handleChange = (event) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const { name, location, software, memory, cpu, disk } = values;
-          
           const { data } = await axios.post(addToQueueRoute, {
             userUid,
             name,
@@ -97,7 +96,8 @@ const handleChange = (event) => {
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="location" className="block text-sm font-medium text-gray-300">Server Location</label>
-                                            <select id="location" onChange={(e) => handleChange(e)} name="location" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm">
+                                            <select id="location" required onChange={(e) => handleChange(e)} name="location" className="mt-1 block w-full py-2 px-3 border  rounded-md border-gray-300 text-white bg-gray-700 shadow-sm focus:outline-none sm:text-sm">
+                                                <option value="0">Please select a location</option>
                                                 <option value="1">Stormbreaker (Germany)</option>
                                                 <option value="2">Curiosity (Germany)</option>
                                                 <option value="5">Omega (Germany)</option>

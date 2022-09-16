@@ -10,7 +10,12 @@ module.exports.createServer = async (req, res, next) => {
   try {
     const { userUid, name, location, software, memory, disk, cpu } = req.body;
     const user = await User.findOne({ userUid });
-    console.log(location)
+    if(location == ""){
+      return res.json({ added: false, msg: "You need to select a node first."});
+    }else{
+    if(software == ""){
+      return res.json({added: false, msg: "Please select a server software."});
+    }
     const getNodeStats = await Node.findOne({ pteroId: location }).select([
       "nodeSlots"
     ]);
@@ -21,6 +26,13 @@ module.exports.createServer = async (req, res, next) => {
         const newTotalDisk = user.availDisk - disk;
         const newTotalCPU = user.availCPU - cpu;
         const newTotalSlots = user.availSlots - 1;
+        if(memory < 500){
+          return res.json({ added: false, msg: "You need to have more than 499mb of memory on a server."});
+        }else if(disk < 1000){
+          return res.json({ added: false, msg: "You need to have more than 1000mb of disk space on a server."});
+        }else if(cpu < 25){
+          return res.json({ added: false, msg: "You need to have more than 24% of CPU on a server."});
+        }else{
         if(newTotalMem < 0){
           return res.json({ added: false, msg: "You can't use more memory than your account has."})
         }else if(newTotalDisk < 0){
@@ -30,6 +42,7 @@ module.exports.createServer = async (req, res, next) => {
         }else if(newTotalSlots < 0){
           return res.json({ added: false, msg: "You can't use more slots than your account has."})
         }else{
+
         const eggFind = await fetch('https://panel.forcehost.net/api/application/nests/2/eggs/'+software, {
           method: 'GET',
           headers: {
@@ -100,7 +113,6 @@ module.exports.createServer = async (req, res, next) => {
       })
     })
     const pteroData = await pteroCreate.json();
-    console.log(pteroData)
     if(pteroData.attributes.id){
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
       const server = await Server.create({
@@ -123,6 +135,8 @@ module.exports.createServer = async (req, res, next) => {
     }
       }
     }
+  }
+}
   } catch(ex) {
     next(ex)
   }

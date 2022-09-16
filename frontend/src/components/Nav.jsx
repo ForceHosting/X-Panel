@@ -30,7 +30,7 @@ export default function Nav({ username }){
                 <p className="text-sm font-light uppercase text-gray-300">
                     Powered by X-Panel
                     <span className="text-base block font-bold tracking-widest">
-                        {siteName}
+                    {siteName}
                     </span>
                 </p>
             </a>
