@@ -25,6 +25,7 @@
     "form-data": "^4.0.0",
     "mongoose": "^6.2.1",
     "node-fetch": "^2.6.7",
+    "nodemailer": "^6.7.8",
     "nodemon": "^2.0.15",
     "paypal-rest-sdk": "^1.8.1",
     "short-unique-id": "^4.4.4",

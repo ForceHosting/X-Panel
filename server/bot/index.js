@@ -2,13 +2,24 @@ const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, Tex
 const { token } = require("../config.json");
 const mongoose = require("mongoose")
 const User = require("../models/userModel");
+const Server = require("../models/servers");
+const Webhosting = require("../models/webhostingModel");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
 	
 	setInterval(
-		() => {
+		async () => {
+				const users = await User.find().count();
+				const servers = await Server.find().count();
+				const web = await Webhosting.find().count();
+				const usersChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020537846542635079');
+				usersChannel.setName(`✨ ${users} users!`)
+				const serversChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020539431670780027');
+				serversChannel.setName(`✨ ${servers} servers!`)
+				const webChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020538820925603850');
+				webChannel.setName(`✨ ${web} websites!`)
 			var statusArray = [
 				`my.forcehost.net`,
 				`What is DAv2?`,
@@ -16,7 +27,10 @@ client.once('ready', () => {
 				`Happy Hosting`,
 				`Sept 23`,
 				`where is the client panel?`,
-				`If FH made an onlyfans, would you buy?`
+				`If FH made an onlyfans, would you buy?`,
+				`with ${users} users`,
+				`on ${servers} servers`,
+				`on ${web} webistes`
 			]
 			var randomNumber = Math.floor(Math.random()*statusArray.length);
 			client.user.setActivity(statusArray[randomNumber], { type: ActivityType.Playing });
