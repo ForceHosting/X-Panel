@@ -33,10 +33,8 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   pteroId: {
-    type: String,
-    required: true,
-    unique: true,
-    max: 20,
+    type: Number,
+    required: true
   },
   pteroPwd: {
     type: String,

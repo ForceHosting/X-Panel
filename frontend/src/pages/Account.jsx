@@ -33,7 +33,7 @@ export default function Account(currentUser, socket) {
         let base64ToString = Buffer.from(data.pteroPwd, "base64").toString();
         setUsername(data.username)
         setEmail(data.email)
-        setPteroUser(data.pteroId)
+        setPteroUser(data.pteroUserId)
         setPteroPwd(base64ToString)
         //setUid(data._id)
       }

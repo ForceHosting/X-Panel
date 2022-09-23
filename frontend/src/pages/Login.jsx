@@ -1,4 +1,4 @@
-import {siteName, siteLogo } from '../config';
+import {siteName } from '../config';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
@@ -76,11 +76,6 @@ const handleSubmit = async (event) => {
             <div class="p-6 bg-white border-b border-white">
               <div class="max-w-md w-full space-y-8">
                 <div>
-                  <img
-                    class="mx-auto h-12 w-auto rounded-xl"
-                    src={siteLogo}
-                    alt="Workflow"
-                  />
                   <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Login to {siteName}
                   </h2>
@@ -97,13 +92,14 @@ const handleSubmit = async (event) => {
   </div>
   <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
 </form>
+<p className="my-2 text-center text-xs font-semibold text-gray-900">Don't have an account? Register <a className='text-blue-500' href="/register">here!</a></p>
                   <p class="my-2 text-center text-xs font-extrabold text-gray-900">
                     By logging in you agree with our {""}
-                    <a href="DADDY" class="text-blue-500">
+                    <a href="/legal/tos" class="text-blue-500">
                       Terms Of Service {""}
                     </a>
                     and {""}
-                    <a href="DADDY" class="text-blue-500">
+                    <a href="/legal/privacy" class="text-blue-500">
                       Privacy Policy
                     </a>
                   </p>

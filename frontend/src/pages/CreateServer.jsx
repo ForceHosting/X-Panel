@@ -108,14 +108,15 @@ const handleChange = (event) => {
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="location" className="block text-sm font-medium text-gray-300">Server Software</label>
                                             <select id="location" name="software" onChange={(e) => handleChange(e)} className="mt-1 block w-full py-2 px-3 border  rounded-md shadow-sm focus:outline-none border-gray-300 text-white bg-gray-700 sm:text-sm">
-                                                <option value="1">PaperMC</option>
-                                                <option value="2">Forge</option>
-                                                <option value="3">Bungeecord</option>
-                                                <option value="4" disabled>Teamspeak3 (Coming Soon!)</option>
-                                                <option value="5">Mumble</option>
-                                                <option value="6">Python</option>
-                                                <option value="22">NodeJS</option>
-                                                <option value="8">LavaLink</option>
+                                                <option value="0">Please select a software</option>
+                                                <option value="15">PaperMC</option>
+                                                <option value="16">Bungeecord</option>
+                                                <option value="17">Vanilla</option>
+                                                <option value="18">Forge</option>
+                                                <option value="19">Lavalink</option>
+                                                <option value="21">Python</option>
+                                                <option value="20">NodeJS</option>
+                                                <option value="22">MongoDB</option>
                                             </select>
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">

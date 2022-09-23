@@ -7,6 +7,7 @@ const { makeid, getIP, sendWelcome } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const fetch = require('node-fetch');
 const {pteroKey} = require('../config.json');
+const noRegister = true;
 
 module.exports.getData = async (req, res, next) => {
   try {
@@ -80,7 +81,10 @@ module.exports.getUserLevel = async (req, res, next) => {
 
 module.exports.register = async (req, res, next) => {
   try {
-    const userUid = uid()
+    if(noRegister == true){
+      return res.json({ msg: "Registration will be enabled soon!", status: false})
+    }else{
+      const userUid = uid()
     const { username, email, password } = req.body;
     const {ip} = await fetch('https://api.ipify.org?format=json', { method: 'GET' })
       .then(res => res.json())
@@ -98,12 +102,11 @@ module.exports.register = async (req, res, next) => {
       return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
     const pteroIdu = makeid(10);
-    const pteroUid = makeid(5)
     const pteroPass = makeid(15)
     var rawPteroPass = Buffer.from(pteroPass);
     var encryptedPteroPass = rawPteroPass.toString('base64');
 
-    const pteroData = await fetch('https://panel.forcehost.net/api/application/users', {
+    const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -117,19 +120,21 @@ module.exports.register = async (req, res, next) => {
         password: pteroPass
       })
     });
-    if(pteroData.status != 201){
+    const pteroData = await pteroReq.json();
+    if(pteroReq.status != 201){
       const errorCode = makeid(5)
       sendErrorCode(errorCode, 'Pterodactyl account creation issue')
       return res.json({ msg: `There was an issue with creating your account. Please contact support. Err code: ${errorCode}`, status: false});
     }
     const newLinkId = makeid(10)
+    const pterodactylUid = pteroData.attributes.id;
     const user = await User.create({
       uid: userUid,
       username: username,
       email: email,
       lastIP: ip,
-      pteroUserId: pteroUid,
-      pteroId: pteroIdu,
+      pteroUserId: pteroIdu,
+      pteroId: pterodactylUid,
       pteroPwd: encryptedPteroPass,
       credits: 0,
       password: hashedPassword,
@@ -154,6 +159,7 @@ module.exports.register = async (req, res, next) => {
     userRegister(user.username)
     sendWelcome(userData.email)
     return res.json({ status: true, userData });
+    }
   } catch (ex) {
     next(ex);
   }

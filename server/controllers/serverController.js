@@ -43,7 +43,7 @@ module.exports.createServer = async (req, res, next) => {
           return res.json({ added: false, msg: "You can't use more slots than your account has."})
         }else{
 
-        const eggFind = await fetch('https://panel.forcehost.net/api/application/nests/2/eggs/'+software, {
+        const eggFind = await fetch('https://control.forcehost.net/api/application/nests/5/eggs/'+software, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ module.exports.createServer = async (req, res, next) => {
           }
         })
         const eggData = await eggFind.json();
-        const pteroCreate = await fetch('https://panel.forcehost.net/api/application/servers', {
+        const pteroCreate = await fetch('https://control.forcehost.net/api/application/servers', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -113,6 +113,7 @@ module.exports.createServer = async (req, res, next) => {
       })
     })
     const pteroData = await pteroCreate.json();
+    console.log(pteroData)
     if(pteroData.attributes.id){
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
       const server = await Server.create({
@@ -194,7 +195,7 @@ module.exports.addToQueue = async (req, res, next) => {
       const serverId = req.params.pid;
       const serverData = await Server.findById(serverId);
       if(serverData.serverOwner === userId){
-        await fetch('https://panel.forcehost.net/api/application/servers/'+serverData.serverId, {
+        await fetch('https://control.forcehost.net/api/application/servers/'+serverData.serverId, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',

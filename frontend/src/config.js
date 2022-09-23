@@ -1,3 +1,3 @@
 export const siteName = "Force Host";
 export const siteLogo = "assets/xpanel.png"
-export const serverIP = "http://localhost:5000";
+export const serverIP = "https://api.my.forcehost.net";
