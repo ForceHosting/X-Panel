@@ -34,7 +34,7 @@ client.once('ready', () => {
 			]
 			var randomNumber = Math.floor(Math.random()*statusArray.length);
 			client.user.setActivity(statusArray[randomNumber], { type: ActivityType.Playing });
-		}, 5000
+		}, 10000
 	)
 
 })

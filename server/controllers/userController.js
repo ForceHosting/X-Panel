@@ -7,7 +7,7 @@ const { makeid, getIP, sendWelcome } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const fetch = require('node-fetch');
 const {pteroKey} = require('../config.json');
-const noRegister = true;
+const noRegister = false;
 
 module.exports.getData = async (req, res, next) => {
   try {
@@ -97,9 +97,9 @@ module.exports.register = async (req, res, next) => {
     const emailCheck = await User.findOne({ email });
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
-    const checkIP = await User.find({ lastIP: ip }).count();
-    if(checkIP > 0)
-      return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
+    //const checkIP = await User.find({ lastIP: ip }).count();
+    //if(checkIP > 0)
+      //return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
     const pteroIdu = makeid(10);
     const pteroPass = makeid(15)

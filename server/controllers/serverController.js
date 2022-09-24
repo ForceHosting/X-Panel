@@ -8,8 +8,9 @@ const fetch = require('node-fetch');
 
 module.exports.createServer = async (req, res, next) => {
   try {
+    
     const { userUid, name, location, software, memory, disk, cpu } = req.body;
-    const user = await User.findOne({ userUid });
+    const user = await User.findById(userUid);
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
@@ -51,6 +52,7 @@ module.exports.createServer = async (req, res, next) => {
           }
         })
         const eggData = await eggFind.json();
+        const userPtero = user.pteroId;
         const pteroCreate = await fetch('https://control.forcehost.net/api/application/servers', {
       method: 'post',
       headers: {
@@ -60,7 +62,7 @@ module.exports.createServer = async (req, res, next) => {
       },
       body: JSON.stringify({
         name: name,
-        user: user.pteroId,
+        user: userPtero,
         egg: software,
         docker_image: eggData.attributes.docker_image,
         startup: eggData.attributes.startup,
@@ -113,7 +115,6 @@ module.exports.createServer = async (req, res, next) => {
       })
     })
     const pteroData = await pteroCreate.json();
-    console.log(pteroData)
     if(pteroData.attributes.id){
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
       const server = await Server.create({
