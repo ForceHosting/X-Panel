@@ -1,0 +1,8 @@
+{
+    "token": "Bot Token",
+    "sessionSecrets": "massivesecretshere",
+    "paypal_cid": "PayPal client id",
+    "paypal_secret": "PayPal secret",
+    "paypal_mode": "sandbox",
+    "pteroKey": "Pterodactyl API App Key"
+}
