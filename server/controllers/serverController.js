@@ -27,7 +27,7 @@ module.exports.createServer = async (req, res, next) => {
         const newTotalDisk = user.availDisk - disk;
         const newTotalCPU = user.availCPU - cpu;
         const newTotalSlots = user.availSlots - 1;
-        if(memory < 500){
+        if(memory < 350){
           return res.json({ added: false, msg: "You need to have more than 499mb of memory on a server."});
         }else if(disk < 1000){
           return res.json({ added: false, msg: "You need to have more than 1000mb of disk space on a server."});
