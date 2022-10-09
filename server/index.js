@@ -32,11 +32,11 @@ app.use(session({
 mongoose.connect(process.env.MONGOURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    //auth: {
-      //username: process.env.MONGO_USER,
-      //password: process.env.MONGO_PWD,
-      //atuhdb: 'client'
-    //}
+    auth: {
+      username: process.env.MONGO_USER,
+      password: process.env.MONGO_PWD,
+      atuhdb: 'Client'
+    }
   })
   .then(() => {
     console.log("DB Connetion Successfull");
