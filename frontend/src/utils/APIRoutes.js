@@ -13,3 +13,4 @@ export const getTicketInformationRoute = `${serverIP}/api/ticket/information`
 export const generateDiscordLinkIdRoute = `${serverIP}/api/auth/link/generate`
 export const deleteServerRoute = `${serverIP}/api/server/delete`
 export const renewServerRoute = `${serverIP}/api/server/renew`
+export const deleteAccountRoute = `${serverIP}/api/auth/delete`

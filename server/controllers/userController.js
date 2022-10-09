@@ -3,7 +3,7 @@ const Servers = require("../models/servers");
 const bcrypt = require("bcrypt");
 const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 10 });
-const { makeid, getIP, sendWelcome } = require('../functions')
+const { makeid, getIP, sendWelcome, sendDelete } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const fetch = require('node-fetch');
 const {pteroKey} = require('../config.json');
@@ -230,5 +230,35 @@ module.exports.generateAccLink = async (req, res, next) => {
     return res.json(newLinkId)
   }catch(ex){
     next(ex);
+  }
+}
+
+module.exports.deleteAccount = async (req,res,next) => {
+  try {
+    const {accountId} = req.body;
+    const userInfo = await User.findById({_id: accountId}).select([
+      'email',
+      'pteroId'
+    ]);
+    const getServers = await Servers.find({ serverOwner: accountId }).count();
+    if(getServers > 0){
+      return res.json({deleted:false,msg:"You need to delete your servers first."});
+    }
+    const pteroReq = await fetch('https://control.forcehost.net/api/application/users/'+userInfo.pteroId, {
+      "method": "DELETE",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer "+pteroKey,
+  }
+    });
+    const pteroData = await pteroReq.json();
+    if(pteroData){
+      sendDelete(userInfo.email);
+      await User.deleteOne({ _id: accountId });
+      res.json({deleted:true,msg:"Your account has been deleted"})
+    }
+  }catch(ex){
+    next(ex)
   }
 }

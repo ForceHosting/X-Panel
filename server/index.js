@@ -32,11 +32,11 @@ app.use(session({
 mongoose.connect(process.env.MONGOURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    auth: {
-      username: process.env.MONGO_USER,
-      password: process.env.MONGO_PWD,
-      atuhdb: 'client'
-    }
+    //auth: {
+      //username: process.env.MONGO_USER,
+      //password: process.env.MONGO_PWD,
+      //atuhdb: 'client'
+    //}
   })
   .then(() => {
     console.log("DB Connetion Successfull");
@@ -56,7 +56,7 @@ const server = app.listen(process.env.PORT, () =>
 );
 const io = socket(server, {
   cors: {
-    origin: "https://api.my.forcehost.net",
+    origin: "http://localhost:3000",
     credentials: true,
   },
 });
