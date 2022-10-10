@@ -6,8 +6,9 @@ const uid = new ShortUniqueId({ length: 10 });
 const { makeid, getIP, sendWelcome } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const fetch = require('node-fetch');
-const {pteroKey} = require('../config.json');
+const {pteroKey, jwtToken} = require('../config.json');
 const noRegister = false;
+const jwt = require('jsonwebtoken')
 
 module.exports.getData = async (req, res, next) => {
   try {
@@ -27,6 +28,7 @@ module.exports.getData = async (req, res, next) => {
       "availSlots",
       "role",
     ]);
+
     return res.json({ userData })
   } catch(ex){
     next(ex)
@@ -58,9 +60,23 @@ module.exports.getData = async (req, res, next) => {
           "availSlots",
           "role",
         ]);
-        console.log(userData)
+      const token = jwt.sign(
+        {
+          username: userData.username,
+          email: userData.email,
+          pteroId: userData.pteroId,
+          pteroPwd: userData.Pwd,
+          credits: userData.credits,
+          availMem: userData.availMem,
+          availDisk: userData.availDisk,
+          availCPU: userData.availCPU,
+          availSlots: userData.availSlots,
+          role: userData.role
+        },
+        `${jwtToken}`
+      )
       userLogin(user.username)
-      return res.json({ status: true, userData });
+      return res.json({ status: true, user: token });
     } catch (ex) {
       next(ex);
     }
@@ -86,6 +102,7 @@ module.exports.register = async (req, res, next) => {
     }else{
       const userUid = uid()
     const { username, email, password } = req.body;
+    console.log(req.body)
     const {ip} = await fetch('https://api.ipify.org?format=json', { method: 'GET' })
       .then(res => res.json())
       .catch(error => console.error(error));
@@ -109,6 +126,7 @@ module.exports.register = async (req, res, next) => {
     const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
       method: 'post',
       headers: {
+        "Accept": "application/json",
         'Content-Type': 'application/json',
         Authorization: `Bearer `+pteroKey
       },
@@ -117,7 +135,7 @@ module.exports.register = async (req, res, next) => {
         email: email,
         first_name: 'Force Host',
         last_name: 'Registered User',
-        password: pteroPass
+        password: pteroPass,
       })
     });
     const pteroData = await pteroReq.json();
@@ -156,9 +174,25 @@ module.exports.register = async (req, res, next) => {
       "availSlots",
       "role",
     ]);
+    const token = jwt.sign(
+      {
+        username: userData.username,
+        email: userData.email,
+        pteroId: userData.pteroId,
+        pteroPwd: userData.Pwd,
+        credits: userData.credits,
+        availMem: userData.availMem,
+        availDisk: userData.availDisk,
+        availCPU: userData.availCPU,
+        availSlots: userData.availSlots,
+        role: userData.role
+      },
+      `${jwtToken}`
+    )
+    console.log(token)
     userRegister(user.username)
     sendWelcome(userData.email)
-    return res.json({ status: true, userData });
+    return res.json({ status: true, user: token });
     }
   } catch (ex) {
     next(ex);
