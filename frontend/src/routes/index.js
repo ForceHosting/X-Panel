@@ -64,7 +64,7 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: 'app', element: <GeneralApp /> },
+        { path: '/app', element: <GeneralApp /> },
         {
           path: 'user',
           children: [
@@ -76,6 +76,9 @@ export default function Router() {
             { path: ':name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> },
           ],
+        },
+        {
+          path: 'server/create', element: <Maintenance />
         },
         {
           path: 'invoice',
@@ -97,11 +100,10 @@ export default function Router() {
           ],
         },
         {
-          path: 'chat',
+          path: 'server',
           children: [
             { element: <Chat />, index: true },
-            { path: 'new', element: <Chat /> },
-            { path: ':conversationKey', element: <Chat /> },
+            { path: 'create', element: <Chat /> },
           ],
         },
         { path: 'permission-denied', element: <PermissionDenied /> },

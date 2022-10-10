@@ -1,6 +1,6 @@
 // @mui
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Typography, Card, CardContent } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -27,9 +27,11 @@ AppWelcome.propTypes = {
   title: PropTypes.string,
 };
 
-export default function AppWelcome({ title, description, action, img, ...other }) {
+export default function AppWelcome({ title, description, action, img, color="primary", ...other }) {
+  const theme = useTheme();
+
   return (
-    <RootStyle {...other}>
+    <RootStyle sx={{backgroundColor:[theme.palette[color].darker]}} {...other}>
       <CardContent
         sx={{
           p: { md: 0 },

@@ -46,7 +46,7 @@ export default function Page403() {
             <ForbiddenIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
           </m.div>
 
-          <Button to="/" size="large" variant="contained" component={RouterLink}>
+          <Button to="/app" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </ContentStyle>

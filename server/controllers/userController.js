@@ -12,8 +12,9 @@ const jwt = require('jsonwebtoken')
 
 module.exports.getData = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    let userData = await User.findById(userId).select([
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    let userData = await User.findById(jwtVerify._id).select([
       "_id",
       "uid",
       "username",
@@ -28,8 +29,7 @@ module.exports.getData = async (req, res, next) => {
       "availSlots",
       "role",
     ]);
-
-    return res.json({ userData })
+    return res.json(userData)
   } catch(ex){
     next(ex)
   }
@@ -62,6 +62,7 @@ module.exports.getData = async (req, res, next) => {
         ]);
       const token = jwt.sign(
         {
+          _id: userData._id,
           username: userData.username,
           email: userData.email,
           pteroId: userData.pteroId,
@@ -176,6 +177,7 @@ module.exports.register = async (req, res, next) => {
     ]);
     const token = jwt.sign(
       {
+        _id: userData._id,
         username: userData.username,
         email: userData.email,
         pteroId: userData.pteroId,

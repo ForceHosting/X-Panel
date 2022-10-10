@@ -27,7 +27,7 @@ export default function Maintenance() {
       <Container>
         <ContentStyle sx={{ textAlign: 'center', alignItems: 'center' }}>
           <Typography variant="h3" paragraph>
-            Website currently under maintenance
+            Page currently under maintenance
           </Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>We are currently working hard on this page!</Typography>

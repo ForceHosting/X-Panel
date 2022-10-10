@@ -16,7 +16,6 @@ import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
 import axios from '../../../utils/axios';
 import { loginRoute } from '../../../utils/APIRoutes';
-
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -55,11 +54,12 @@ export default function LoginForm() {
         email: data.email,
         password: data.password
       });
-      console.log(res)
-      if(res.data.status === true){
+      console.log(res.status)
+      if(res.status === 200){
+        const token = res.data.user
         localStorage.setItem(
           'token',
-          res.data.user
+          token
         )
         navigate("/app")
       }else{

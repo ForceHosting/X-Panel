@@ -1,7 +1,8 @@
 // @mui
+import {useEffect, useState} from 'react';
 import { Stack, Button, Typography } from '@mui/material';
 // hooks
-import useAuth from '../../../hooks/useAuth';
+import jwtDecode from 'jwt-decode';
 import useLocales from '../../../hooks/useLocales';
 // routes
 import { PATH_DOCS } from '../../../routes/paths';
@@ -11,7 +12,13 @@ import { DocIllustration } from '../../../assets';
 // ----------------------------------------------------------------------
 
 export default function NavbarDocs() {
-  const { user } = useAuth();
+  const [user, setUserInfo] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+      const decoded = jwtDecode(token);
+      setUserInfo(decoded)
+  }, [])
 
   const { translate } = useLocales();
 
@@ -21,14 +28,14 @@ export default function NavbarDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          {translate('docs.hi')}, {user?.displayName}
+          {translate('docs.hi')}, {user?.username}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
           {translate('docs.description')}
         </Typography>
       </div>
 
-      <Button href={PATH_DOCS} target="_blank" rel="noopener" variant="contained">
+      <Button href={"https://discord.gg/xFtqjTtBNy"} target="_blank" rel="noopener" variant="contained">
         {translate('docs.documentation')}
       </Button>
     </Stack>

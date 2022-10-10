@@ -39,10 +39,9 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
   },
-  chat: {
-    root: path(ROOTS_DASHBOARD, '/chat'),
-    new: path(ROOTS_DASHBOARD, '/chat/new'),
-    view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
+  server: {
+    root: path(ROOTS_DASHBOARD, '/server'),
+    create: path(ROOTS_DASHBOARD, '/server/create'),
   },
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   user: {

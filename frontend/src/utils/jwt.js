@@ -32,7 +32,7 @@ const handleTokenExpired = (exp) => {
     // eslint-disable-next-line no-alert
     alert('Token expired');
 
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('token');
 
     window.location.href = PATH_AUTH.login;
   }, timeLeft);
@@ -40,14 +40,13 @@ const handleTokenExpired = (exp) => {
 
 const setSession = (accessToken) => {
   if (accessToken) {
-    localStorage.setItem('accessToken', accessToken);
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     // This function below will handle when token is expired
     const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
     handleTokenExpired(exp);
   } else {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('token');
     delete axios.defaults.headers.common.Authorization;
   }
 };

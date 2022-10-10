@@ -1,10 +1,11 @@
 const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
-const { pteroKey } = require('../config.json');
+const { pteroKey, jwtToken } = require('../config.json');
 const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
+const jwt = require('jsonwebtoken')
 
 module.exports.createServer = async (req, res, next) => {
   try {
@@ -182,8 +183,9 @@ module.exports.addToQueue = async (req, res, next) => {
 
   module.exports.getServers = async (req, res, next) => {
     try {
-        const userId = req.params.id;
-        const servers = await Server.find({ serverOwner: userId })
+        const bearerHeader = req.headers['authorization'];
+        const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+        const servers = await Server.find({ serverOwner: jwtVerify._id })
         return res.json({ servers });
       } catch (ex) {
         next(ex);

@@ -8,11 +8,14 @@ const {
   banUser,
   generateAccLink
 } = require("../controllers/userController");
+const {
+  verifyToken
+} = require("../functions");
 
 const router = require("express").Router();
 
 router.post("/login", login);
-router.get("/getData/:id", getData);
+router.get("/getData", getData);
 router.post("/register", register);
 router.get("/allusers/:id", getAllUsers);
 router.get("/logout/:id", logOut);

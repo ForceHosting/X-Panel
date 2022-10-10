@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography, Stack } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography } from '@mui/material';
 // utils
 import cssStyles from '../../../../utils/cssStyles';
-import { fShortenNumber } from '../../../../utils/formatNumber';
 // components
 import Image from '../../../../components/Image';
-import SocialsButton from '../../../../components/SocialsButton';
 import SvgIconStyle from '../../../../components/SvgIconStyle';
+
 
 // ----------------------------------------------------------------------
 
@@ -25,11 +24,15 @@ const OverlayStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserCard.propTypes = {
-  user: PropTypes.object.isRequired,
+  server: PropTypes.object.isRequired,
+  background: PropTypes.object.isRequired,
 };
 
-export default function UserCard({ user }) {
-  const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+
+
+export default function UserCard({ server, background }) {
+  const { serverName, serverMemory, serverCPU, serverDisk, serverId } = server;
+  console.log(server)
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -49,8 +52,8 @@ export default function UserCard({ user }) {
           }}
         />
         <Avatar
-          alt={name}
-          src={avatarUrl}
+          alt={serverName}
+          src={"https://img.icons8.com/clouds/344/minecraft-logo.png"}
           sx={{
             width: 64,
             height: 64,
@@ -63,43 +66,39 @@ export default function UserCard({ user }) {
           }}
         />
         <OverlayStyle />
-        <Image src={cover} alt={cover} ratio="16/9" />
+        <Image src={background} alt={"cover"} ratio="16/9" />
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6 }}>
-        {name}
+        {serverName}
       </Typography>
 
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {position}
+        Id: {serverId}
       </Typography>
 
-      <Stack alignItems="center">
-        <SocialsButton initialColor sx={{ my: 2.5 }} />
-      </Stack>
-
-      <Divider sx={{ borderStyle: 'dashed' }} />
+      <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />
 
       <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Follower
+            Memory
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(follower)}</Typography>
+          <Typography variant="subtitle1">{serverMemory}</Typography>
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Following
+            CPU
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(following)}</Typography>
+          <Typography variant="subtitle1">{serverCPU}</Typography>
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Total Post
+            Disk
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(totalPost)}</Typography>
+          <Typography variant="subtitle1">{serverDisk}</Typography>
         </div>
       </Box>
     </Card>
