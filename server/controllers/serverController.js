@@ -9,8 +9,10 @@ const jwt = require('jsonwebtoken')
 
 module.exports.createServer = async (req, res, next) => {
   try {
-    
-    const { userUid, name, location, software, memory, disk, cpu } = req.body;
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    const userUid = jwtVerify._id;
+    const { name, location, software, memory, disk, cpu } = req.body;
     const user = await User.findById(userUid);
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
@@ -53,6 +55,9 @@ module.exports.createServer = async (req, res, next) => {
           }
         })
         const eggData = await eggFind.json();
+        if(!eggData){
+          return res.json({added: false, msg: "Fetching that software type had an issue."})
+      }
         const userPtero = user.pteroId;
         const pteroCreate = await fetch('https://control.forcehost.net/api/application/servers', {
       method: 'post',

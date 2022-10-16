@@ -78,7 +78,7 @@ export default function Router() {
           ],
         },
         {
-          path: 'server/create', element: <Maintenance />
+          path: 'server/create', element: <CreateServer />
         },
         {
           path: 'invoice',
