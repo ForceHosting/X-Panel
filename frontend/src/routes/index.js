@@ -78,9 +78,6 @@ export default function Router() {
           ],
         },
         {
-          path: 'server/create', element: <CreateServer />
-        },
-        {
           path: 'invoice',
           children: [
             { element: <Navigate to="/invoice/list" replace />, index: true },
@@ -103,7 +100,7 @@ export default function Router() {
           path: 'server',
           children: [
             { element: <Chat />, index: true },
-            { path: 'create', element: <Chat /> },
+            { path: 'create', element: <CreateServer /> },
           ],
         },
         { path: 'permission-denied', element: <PermissionDenied /> },
@@ -138,7 +135,7 @@ const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 
 // GENERAL
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
-
+const CreateServer = Loadable(lazy(() => import('../pages/dashboard/CreateServer')));
 
 // INVOICE
 const InvoiceList = Loadable(lazy(() => import('../pages/dashboard/InvoiceList')));
