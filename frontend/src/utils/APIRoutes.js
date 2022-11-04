@@ -10,5 +10,5 @@ export const getTicketMessageRoute = `/api/ticket/getmsg`
 export const sendTicketMessageRoute = `/api/ticket/addmsg`
 export const getTicketInformationRoute = `/api/ticket/information`
 export const generateDiscordLinkIdRoute = `/api/auth/link/generate`
-export const deleteServerRoute = `/api/server/delete`
+export const deleteServerRoute = `/api/server/remove`
 export const renewServerRoute = `/api/server/renew`

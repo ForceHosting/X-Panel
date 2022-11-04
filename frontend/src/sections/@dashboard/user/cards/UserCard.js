@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 // @mui
+import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Button } from '@mui/material';
 // utils
+import { deleteServerRoute } from '../../../../utils/APIRoutes';
+import axios from '../../../../utils/axios';
 import cssStyles from '../../../../utils/cssStyles';
 // components
 import Image from '../../../../components/Image';
 import SvgIconStyle from '../../../../components/SvgIconStyle';
-
 
 // ----------------------------------------------------------------------
 
@@ -31,8 +33,24 @@ UserCard.propTypes = {
 
 
 export default function UserCard({ server, background }) {
-  const { serverName, serverMemory, serverCPU, serverDisk, serverId } = server;
-  console.log(server)
+  const { serverName, serverMemory, serverCPU, serverDisk, serverId, _id } = server;
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const deleteServer = async (event,server) => {
+    console.log(server.id)
+    const getDeleteData = await axios.post(`${deleteServerRoute}`,{server: server._id},
+    {headers:
+      {'Authorization': `${localStorage.getItem('token')}`
+    }}
+    );
+    if(getDeleteData.data.status !== 200){
+      enqueueSnackbar(getDeleteData.data.msg, {variant: 'error'});
+    }else{
+      enqueueSnackbar('Server deleted successfully')
+    }
+
+  }
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -51,6 +69,7 @@ export default function UserCard({ server, background }) {
             color: 'background.paper',
           }}
         />
+        
         <Avatar
           alt={serverName}
           src={"https://img.icons8.com/clouds/344/minecraft-logo.png"}
@@ -66,9 +85,10 @@ export default function UserCard({ server, background }) {
           }}
         />
         <OverlayStyle />
+        
         <Image src={background} alt={"cover"} ratio="16/9" />
+        
       </Box>
-
       <Typography variant="subtitle1" sx={{ mt: 6 }}>
         {serverName}
       </Typography>
@@ -76,6 +96,10 @@ export default function UserCard({ server, background }) {
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         Id: {serverId}
       </Typography>
+      
+      <Button variant="outlined" sx={{ mt: 1}} color="error" onClick={(event) => deleteServer(event, server)}>
+  Delete Server
+</Button>
 
       <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />
 

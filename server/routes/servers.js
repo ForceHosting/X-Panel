@@ -8,7 +8,7 @@ const {
   
   router.post("/create", createServer);
   router.get("/getServers", getServers)
-  router.get("/delete/:uid/:pid", deleteServer)
+  router.post("/remove", deleteServer)
   
   module.exports = router;
   

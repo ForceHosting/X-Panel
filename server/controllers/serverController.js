@@ -199,9 +199,12 @@ module.exports.addToQueue = async (req, res, next) => {
 
   module.exports.deleteServer = async (req, res, next) => {
     try{
-      const userId = req.params.uid;
-      const serverId = req.params.pid;
-      const serverData = await Server.findById(serverId);
+      const bearerHeader = req.headers['authorization'];
+      const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+      const userId = jwtVerify._id;
+      const {server} = req.body;
+      const serverData = await Server.findById(server);
+      console.log(serverData)
       if(serverData.serverOwner === userId){
         await fetch('https://control.forcehost.net/api/application/servers/'+serverData.serverId, {
       method: 'DELETE',
@@ -224,9 +227,9 @@ module.exports.addToQueue = async (req, res, next) => {
         const newTotalCPU = userData.availCPU + serverData.serverCPU;
         const newTotalSlots = userData.availSlots + 1;
         deletedServer(userData.username, serverData.serverMemory, serverData.serverCPU, serverData.serverDisk, serverData.serverNode)
-        await Server.deleteOne({ _id: serverId});
+        await Server.deleteOne({ _id: server});
         await User.findByIdAndUpdate(userId, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
-        return res.json({status: 200, msg: 'Server deleted successfully.'})
+        return res.json({status: 200})
       }else{
         return res.json({status: 401, msg: 'You do not have the permission to delete this server.'})
       }
