@@ -1,1 +1,102 @@
-const _0x5dabde=_0x2b78;(function(_0x2e28ee,_0x4e8e3a){const _0x346aad=_0x2b78,_0x1d1487=_0x2e28ee();while(!![]){try{const _0x1059c1=-parseInt(_0x346aad(0x1e3))/0x1+-parseInt(_0x346aad(0x1ea))/0x2*(-parseInt(_0x346aad(0x1e6))/0x3)+parseInt(_0x346aad(0x1ee))/0x4*(parseInt(_0x346aad(0x1e5))/0x5)+parseInt(_0x346aad(0x1eb))/0x6*(parseInt(_0x346aad(0x1f4))/0x7)+-parseInt(_0x346aad(0x204))/0x8+-parseInt(_0x346aad(0x206))/0x9+parseInt(_0x346aad(0x20c))/0xa;if(_0x1059c1===_0x4e8e3a)break;else _0x1d1487['push'](_0x1d1487['shift']());}catch(_0x4f2d8f){_0x1d1487['push'](_0x1d1487['shift']());}}}(_0x254b,0x99597));function _0x2b78(_0x2bdd35,_0x550e7e){const _0x254b05=_0x254b();return _0x2b78=function(_0x2b7844,_0x5070ae){_0x2b7844=_0x2b7844-0x1dc;let _0x503b89=_0x254b05[_0x2b7844];return _0x503b89;},_0x2b78(_0x2bdd35,_0x550e7e);}function _0x254b(){const _0x5e9f96=['log','You\x27ve\x20been\x20banned.','express-session','ticket','mongoose','14077rmBDnA','msg','production','License\x20Key\x20Valid','connect','./routes/payments','./routes/tickets','express','MONGO_PWD','/api/payments','./config.json','MONGO_DB','./routes/webhosting','DB\x20Connetion\x20Successfull','/api/server','then','1280920nNBFNd','./routes/license','7265178GUwclg','MONGOURL','openTickets','use','add-user','MONGO_USER','6137850hYxXWY','cors','fromUser','/api/auth','catch','config','onlineUsers','set','json','MemoryStore','X-Panel_INFO','join','message','dotenv','255736DVbiXU','/api/webhosting','4692695BIUXQi','3HzYHAV','PORT','ENVIRONMENT','/api/license','10564Mgvoyf','876KEhybZ','node-fetch','env','4PVRmoZ'];_0x254b=function(){return _0x5e9f96;};return _0x254b();}const express=require(_0x5dabde(0x1fb)),cors=require(_0x5dabde(0x20d)),mongoose=require(_0x5dabde(0x1f3)),authRoutes=require('./routes/auth'),serverRoutes=require('./routes/servers'),ticketRoutes=require(_0x5dabde(0x1fa)),paymentRoutes=require(_0x5dabde(0x1f9)),webhostingRoutes=require(_0x5dabde(0x200)),licenseRoutes=require(_0x5dabde(0x205)),app=express(),{sessionSecrets,corsOrigin,licenseKey}=require(_0x5dabde(0x1fe)),session=require(_0x5dabde(0x1f1)),socket=require('socket.io');require(_0x5dabde(0x1e2))[_0x5dabde(0x211)]();var cookieParser=require('cookie-parser');const fetch=require(_0x5dabde(0x1ec));var MemoryStore=session[_0x5dabde(0x1de)];app['use'](cookieParser()),app[_0x5dabde(0x209)](cors()),app[_0x5dabde(0x209)](express[_0x5dabde(0x1dd)]()),app[_0x5dabde(0x209)](session({'secret':sessionSecrets,'resave':!![],'saveUninitialized':![],'name':_0x5dabde(0x1df),'store':new MemoryStore(),'cookie':{'expires':0xf4240}}));process[_0x5dabde(0x1ed)][_0x5dabde(0x1e8)]===_0x5dabde(0x1f6)?mongoose[_0x5dabde(0x1f8)](process[_0x5dabde(0x1ed)][_0x5dabde(0x207)],{'useNewUrlParser':!![],'useUnifiedTopology':!![],'auth':{'username':process[_0x5dabde(0x1ed)][_0x5dabde(0x20b)],'password':process[_0x5dabde(0x1ed)][_0x5dabde(0x1fc)],'atuhdb':process[_0x5dabde(0x1ed)][_0x5dabde(0x1ff)]}})[_0x5dabde(0x203)](()=>{const _0x5f5b3e=_0x5dabde;console[_0x5f5b3e(0x1ef)]('DB\x20Connetion\x20Successfull');})[_0x5dabde(0x210)](_0x260eba=>{const _0x21a5ac=_0x5dabde;console[_0x21a5ac(0x1ef)](_0x260eba[_0x21a5ac(0x1e1)]);}):mongoose['connect'](process[_0x5dabde(0x1ed)][_0x5dabde(0x207)],{'useNewUrlParser':!![],'useUnifiedTopology':!![]})[_0x5dabde(0x203)](()=>{const _0x1edaf4=_0x5dabde;console['log'](_0x1edaf4(0x201));})[_0x5dabde(0x210)](_0x437af5=>{console['log'](_0x437af5['message']);});console[_0x5dabde(0x1ef)](_0x5dabde(0x1f7)),app[_0x5dabde(0x209)](_0x5dabde(0x20f),authRoutes),app['use'](_0x5dabde(0x202),serverRoutes),app[_0x5dabde(0x209)]('/api/ticket',ticketRoutes),app['use'](_0x5dabde(0x1fd),paymentRoutes),app['use'](_0x5dabde(0x1e4),webhostingRoutes),app['use'](_0x5dabde(0x1e9),licenseRoutes);const server=app['listen'](process[_0x5dabde(0x1ed)][_0x5dabde(0x1e7)],()=>console['log']('Server\x20started\x20on\x20'+process['env'][_0x5dabde(0x1e7)])),io=socket(server,{'cors':{'origin':corsOrigin,'credentials':!![]}});global[_0x5dabde(0x212)]=new Map(),global[_0x5dabde(0x208)]=new Map(),io['on']('connection',_0x5e7135=>{const _0x145124=_0x5dabde;global['chatSocket']=_0x5e7135,_0x5e7135['on'](_0x145124(0x20a),(_0x1e48af,_0x2043dd)=>{const _0x51bfa0=_0x145124;onlineUsers[_0x51bfa0(0x1dc)](_0x1e48af,_0x2043dd),_0x5e7135[_0x51bfa0(0x1e0)](_0x2043dd);}),_0x5e7135['on']('banUser',_0x3207bb=>{const _0x2228f6=_0x145124,_0x1fd083=onlineUsers['get'](_0x3207bb['to']);_0x1fd083&&_0x5e7135['to'](_0x1fd083)['emit']('bannedUser',{'msg':_0x2228f6(0x1f0),'from':'System'});}),_0x5e7135['on']('send-ticket-msg',_0x3ab3b3=>{const _0x5d56f2=_0x145124;console['log'](_0x3ab3b3),_0x5e7135['to'](_0x3ab3b3[_0x5d56f2(0x1f2)])['emit']('msg-recieve',{'msg':_0x3ab3b3[_0x5d56f2(0x1f5)],'user':_0x3ab3b3[_0x5d56f2(0x20e)]});});});
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
+const serverRoutes = require('./routes/servers');
+const ticketRoutes = require("./routes/tickets");
+const paymentRoutes = require("./routes/payments");
+const webhostingRoutes = require('./routes/webhosting');
+const devRoutes = require('./routes/dev');
+const app = express();
+const {sessionSecrets, corsOrigin, licenseKey} = require("./config.json")
+const session = require("express-session")
+const socket = require("socket.io");
+require("dotenv").config();
+var cookieParser = require('cookie-parser')
+const fetch = require('node-fetch');
+
+var MemoryStore = session.MemoryStore
+
+app.use(cookieParser());
+app.use(cors());
+app.use(express.json());
+app.use(session({
+  secret: sessionSecrets,
+  resave: true,
+  saveUninitialized: false,
+  name:'X-Panel_INFO',
+  store: new MemoryStore(),
+  cookie:{
+      expires:1000000,
+  },
+}))
+
+if(process.env.ENVIRONMENT === "production"){
+  mongoose.connect(process.env.MONGOURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    auth: {
+      username: process.env.MONGO_USER,
+      password: process.env.MONGO_PWD,
+      atuhdb: process.env.MONGO_DB
+    }
+  })
+  .then(() => {
+    console.log("DB Connetion Successfull");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+}else{
+  mongoose.connect(process.env.MONGOURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("DB Connetion Successfull");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+}
+
+
+  console.log("License Key Valid")
+  app.use("/api/auth", authRoutes);
+  app.use("/api/server", serverRoutes);
+  app.use("/api/ticket", ticketRoutes);
+  app.use("/api/payments", paymentRoutes);
+  app.use("/api/webhosting", webhostingRoutes);
+  app.use("/api/dev", devRoutes);
+
+
+
+const server = app.listen(process.env.PORT, () =>
+  console.log(`Server started on ${process.env.PORT}`)
+);
+const io = socket(server, {
+  cors: {
+    origin: corsOrigin,
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+global.openTickets = new Map();
+io.on("connection", (socketdata) => {
+  global.chatSocket = socketdata;
+  socketdata.on("add-user", (userId, ticketid) => {
+    onlineUsers.set(userId, ticketid);
+    socketdata.join(ticketid)
+  });
+  socketdata.on("banUser", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      socketdata.to(sendUserSocket).emit("bannedUser", { msg: 'You\'ve been banned.', from: 'System' });
+    }
+  });
+  socketdata.on("send-ticket-msg", (data) => {
+      console.log(data)
+      socketdata.to(data.ticket).emit("msg-recieve", { msg: data.msg, user: data.fromUser });
+  });
+});

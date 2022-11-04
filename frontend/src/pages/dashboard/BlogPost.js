@@ -18,10 +18,6 @@ import { SkeletonPost } from '../../components/skeleton';
 // sections
 import {
   BlogPostHero,
-  BlogPostTags,
-  BlogPostRecent,
-  BlogPostCommentList,
-  BlogPostCommentForm,
 } from '../../sections/@dashboard/blog';
 
 // ----------------------------------------------------------------------
@@ -33,20 +29,15 @@ export default function BlogPost() {
 
   const { title } = useParams();
 
-  const [recentPosts, setRecentPosts] = useState([]);
-
   const [post, setPost] = useState(null);
 
   const [error, setError] = useState(null);
 
   const getPost = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
-
+      const response = await axios.get(`/api/dev/post/${title}`);
       if (isMountedRef.current) {
-        setPost(response.data.post);
+        setPost(response.data[0]);
       }
     } catch (error) {
       console.error(error);
@@ -54,24 +45,9 @@ export default function BlogPost() {
     }
   }, [isMountedRef, title]);
 
-  const getRecentPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
-
-      if (isMountedRef.current) {
-        setRecentPosts(response.data.recentPosts);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [isMountedRef, title]);
-
   useEffect(() => {
     getPost();
-    getRecentPosts();
-  }, [getRecentPosts, getPost]);
+  }, [getPost]);
 
   return (
     <Page title="Blog: Post Details">
@@ -81,7 +57,7 @@ export default function BlogPost() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: sentenceCase(title) },
+            { name: title },
           ]}
         />
 
@@ -91,31 +67,11 @@ export default function BlogPost() {
 
             <Box sx={{ p: { xs: 3, md: 5 } }}>
               <Typography variant="h6" sx={{ mb: 5 }}>
-                {post.description}
+                {post.postedOn}
               </Typography>
 
-              <Markdown children={post.body} />
+              <Markdown children={post.postContent} />
 
-              <Box sx={{ my: 5 }}>
-                <Divider />
-                <BlogPostTags post={post} />
-                <Divider />
-              </Box>
-
-              <Box sx={{ display: 'flex', mb: 2 }}>
-                <Typography variant="h4">Comments</Typography>
-                <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                  ({post.comments.length})
-                </Typography>
-              </Box>
-
-              <BlogPostCommentList post={post} />
-
-              <Box sx={{ mb: 5, mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <Pagination count={8} color="primary" />
-              </Box>
-
-              <BlogPostCommentForm />
             </Box>
           </Card>
         )}
@@ -123,8 +79,6 @@ export default function BlogPost() {
         {!post && !error && <SkeletonPost />}
 
         {error && <Typography variant="h6">404 {error}!</Typography>}
-
-        <BlogPostRecent posts={recentPosts} />
       </Container>
     </Page>
   );

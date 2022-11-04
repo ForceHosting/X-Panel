@@ -33,7 +33,14 @@ const navConfig = [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
     ],
+    
   },
+  {
+    subheader: 'Information',
+    items: [
+      { title: 'Developer Blog', path: PATH_DASHBOARD.blog.root, icon: ICONS.dashboard}
+    ]
+  }
 
  
 ];
