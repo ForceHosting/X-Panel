@@ -204,7 +204,6 @@ module.exports.addToQueue = async (req, res, next) => {
       const userId = jwtVerify._id;
       const {server} = req.body;
       const serverData = await Server.findById(server);
-      console.log(serverData)
       if(serverData.serverOwner === userId){
         await fetch('https://control.forcehost.net/api/application/servers/'+serverData.serverId, {
       method: 'DELETE',
