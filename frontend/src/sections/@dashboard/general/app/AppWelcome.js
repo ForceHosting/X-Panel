@@ -25,6 +25,7 @@ AppWelcome.propTypes = {
   description: PropTypes.string,
   img: PropTypes.node,
   title: PropTypes.string,
+  color: PropTypes.string,
 };
 
 export default function AppWelcome({ title, description, action, img, color="primary", ...other }) {

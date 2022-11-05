@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -15,15 +13,9 @@ import axios from '../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import Label from '../../../components/Label';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField } from '../../../components/hook-form';
 
-// ----------------------------------------------------------------------
 
-NewServerForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentUser: PropTypes.object,
-};
 
 export default function NewServerForm() {
   const navigate = useNavigate();
@@ -105,14 +97,9 @@ export default function NewServerForm() {
 
   const {
     reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  const values = watch();
 
   const onSubmit = async (event) => {
     try {
@@ -135,22 +122,6 @@ export default function NewServerForm() {
       console.error(error);
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'avatarUrl',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

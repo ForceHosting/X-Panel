@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy';
 import { Link as RouterLink } from 'react-router-dom';
 import { useEffect, useCallback, useState } from 'react';
 // @mui
@@ -13,7 +12,6 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
-import { SkeletonPostItem } from '../../components/skeleton';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../sections/@dashboard/blog';
@@ -28,18 +26,6 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-const applySort = (posts, sortBy) => {
-  if (sortBy === 'latest') {
-    return orderBy(posts, ['createdAt'], ['desc']);
-  }
-  if (sortBy === 'oldest') {
-    return orderBy(posts, ['createdAt'], ['asc']);
-  }
-  if (sortBy === 'popular') {
-    return orderBy(posts, ['view'], ['desc']);
-  }
-  return posts;
-};
 
 export default function BlogPosts() {
   const { themeStretch } = useSettings();
@@ -49,8 +35,6 @@ export default function BlogPosts() {
   const [posts, setPosts] = useState([]);
 
   const [filters, setFilters] = useState('latest');
-
-  const sortedPosts = applySort(posts, filters);
 
   const getAllPosts = useCallback(async () => {
     try {

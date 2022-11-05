@@ -4,8 +4,6 @@ import { Stack, Button, Typography } from '@mui/material';
 // hooks
 import jwtDecode from 'jwt-decode';
 import useLocales from '../../../hooks/useLocales';
-// routes
-import { PATH_DOCS } from '../../../routes/paths';
 // assets
 import { DocIllustration } from '../../../assets';
 

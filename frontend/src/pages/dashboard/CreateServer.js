@@ -1,4 +1,4 @@
-import { paramCase, capitalCase } from 'change-case';
+import { paramCase } from 'change-case';
 import { useParams, useLocation } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';

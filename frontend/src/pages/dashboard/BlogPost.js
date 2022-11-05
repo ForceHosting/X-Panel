@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { sentenceCase } from 'change-case';
 import { useParams } from 'react-router-dom';
 // @mui
-import { Box, Card, Divider, Container, Typography, Pagination } from '@mui/material';
+import { Box, Card, Container, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
