@@ -235,7 +235,6 @@ client.on('interactionCreate', async interaction => {
 		const userid = interaction.user.id
 		const userInfo = await User.findOne({ 'discordId': userid })
 		const coinInfo = await User.findOne({ 'discordId': interaction.targetUser.id })
-		console.log(userid)
 		if (!userInfo) { 
 			interaction.reply("Im sorry, but you can not use this command")
 			return
