@@ -1,8 +1,11 @@
 {
-    "token": "Bot Token",
-    "sessionSecrets": "massivesecretshere",
-    "paypal_cid": "PayPal client id",
-    "paypal_secret": "PayPal secret",
-    "paypal_mode": "sandbox",
-    "pteroKey": "Pterodactyl API App Key"
+    "token": "",
+    "sessionSecrets": "",
+    "paypal_cid": "",
+    "paypal_secret": "",
+    "paypal_mode": "",
+    "pteroKey": "",
+    "emailPassword": "",
+    "jwtToken": "",
+    "licenseKey": ""
 }
