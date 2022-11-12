@@ -57,7 +57,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   padding: theme.spacing(12, 0),
 }));
-
+const audio = new Audio(
+  "https://github.com/catocodedev/site/raw/main/assets/Meow.wav"
+);
+const play = () => {
+  audio.play();
+};
 // ----------------------------------------------------------------------
 
 export default function Login() {
@@ -103,7 +108,7 @@ export default function Login() {
 
               <Tooltip title={capitalCase(method)} placement="right">
                 <>
-                  <Image
+                  <Image onClick={play}
                     disabledEffect
                     src={`https://minimal-assets-api-dev.vercel.app/assets/icons/auth/ic_${method}.png`}
                     sx={{ width: 32, height: 32 }}
