@@ -11,6 +11,12 @@ const data1 = new ContextMenuCommandBuilder()
 const data2 = new SlashCommandBuilder()
 	.setName('resources')
 	.setDescription('Replies with your input!')
+const data4 = new SlashCommandBuilder()
+	.setName('bservers')
+	.setDescription('Replies with how many servers the bot is in')
+const data5 = new SlashCommandBuilder()
+	.setName('servers')
+	.setDescription('Replies with the servers you have')
 const data3 = new SlashCommandBuilder()
 .setName('acclink')
 .setDescription('Link your client area account to Discord!')
@@ -19,9 +25,41 @@ const data3 = new SlashCommandBuilder()
 				 .setRequired(true));
       
 const commands = [
-	data1, data2, data3
+	data1, data2, data3, data4, data5
 ]
 	.map(command => command.toJSON());
+
+const announceCmd = new SlashCommandBuilder()
+	.setName('announce')
+	.setDescription('Announce something')
+	.addStringOption((option)=> option.setName('title')
+		.setDescription('The announcement title.')
+		.setRequired(true)
+	)
+	.addStringOption((option)=> option.setName('description')
+		.setDescription('The announcement description.')
+		.setRequired(true)
+	)
+
+
+const updateCmd = new SlashCommandBuilder()
+	.setName('update')
+	.setDescription('Post an update')
+	.addStringOption((option)=> option.setName('title')
+		.setDescription('The update title.')
+		.setRequired(true)
+	)
+	.addStringOption((option)=> option.setName('description')
+		.setDescription('The update description.')
+		.setRequired(true)
+	)
+const forceCommands = [
+	announceCmd, updateCmd
+]
+
+
+
+
 
 const rest = new REST({ version: '10' }).setToken(token);
 
@@ -33,6 +71,11 @@ const rest = new REST({ version: '10' }).setToken(token);
 		await rest.put(
 			Routes.applicationCommands(clientId),
 			{ body: commands },
+		);
+
+		await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: forceCommands },
 		);
 
 		console.log('Successfully reloaded application (/) commands.');

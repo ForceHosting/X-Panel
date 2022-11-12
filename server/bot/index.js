@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType, Embed } = require('discord.js');
 const { token } = require("../config.json");
 const mongoose = require("mongoose")
 const User = require("../models/userModel");
@@ -157,7 +157,7 @@ function Addedcoins(giver,accepter,coins){
 }
 
 client.on('interactionCreate', async interaction => {
-	console.log(interaction)
+
 	if (!interaction.isChatInputCommand()) return;
 	if (interaction.commandName === 'acclink') {
         // Gives us 15 mins to get data instend of 5 seconds
@@ -226,6 +226,53 @@ client.on('interactionCreate', async interaction => {
 		}
 		  
 	    
+	}
+	if (interaction.commandName === 'bservers') {
+		await interaction.reply({ content: 'Gathering server data. This will take up to 5 seconds.', ephemeral: true });
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Servers')
+			.setDescription(`\`Force Host\` is currently in ${client.guilds.cache.size} servers.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})  
+	}
+	if (interaction.commandName === 'servers') {
+		await interaction.reply({ content: 'This command is still under development.', ephemeral: true });
+	}
+	if(interaction.commandName === 'announce'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952995806543902');
+		if(hasAnnouncePerm === true){
+			const title = interaction.options.getString('title');
+			const description = interaction.options.getString('description');
+			const newAnnouncementEmbed = new EmbedBuilder()
+				.setTitle(title+" 📢")
+				.setDescription(`${description} \n\nHapiest Hosting,\n~ The Force Team\n*Hosting Tomorrow for The Worlds Today*`)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('797953387534483476').send({embeds: [newAnnouncementEmbed]})
+			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
+		}else {
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'update'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952995806543902');
+		if(hasAnnouncePerm === true){
+			const title = interaction.options.getString('title');
+			const description = interaction.options.getString('description');
+			const newAnnouncementEmbed = new EmbedBuilder()
+				.setTitle(title+" ⬆️")
+				.setDescription(`${description} \n\nHapiest Hosting,\n~ The Force Team\n*Hosting Tomorrow for The Worlds Today*`)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('916572067619557407').send({embeds: [newAnnouncementEmbed]})
+			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
+		}else {
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
 	}
 });
 
@@ -310,6 +357,24 @@ client.on('interactionCreate', async interaction => {
 			
 		}
 	}
+})
+
+client.on('guildCreate', guild => {
+	const newEmbed = new EmbedBuilder()
+			.setTitle('New Guild')
+			.setDescription(`The bot has now joined \`${guild.name}\`. Guild has \`${guild.memberCount}\` members.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	client.channels.cache.get('1041066838341189723').send({embeds: [newEmbed]})
+})
+
+client.on('guildDelete', guild => {
+	const newEmbed = new EmbedBuilder()
+			.setTitle('Left Guild')
+			.setDescription(`The bot has now left \`${guild.name}\`. Guild has \`${guild.memberCount}\` members.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	client.channels.cache.get('1041066863792246794').send({embeds: [newEmbed]})
 })
 
 client.login(token);
