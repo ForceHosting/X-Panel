@@ -66,6 +66,7 @@ if(process.env.ENVIRONMENT === "production"){
   app.use("/api/server", serverRoutes);
   app.use("/api/ticket", ticketRoutes);
   app.use("/api/payments", paymentRoutes);
+  app.use("api/products", productRoutes);
   app.use("/api/webhosting", webhostingRoutes);
   app.use("/api/dev", devRoutes);
 

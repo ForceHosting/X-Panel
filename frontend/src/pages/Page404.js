@@ -22,7 +22,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
+const audio = new Audio(
+  "https://github.com/catocodedev/site/raw/main/assets/Meow.wav"
+);
+const play = () => {
+  audio.play();
+};
 export default function Page404() {
   return (
     <Page title="404 Page Not Found">
@@ -41,7 +46,7 @@ export default function Page404() {
             </Typography>
           </m.div>
 
-          <m.div variants={varBounce().in}>
+          <m.div onClick={play} variants={varBounce().in}>
             <PageNotFoundIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
           </m.div>
 
