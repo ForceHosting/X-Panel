@@ -40,4 +40,4 @@ const productsSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Payments", productsSchema);
+module.exports = mongoose.model("Products", productsSchema);
