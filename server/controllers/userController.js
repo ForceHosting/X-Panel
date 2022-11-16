@@ -59,6 +59,7 @@ module.exports.getData = async (req, res, next) => {
           "availCPU",
           "availSlots",
           "role",
+          "linkId"
         ]);
       const token = jwt.sign(
         {
@@ -72,7 +73,8 @@ module.exports.getData = async (req, res, next) => {
           availDisk: userData.availDisk,
           availCPU: userData.availCPU,
           availSlots: userData.availSlots,
-          role: userData.role
+          role: userData.role,
+          linkId: userData.linkId
         },
         `${jwtToken}`
       )
@@ -174,6 +176,7 @@ module.exports.register = async (req, res, next) => {
       "availCPU",
       "availSlots",
       "role",
+      "linkId"
     ]);
     const token = jwt.sign(
       {
@@ -187,7 +190,8 @@ module.exports.register = async (req, res, next) => {
         availDisk: userData.availDisk,
         availCPU: userData.availCPU,
         availSlots: userData.availSlots,
-        role: userData.role
+        role: userData.role,
+        linkId: userData.linkId
       },
       `${jwtToken}`
     )

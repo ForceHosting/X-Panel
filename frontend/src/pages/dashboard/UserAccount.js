@@ -39,6 +39,11 @@ export default function UserAccount() {
       icon: <Iconify icon={'ic:round-vpn-key'} width={20} height={20} />,
       component: <AccountChangePassword />,
     },
+    {
+      value: 'link_account',
+      icon: <Iconify icon={'mdi:link-variant'} width={20} height={20} />,
+      component: <AccountNotifications />,
+    },
   ];
 
   return (
