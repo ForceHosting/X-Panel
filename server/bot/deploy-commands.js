@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, Routes } = require('discord.js');
 const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
-const clientId = '895694315492343832'
+const clientId = '793633534803443743'
 const guildId = '783416129908899860'
 const { token } = require("../config.json");
 const data1 = new ContextMenuCommandBuilder()
@@ -53,8 +53,11 @@ const updateCmd = new SlashCommandBuilder()
 		.setDescription('The update description.')
 		.setRequired(true)
 	)
+const getLicense = new SlashCommandBuilder()
+	.setName('genlicense')
+	.setDescription('Creates an X-Panel license.')
 const forceCommands = [
-	announceCmd, updateCmd
+	announceCmd, updateCmd, getLicense
 ]
 
 

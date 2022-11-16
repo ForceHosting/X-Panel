@@ -4,6 +4,8 @@ const mongoose = require("mongoose")
 const User = require("../models/userModel");
 const Server = require("../models/servers");
 const Webhosting = require("../models/webhostingModel");
+const License = require('../models/licenseModel');
+const { makeid } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
@@ -272,6 +274,59 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}else {
 			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'genlicense'){
+		await interaction.reply({ content: 'Spinning up your license. Please allow us several seconds to generate the key.', ephemeral: true });
+		userid = interaction.user.id;
+		const userInfo = await User.findOne({ 'discordId': userid })
+		if (userInfo) {
+			const totalLicenses = await License.find({ 'licenseOwner': userInfo._id}).count()
+			if(totalLicenses >= 2){
+				const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`Sorry, it seems you have two valid licenses at the moment. If you need another license key, please contact support.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+			}else{
+			const generatedLicenseKey = makeid(20)
+			const createLicense = await License.create({
+				licenseId: `XPNLSECR.`+generatedLicenseKey,
+				licenseOwner: userInfo._id,
+				licenseValid: true
+			})
+			if(createLicense){
+			const newEmbed = new EmbedBuilder()
+				.setColor(0x0099FF)
+				.setTitle('New License!')
+				.setDescription(`Please copy the license key somewhere safe!`)
+				.addFields(
+					{ name: 'License Key', value: `||${createLicense.licenseId}||`, inline: true},
+					{ name: 'License State', value: `${createLicense.licenseValid}`, inline: true},
+				)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+			}else{
+				const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`Something went wrong. Please try again later.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+			}}
+			
+			}else {
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}
 	}
 });
