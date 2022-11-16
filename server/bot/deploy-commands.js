@@ -56,8 +56,15 @@ const updateCmd = new SlashCommandBuilder()
 const getLicense = new SlashCommandBuilder()
 	.setName('genlicense')
 	.setDescription('Creates an X-Panel license.')
+const webhostingCommand = new SlashCommandBuilder()
+	.setName('webhosting')
+	.setDescription('Create a webhosting account.')
+	.addStringOption((option)=> option.setName('Domain')
+		.setDescription('The domain you plan to use for your website.')
+		.setRequired(true)
+	)
 const forceCommands = [
-	announceCmd, updateCmd, getLicense
+	announceCmd, updateCmd, getLicense, webhostingCommand
 ]
 
 
