@@ -1,13 +1,13 @@
 const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType, Embed } = require('discord.js');
-const { token } = require("../config.json");
+const { token, directAdminAuth } = require("../config.json");
 const mongoose = require("mongoose")
 const User = require("../models/userModel");
 const Server = require("../models/servers");
-const Webhosting = require("../models/webhostingModel");
+const Web = require("../models/webhostingModel");
 const License = require('../models/licenseModel');
-const { makeid } = require('../functions');
+const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
+const fetch = require('node-fetch');
 client.once('ready', () => {
     console.log("Bot is online, and ready!");
 	
@@ -15,7 +15,7 @@ client.once('ready', () => {
 		async () => {
 				const users = await User.find().count();
 				const servers = await Server.find().count();
-				const web = await Webhosting.find().count();
+				const web = await Web.find().count();
 				const usersChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020537846542635079');
 				usersChannel.setName(`✨ ${users} users!`)
 				const serversChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020539431670780027');
@@ -239,6 +239,61 @@ client.on('interactionCreate', async interaction => {
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})  
 	}
+	if (interaction.commandName === 'webhosting') {
+		await interaction.reply({ content: 'Generating your account. This make take a minute. If it takes longer than 10 minutes, please contact support.', ephemeral: true });
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({ 'discordId': userDid })	
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}
+		const domain = interaction.options.getString('domain');
+			const randomUsername = makeWebUser(15);
+            const newRandomPass = makeid(15)
+            var newRandomPassBuffer = Buffer.from(newRandomPass);
+            var encryptedPass = newRandomPassBuffer.toString('base64');
+            const webData = await fetch(`https://web.forcehost.net:2222/CMD_API_ACCOUNT_USER?action=create&add=Submit&username=${randomUsername}&email=${userInfo.email}&passwd=${newRandomPass}&passwd2=${newRandomPass}&domain=${domain}&package=free&ip=181.214.41.250&notify=yes`, {
+      headers: {
+        'Content-Type': 'text/plain',
+        'Authorization': `Basic ${directAdminAuth}`
+      },
+    });
+	const data = await webData.text()
+	const regex = 'error=0'
+	if(data.includes(regex) === true){
+        Web.create({
+            panelUser: randomUsername,
+            panelPwd: encryptedPass,
+            planType: 'Free',
+            planDomain: domain,
+            accountHolder: userInfo._id,
+        })
+        newWebUser(userInfo.username, domain)
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Account Generated 🥳')
+			.setDescription(`Please store the details below somewhere secure. Once you clear this message, they will be gone forever.`)
+			.addFields({name: 'Account Username', value: `||${randomUsername}||`})
+			.addFields({name: 'Accont Password', value: `||${newRandomPass}||`})
+			.addFields({name: 'Dashboard', value: 'web.forcehost.net:2222'})
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed], ephemeral: true})  
+	}else{
+		newWebUser(userInfo.username, domain)
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Generation Error')
+			.setDescription(`There was an error generating your account. Please contact support. Err Code: \n\n\`${data}\``)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed], ephemeral: true})  
+	}}
 	if (interaction.commandName === 'servers') {
 		await interaction.reply({ content: 'This command is still under development.', ephemeral: true });
 	}
