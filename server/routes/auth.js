@@ -8,9 +8,7 @@ const {
   banUser,
   generateAccLink
 } = require("../controllers/userController");
-const {
-  verifyToken
-} = require("../functions");
+const passport = require('passport');
 
 const router = require("express").Router();
 
@@ -22,5 +20,10 @@ router.get("/logout/:id", logOut);
 router.get('/getmodlevel/:id', getUserLevel);
 router.get('/ban/:id', banUser);
 router.post('/link/generate', generateAccLink);
+router.get('/', passport.authenticate('discord'));
+router.get('/redirect', passport.authenticate('discord', { 
+    failureRedirect: '/forbidden',
+    successRedirect: '/dashboard'
+}));
 
 module.exports = router;

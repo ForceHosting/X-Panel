@@ -28,6 +28,8 @@
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.15",
+    "passport": "^0.6.0",
+    "passport-discord": "^0.1.4",
     "paypal-rest-sdk": "^1.8.1",
     "short-unique-id": "^4.4.4",
     "socket.io": "^4.4.1"
