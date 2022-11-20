@@ -51,6 +51,7 @@ export default function Router() {
         { path: 'reset-password', element: <ResetPassword /> },
         { path: 'new-password', element: <NewPassword /> },
         { path: 'verify', element: <VerifyCode /> },
+        { path: 'authorizing', element: <DiscordAuth/>},
       ],
     },
 
@@ -167,3 +168,4 @@ const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+const DiscordAuth = Loadable(lazy(() => import('../pages/auth/DiscordAuth')));

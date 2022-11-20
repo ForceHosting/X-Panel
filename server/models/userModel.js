@@ -22,11 +22,9 @@ const userSchema = new mongoose.Schema({
   },
   lastIP: {
     type: String,
-    required: true
   },
   password: {
     type: String,
-    required: true,
     min: 8,
   },
   pteroUserId: {

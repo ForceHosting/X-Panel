@@ -23,7 +23,11 @@ router.post('/link/generate', generateAccLink);
 router.get('/', passport.authenticate('discord'));
 router.get('/redirect', passport.authenticate('discord', { 
     failureRedirect: '/forbidden',
-    successRedirect: '/dashboard'
+    successRedirect: 'http://localhost:3000/auth/authorizing'
 }));
+router.get('/discord/data', (req, res)=>{
+  console.log(req.user)
+  return res.send(req.user)
+})
 
 module.exports = router;

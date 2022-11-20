@@ -16,6 +16,7 @@ client.once('ready', () => {
 				const users = await User.find().count();
 				const servers = await Server.find().count();
 				const web = await Web.find().count();
+				const dServers = await client.guilds.cache.size;
 				const usersChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020537846542635079');
 				usersChannel.setName(`✨ ${users} users!`)
 				const serversChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020539431670780027');
@@ -32,7 +33,8 @@ client.once('ready', () => {
 				`If FH made an onlyfans, would you buy?`,
 				`with ${users} users`,
 				`on ${servers} servers`,
-				`on ${web} webistes`
+				`on ${web} webistes`,
+				`in ${dServers} Discords`
 			]
 			var randomNumber = Math.floor(Math.random()*statusArray.length);
 			client.user.setActivity(statusArray[randomNumber], { type: ActivityType.Playing });

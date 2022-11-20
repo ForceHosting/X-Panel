@@ -2,15 +2,22 @@ const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
 const DiscordUser = require('../models/userModel');
 const { CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI } = require('../config')
+const { sendErrorCode, userRegister} = require('../bot/index');
+const {sendWelcome, makeid} = require('../functions');
+const fetch = require('node-fetch');
+const {pteroKey} = require('../config.json');
+const ShortUniqueId = require("short-unique-id");
+const uid = new ShortUniqueId({ length: 20 });
 
 passport.serializeUser((user, done) => {
     console.log("Serialize");
-    done(null, user.id)
+    done(null, user)
 });
 
 passport.deserializeUser(async (id, done) => {
     console.log("Deserializing");
-    const user = await DiscordUser.findById(id);
+    console.log(id)
+    const user = await DiscordUser.findOne({_id: id._id});
     if(user) 
         done(null, user);
 });
@@ -19,11 +26,63 @@ passport.use(new DiscordStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     callbackURL: CLIENT_REDIRECT_URI,
-    scope: ['identify', 'guilds']
+    scope: ['identify', 'guilds', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        console.log(profile.username)
-        done(null)
+        const user = await DiscordUser.findOne({discordId: profile.id});
+        if(user){
+            console.log("User exists.");
+            await user.updateOne({
+                username: `${profile.username}#${profile.discriminator}`,
+                email: profile.email
+            });
+            done(null, user);
+        }else{
+    const pteroIdu = makeid(10);
+    const pteroPass = makeid(15)
+    var rawPteroPass = Buffer.from(pteroPass);
+    var encryptedPteroPass = rawPteroPass.toString('base64');
+    console.log(profile)
+    const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
+      method: 'post',
+      headers: {
+        "Accept": "application/json",
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+      body: JSON.stringify({
+        username: pteroIdu,
+        email: profile.email,
+        first_name: 'Force Host',
+        last_name: 'Registered User',
+        password: pteroPass,
+      })
+    });
+    const pteroData = await pteroReq.json();
+    if(pteroReq.status != 201){
+      const errorCode = makeid(5)
+      sendErrorCode(errorCode, 'Pterodactyl account creation issue')
+      done(`Please contact support. Err Code: ${errorCode}`)
+    }
+    const userUid = uid()
+    const newLinkId = makeid(10)
+    const pterodactylUid = pteroData.attributes.id;
+    const newUser = await DiscordUser.create({
+      uid: userUid,
+      username: `${profile.username}#${profile.discriminator}`,
+      email: profile.email,
+      pteroUserId: pteroIdu,
+      pteroId: pterodactylUid,
+      pteroPwd: encryptedPteroPass,
+      credits: 0,
+      role: "Customer",
+      linkId: newLinkId,
+      discordId: profile.id
+    });
+    userRegister(newUser.username)
+    sendWelcome(newUser.email)
+    done(null, newUser)
+        }
     }
     catch(err) {
         console.log(err);
