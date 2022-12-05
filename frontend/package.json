@@ -4,6 +4,7 @@
   "version": "3.5.0",
   "description": "Javascript Version",
   "private": true,
+  "proxy": "http://localhost:25566",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",

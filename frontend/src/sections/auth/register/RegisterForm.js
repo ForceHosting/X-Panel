@@ -100,6 +100,7 @@ export default function RegisterForm() {
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Register
         </LoadingButton>
+        <LoadingButton fullWidth size="large" variant="contained" sx={{color:'white', my: 2}}><a sx={{ textDecoration: 'none', color: 'white' }} href="/api/auth">Register With Discord</a></LoadingButton>
       </Stack>
     </FormProvider>
   );

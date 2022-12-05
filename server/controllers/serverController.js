@@ -30,7 +30,12 @@ module.exports.createServer = async (req, res, next) => {
         const newTotalDisk = user.availDisk - disk;
         const newTotalCPU = user.availCPU - cpu;
         const newTotalSlots = user.availSlots - 1;
-        if(memory < 500){
+
+        const servers = await Server.find({ serverOwner: jwtVerify._id }).count();
+        if(servers >= 5){
+          return res.json({added:false,msg:"You can only have 5 servers to an account."});
+        }
+        else if(memory < 500){
           return res.json({ added: false, msg: "You need to have more than 499mb of memory on a server."});
         }else if(disk < 1000){
           return res.json({ added: false, msg: "You need to have more than 1000mb of disk space on a server."});

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 // @mui
 
-import { Box, Grid, Card, Stack, Typography, OutlinedInput, InputLabel} from '@mui/material';
+import { Box, Grid, Card, Stack, Typography, OutlinedInput} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import {Buffer} from 'buffer';
 import axios from '../../../../utils/axios';
@@ -32,8 +32,9 @@ export default function AccountGeneral() {
     const base64ToString = Buffer.from(userData.data.pteroPwd, "base64").toString();
     setPteroUser(userData.data.pteroUserId);
     setPteroPass(base64ToString)    
+    console.log(`Hey, ${user.username}! Want a job?`)
 })();
-}, []);
+}, [user]);
 
   return (
       <Grid container spacing={3}>

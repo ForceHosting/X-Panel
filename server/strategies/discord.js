@@ -10,13 +10,10 @@ const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 20 });
 
 passport.serializeUser((user, done) => {
-    console.log("Serialize");
     done(null, user)
 });
 
 passport.deserializeUser(async (id, done) => {
-    console.log("Deserializing");
-    console.log(id)
     const user = await DiscordUser.findOne({_id: id._id});
     if(user) 
         done(null, user);
@@ -31,7 +28,6 @@ passport.use(new DiscordStrategy({
     try {
         const user = await DiscordUser.findOne({discordId: profile.id});
         if(user){
-            console.log("User exists.");
             await user.updateOne({
                 username: `${profile.username}#${profile.discriminator}`,
                 email: profile.email
@@ -42,7 +38,6 @@ passport.use(new DiscordStrategy({
     const pteroPass = makeid(15)
     var rawPteroPass = Buffer.from(pteroPass);
     var encryptedPteroPass = rawPteroPass.toString('base64');
-    console.log(profile)
     const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
       method: 'post',
       headers: {
@@ -79,7 +74,7 @@ passport.use(new DiscordStrategy({
       linkId: newLinkId,
       discordId: profile.id
     });
-    userRegister(newUser.username)
+    userRegister(`<@${profile.id}>`)
     sendWelcome(newUser.email)
     done(null, newUser)
         }

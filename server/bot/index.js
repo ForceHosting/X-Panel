@@ -1,10 +1,12 @@
-const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType, Embed } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType, Embed, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { token, directAdminAuth } = require("../config.json");
 const mongoose = require("mongoose")
 const User = require("../models/userModel");
 const Server = require("../models/servers");
 const Web = require("../models/webhostingModel");
 const License = require('../models/licenseModel');
+const Credits = require('../models/creditCodes');
+const creditClaims = require('../models/creditClaims');
 const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const fetch = require('node-fetch');
@@ -241,6 +243,254 @@ client.on('interactionCreate', async interaction => {
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})  
 	}
+
+
+	if(interaction.commandName === 'buymemory'){
+		await interaction.reply({ content: 'Gathering your account data. This make take a minute.', ephemeral: true});
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({'discordId': userDid})
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+			const userCredits = parseInt(userInfo.credits);
+			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
+			const price = parseInt(getPurchaseAmount * 2.5);
+			const creditMath = parseInt(userCredits - price);
+			if(creditMath < 0){
+				const deniedEmbed = new EmbedBuilder()
+					.setColor(0x0099FF)
+					.setTitle('Purchase Denied')
+					.setDescription('The purchase was denied because you do not have enough credits.')
+				await interaction.editReply({ content: '', embeds: [deniedEmbed]})
+			}else{
+			const updatedMem = parseInt(userInfo.availMem + getPurchaseAmount)
+			await User.findByIdAndUpdate(userInfo._id,{ availMem: updatedMem })
+			await User.findByIdAndUpdate(userInfo._id,{ credits: creditMath})
+			const boughtEmbed = new EmbedBuilder()
+				.setTitle('Memory Bought!')
+				.setDescription(`You purchased ${getPurchaseAmount}mb of memory for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			
+			await interaction.editReply({ content: '', embeds: [boughtEmbed]})
+			const purchaseEmbed = new EmbedBuilder()
+				.setTitle('Memory Purchased!')
+				.setColor('Green')
+				.setDescription(`<@${interaction.user.id}> purchased ${getPurchaseAmount}mb of memory for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('1049085267891454012').send({embeds: [purchaseEmbed]})
+			}
+		}
+	}
+	if(interaction.commandName === 'buycpu'){
+		await interaction.reply({ content: 'Gathering your account data. This make take a minute.', ephemeral: true});
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({'discordId': userDid})
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+			const userCredits = parseInt(userInfo.credits);
+			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
+			const price = parseInt(getPurchaseAmount * 50);
+			const creditMath = parseInt(userCredits - price);
+			if(creditMath < 0){
+				const deniedEmbed = new EmbedBuilder()
+					.setColor(0x0099FF)
+					.setTitle('Purchase Denied')
+					.setDescription('The purchase was denied because you do not have enough credits.')
+				await interaction.editReply({ content: '', embeds: [deniedEmbed]})
+			}else{
+			const updateCPU = parseInt(userInfo.availCPU + getPurchaseAmount)
+			await User.findByIdAndUpdate(userInfo._id,{ availCPU: updateCPU })
+			await User.findByIdAndUpdate(userInfo._id,{ credits: creditMath})
+			const boughtEmbed = new EmbedBuilder()
+				.setTitle('CPU Bought!')
+				.setDescription(`You purchased ${getPurchaseAmount}% of cpu for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			
+			await interaction.editReply({ content: '', embeds: [boughtEmbed]})
+			const purchaseEmbed = new EmbedBuilder()
+				.setTitle('CPU Purchased!')
+				.setColor('Green')
+				.setDescription(`<@${interaction.user.id}> purchased ${getPurchaseAmount}% more CPU for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('1049085267891454012').send({embeds: [purchaseEmbed]})
+			}
+		}
+	}
+
+
+	if(interaction.commandName === 'buydisk'){
+		await interaction.reply({ content: 'Gathering your account data. This make take a minute.', ephemeral: true});
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({'discordId': userDid})
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+			const userCredits = parseInt(userInfo.credits);
+			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
+			const price = parseInt(getPurchaseAmount * 2.5);
+			const creditMath = parseInt(userCredits - price);
+			if(creditMath < 0){
+				const deniedEmbed = new EmbedBuilder()
+					.setColor(0x0099FF)
+					.setTitle('Purchase Denied')
+					.setDescription('The purchase was denied because you do not have enough credits.')
+				await interaction.editReply({ content: '', embeds: [deniedEmbed]})
+			}else{
+			const updateDisk = parseInt(userInfo.availDisk + getPurchaseAmount)
+			await User.findByIdAndUpdate(userInfo._id,{ availDisk: updateDisk })
+			await User.findByIdAndUpdate(userInfo._id,{ credits: creditMath})
+			const boughtEmbed = new EmbedBuilder()
+				.setTitle('Disk Bought!')
+				.setDescription(`You purchased ${getPurchaseAmount}mb of disk for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			
+			await interaction.editReply({ content: '', embeds: [boughtEmbed]})
+			const purchaseEmbed = new EmbedBuilder()
+				.setTitle('Disk Purchased!')
+				.setColor('Green')
+				.setDescription(`<@${interaction.user.id}> purchased ${getPurchaseAmount}mb more disk for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('1049085267891454012').send({embeds: [purchaseEmbed]})
+			}
+		}
+	}
+
+	if(interaction.commandName === 'buyslots'){
+		await interaction.reply({ content: 'Gathering your account data. This make take a minute.', ephemeral: true});
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({'discordId': userDid})
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+			const userCredits = parseInt(userInfo.credits);
+			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
+			const price = parseInt(getPurchaseAmount * 200);
+			const creditMath = parseInt(userCredits - price);
+			if(creditMath < 0){
+				const deniedEmbed = new EmbedBuilder()
+					.setColor(0x0099FF)
+					.setTitle('Purchase Denied')
+					.setDescription('The purchase was denied because you do not have enough credits.')
+				await interaction.editReply({ content: '', embeds: [deniedEmbed]})
+			}else{
+			const updateSlots = parseInt(userInfo.availSlots + getPurchaseAmount)
+			await User.findByIdAndUpdate(userInfo._id,{ availSlots: updateSlots })
+			await User.findByIdAndUpdate(userInfo._id,{ credits: creditMath})
+			const boughtEmbed = new EmbedBuilder()
+				.setTitle('Slots Bought!')
+				.setDescription(`You purchased ${getPurchaseAmount} more slots for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			
+			await interaction.editReply({ content: '', embeds: [boughtEmbed]})
+			const purchaseEmbed = new EmbedBuilder()
+				.setTitle('Slots Purchased!')
+				.setColor('Green')
+				.setDescription(`<@${interaction.user.id}> purchased ${getPurchaseAmount} more slots for $${price} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('1049085267891454012').send({embeds: [purchaseEmbed]})
+			}
+		}
+	}
+	
+	if(interaction.commandName === 'claim'){
+		await interaction.reply({ content: 'Gathering your account data. This make take a minute.', ephemeral: true});
+		userDid = interaction.user.id;
+		const userInfo = await User.findOne({'discordId': userDid})
+		if(!userInfo){
+			const newEmbed = new EmbedBuilder()
+			.setColor('Red')
+			.setTitle('Error!')
+			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+		}else{
+			const code = interaction.options.getString('code');
+			const getCreditCode = await Credits.findOne({ 'claimCode': code });
+			
+			if(!getCreditCode){
+				const newEmbed = new EmbedBuilder()
+			.setColor('Red')
+			.setTitle('Error!')
+			.setDescription(`That code was not found in the database. Please try again later, or contact a system administrator.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			await interaction.editReply({ content: '', embeds: [newEmbed]})
+
+			}else{
+				if(getCreditCode.uses >= getCreditCode.maxUses){
+					const newEmbed = new EmbedBuilder()
+					.setColor('Red')
+					.setTitle('Error!')
+					.setDescription(`That code has already exeeded the maximum claims. Please try again later, or contact a system administrator.`)
+					.setTimestamp()
+					.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+					await interaction.editReply({ content: '', embeds: [newEmbed]})
+				}
+				const findIfUsed = await creditClaims.find({ 'claimCode': code, 'userClaimed': userInfo._id}).count();
+				if(findIfUsed == 0){
+					const userCredits = userInfo.credits;
+					const addCredits = userCredits + getCreditCode.claimAmount;
+					const newUses = getCreditCode.uses + 1;
+					await User.findByIdAndUpdate(userInfo._id, {credits: addCredits});
+					await Credits.findByIdAndUpdate(getCreditCode._id, {uses: newUses})
+					await creditClaims.create({
+						claimCode: code,
+						claimAmount: getCreditCode.claimAmount,
+						userClaimed: userInfo._id,
+					});
+					const newEmbed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Success!')
+			.setDescription(`You have successfully claimed the code ${code}! You now have ${addCredits} credits!`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			interaction.editReply({ content: '', embeds: [newEmbed]});
+			const purchaseEmbed = new EmbedBuilder()
+				.setTitle('Code Claimed!')
+				.setColor('Green')
+				.setDescription(`<@${interaction.user.id}> claimed a code for ${getCreditCode.claimAmount} credits!`)
+				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
+			client.channels.cache.get('1049111319829291058').send({embeds: [purchaseEmbed]})
+				}else{
+					const newEmbed = new EmbedBuilder()
+					.setColor('Red')
+					.setTitle('Error!')
+					.setDescription(`You've already claimed that code. Please try again later, or contact a system administrator.`)
+					.setTimestamp()
+					.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+					await interaction.editReply({ content: '', embeds: [newEmbed]})
+				}
+			}
+			}
+		}
+
+
 	if (interaction.commandName === 'webhosting') {
 		await interaction.reply({ content: 'Generating your account. This make take a minute. If it takes longer than 10 minutes, please contact support.', ephemeral: true });
 		userDid = interaction.user.id;

@@ -35,6 +35,7 @@ export default function BlogPost() {
   const getPost = useCallback(async () => {
     try {
       const response = await axios.get(`/api/dev/post/${title}`);
+      console.log(title)
       if (isMountedRef.current) {
         setPost(response.data[0]);
       }

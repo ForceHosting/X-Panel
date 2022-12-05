@@ -9,7 +9,7 @@ module.exports.getLicense = async (req, res, next) => {
     let licenseData = await License.findOne({ 'licenseId': bearerToken }).select([
       "licenseValid",
     ]);
-    return res.json(licenseData)
+    return res.send(licenseData)
   }catch(ex){
     next(ex)
   }

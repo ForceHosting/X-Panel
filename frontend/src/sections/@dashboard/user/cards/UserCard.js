@@ -33,7 +33,7 @@ UserCard.propTypes = {
 
 
 export default function UserCard({ server, background }) {
-  const { serverName, serverMemory, serverCPU, serverDisk, serverId, _id } = server;
+  const { serverName, serverMemory, serverCPU, serverDisk, serverId } = server;
 
   const { enqueueSnackbar } = useSnackbar();
 

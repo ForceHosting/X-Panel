@@ -1,11 +1,10 @@
 import axios from 'axios';
 // config
-import { serverIP } from '../config';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: serverIP,
+  baseURL: '',
 });
 
 axiosInstance.interceptors.response.use(

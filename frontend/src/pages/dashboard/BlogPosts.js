@@ -1,7 +1,6 @@
-import { Link as RouterLink } from 'react-router-dom';
 import { useEffect, useCallback, useState } from 'react';
 // @mui
-import { Grid, Button, Container, Stack } from '@mui/material';
+import { Grid, Container, Stack } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
@@ -11,7 +10,6 @@ import axios from '../../utils/axios';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../sections/@dashboard/blog';
@@ -68,16 +66,6 @@ export default function BlogPosts() {
             { name: 'Blog', href: PATH_DASHBOARD.blog.root },
             { name: 'Posts' },
           ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.blog.new}
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-            >
-              New Post
-            </Button>
-          }
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">

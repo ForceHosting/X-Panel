@@ -5,7 +5,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
+import { Link, Stack, Alert, IconButton, InputAdornment, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
@@ -61,7 +61,7 @@ export default function LoginForm() {
           'token',
           token
         )
-        navigate("/app")
+      navigate("/app")
       }else{
         reset();
         if(isMountedRef.current) {
@@ -112,6 +112,7 @@ export default function LoginForm() {
       <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
         Login
       </LoadingButton>
+      <LoadingButton fullWidth size="large" variant="contained" sx={{color:'white', my: 2}}><a sx={{ textDecoration: 'none', color: 'white' }} href="/api/auth">Login With Discord</a></LoadingButton>
     </FormProvider>
   );
 }

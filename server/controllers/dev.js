@@ -28,6 +28,7 @@ module.exports.getPost = async (req, res, next) => {
         "postUid",
         "postContent"
       ]);
+      console.log(id)
       return res.json(postData)
     }catch(ex){
       next(ex)

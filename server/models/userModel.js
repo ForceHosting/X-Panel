@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+require('mongoose-long')(mongoose);
+
+const {Types: {Long}} = mongoose;
 
 const userSchema = new mongoose.Schema({
   uid: {
@@ -39,7 +42,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   credits: {
-    type: String,
+    type: Number,
     required: true,
     default: 0,
   },
@@ -78,8 +81,9 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
   discordId: {
-    type: Number,
+    type: Long,
     required: false,
+    unique: true,
   },
 });
 

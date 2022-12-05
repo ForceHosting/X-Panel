@@ -11,7 +11,9 @@ const {
 const passport = require('passport');
 
 const router = require("express").Router();
-
+const jwt = require('jsonwebtoken');
+const {jwtToken} = require('../config.json');
+const { userLogin } = require('../bot/index');
 router.post("/login", login);
 router.get("/getData", getData);
 router.post("/register", register);
@@ -23,11 +25,30 @@ router.post('/link/generate', generateAccLink);
 router.get('/', passport.authenticate('discord'));
 router.get('/redirect', passport.authenticate('discord', { 
     failureRedirect: '/forbidden',
-    successRedirect: 'http://localhost:3000/auth/authorizing'
+    successRedirect: '/auth/authorizing'
 }));
 router.get('/discord/data', (req, res)=>{
-  console.log(req.user)
-  return res.send(req.user)
+  const user = req.user;
+  const token = jwt.sign(
+    {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      pteroId: user.pteroId,
+      pteroPwd: user.Pwd,
+      credits: user.credits,
+      availMem: user.availMem,
+      availDisk: user.availDisk,
+      availCPU: user.availCPU,
+      availSlots: user.availSlots,
+      role: user.role,
+      linkId: user.linkId,
+      discordId: user.discordId,
+    },
+    `${jwtToken}`
+  )
+  userLogin(`<@${user.discordId}>`)
+  return res.send(token)
 })
 
 module.exports = router;

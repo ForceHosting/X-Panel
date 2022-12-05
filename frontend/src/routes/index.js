@@ -69,23 +69,8 @@ export default function Router() {
         {
           path: 'user',
           children: [
-            { element: <Navigate to="/user/profile" replace />, index: true },
-            { path: 'profile', element: <UserProfile /> },
-            { path: 'cards', element: <UserCards /> },
-            { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
-            { path: ':name/edit', element: <UserCreate /> },
+            { element: <Navigate to="/user/account" replace />, index: true },
             { path: 'account', element: <UserAccount /> },
-          ],
-        },
-        {
-          path: 'invoice',
-          children: [
-            { element: <Navigate to="/invoice/list" replace />, index: true },
-            { path: 'list', element: <InvoiceList /> },
-            { path: ':id', element: <InvoiceDetails /> },
-            { path: ':id/edit', element: <InvoiceEdit /> },
-            { path: 'new', element: <InvoiceCreate /> },
           ],
         },
         {
@@ -94,7 +79,6 @@ export default function Router() {
             { element: <Navigate to="/blog/posts" replace />, index: true },
             { path: 'posts', element: <BlogPosts /> },
             { path: 'post/:title', element: <BlogPost /> },
-            { path: 'new', element: <BlogNewPost /> },
           ],
         },
         {
@@ -137,27 +121,13 @@ const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 // GENERAL
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const CreateServer = Loadable(lazy(() => import('../pages/dashboard/CreateServer')));
-
-// INVOICE
-const InvoiceList = Loadable(lazy(() => import('../pages/dashboard/InvoiceList')));
-const InvoiceDetails = Loadable(lazy(() => import('../pages/dashboard/InvoiceDetails')));
-const InvoiceCreate = Loadable(lazy(() => import('../pages/dashboard/InvoiceCreate')));
-const InvoiceEdit = Loadable(lazy(() => import('../pages/dashboard/InvoiceEdit')));
+const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
+const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
-const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
 
-// USER
-const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
-const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
-const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
-const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
-const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
-
-// APP
-const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 
 // TEST RENDER PAGE BY ROLE
 const PermissionDenied = Loadable(lazy(() => import('../pages/dashboard/PermissionDenied')));

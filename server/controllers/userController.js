@@ -38,8 +38,7 @@ module.exports.getData = async (req, res, next) => {
   module.exports.login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
-    const userIP = getIP()
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email: email });
       if (!user)
         return res.json({ msg: "Incorrect Email or Password", status: false });
       const isPasswordValid = await bcrypt.compare(password, user.password);
