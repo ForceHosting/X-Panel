@@ -44,6 +44,10 @@ module.exports.getData = async (req, res, next) => {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         return res.json({ msg: "Incorrect Email or Password", status: false });
+        const ip = req.headers['x-forwarded-for'];
+        const checkIP = await User.find({ lastIP: ip }).count();
+        if(checkIP > 0)
+          return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
         const userData = await User.findOne({ email }).select([
           "_id",
           "uid",
@@ -105,9 +109,10 @@ module.exports.register = async (req, res, next) => {
       const userUid = uid()
     const { username, email, password } = req.body;
     console.log(req.body)
-    const {ip} = await fetch('https://api.ipify.org?format=json', { method: 'GET' })
-      .then(res => res.json())
-      .catch(error => console.error(error));
+    const ip = req.headers['x-forwarded-for'];
+    const ipInfo = await fetch('http://api.db-ip.com/v2/free/'+req.headers['x-forwarded-for'], { method: 'GET' })
+    .then(res => res.json())
+    .catch(error => console.error(error));
     if (username == '[Banned]')
       return res.json({ msg: "Sorry, you can't use that username. Please try a different one.", status: false });
     const usernameCheck = await User.findOne({ username });
@@ -116,9 +121,9 @@ module.exports.register = async (req, res, next) => {
     const emailCheck = await User.findOne({ email });
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
-    //const checkIP = await User.find({ lastIP: ip }).count();
-    //if(checkIP > 0)
-      //return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
+    const checkIP = await User.find({ lastIP: ip }).count();
+    if(checkIP > 0)
+      return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
     const pteroIdu = makeid(10);
     const pteroPass = makeid(15)
@@ -160,6 +165,7 @@ module.exports.register = async (req, res, next) => {
       password: hashedPassword,
       role: "Customer",
       linkId: newLinkId,
+      countryCode: ipInfo.countryCode,
     });
     const userData = await User.findOne({ email }).select([
       "_id",

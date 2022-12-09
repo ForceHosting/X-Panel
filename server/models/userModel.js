@@ -85,6 +85,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     unique: true,
   },
+  countryCode: {
+    type: String,
+    required: false,
+  }
 });
 
 module.exports = mongoose.model("Users", userSchema);
