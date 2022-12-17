@@ -1,15 +1,18 @@
 const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
-const { pteroKey } = require('../config.json');
+const { pteroKey, jwtToken } = require('../config.json');
 const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
+const jwt = require('jsonwebtoken')
 
 module.exports.createServer = async (req, res, next) => {
   try {
-    
-    const { userUid, name, location, software, memory, disk, cpu } = req.body;
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    const userUid = jwtVerify._id;
+    const { name, location, software, memory, disk, cpu } = req.body;
     const user = await User.findById(userUid);
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
@@ -27,7 +30,12 @@ module.exports.createServer = async (req, res, next) => {
         const newTotalDisk = user.availDisk - disk;
         const newTotalCPU = user.availCPU - cpu;
         const newTotalSlots = user.availSlots - 1;
-        if(memory < 500){
+
+        const servers = await Server.find({ serverOwner: jwtVerify._id }).count();
+        if(servers >= 5){
+          return res.json({added:false,msg:"You can only have 5 servers to an account."});
+        }
+        else if(memory < 500){
           return res.json({ added: false, msg: "You need to have more than 499mb of memory on a server."});
         }else if(disk < 1000){
           return res.json({ added: false, msg: "You need to have more than 1000mb of disk space on a server."});
@@ -52,6 +60,9 @@ module.exports.createServer = async (req, res, next) => {
           }
         })
         const eggData = await eggFind.json();
+        if(!eggData){
+          return res.json({added: false, msg: "Fetching that software type had an issue."})
+      }
         const userPtero = user.pteroId;
         const pteroCreate = await fetch('https://control.forcehost.net/api/application/servers', {
       method: 'post',
@@ -182,8 +193,9 @@ module.exports.addToQueue = async (req, res, next) => {
 
   module.exports.getServers = async (req, res, next) => {
     try {
-        const userId = req.params.id;
-        const servers = await Server.find({ serverOwner: userId })
+        const bearerHeader = req.headers['authorization'];
+        const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+        const servers = await Server.find({ serverOwner: jwtVerify._id })
         return res.json({ servers });
       } catch (ex) {
         next(ex);
@@ -192,9 +204,11 @@ module.exports.addToQueue = async (req, res, next) => {
 
   module.exports.deleteServer = async (req, res, next) => {
     try{
-      const userId = req.params.uid;
-      const serverId = req.params.pid;
-      const serverData = await Server.findById(serverId);
+      const bearerHeader = req.headers['authorization'];
+      const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+      const userId = jwtVerify._id;
+      const {server} = req.body;
+      const serverData = await Server.findById(server);
       if(serverData.serverOwner === userId){
         await fetch('https://control.forcehost.net/api/application/servers/'+serverData.serverId, {
       method: 'DELETE',
@@ -217,9 +231,9 @@ module.exports.addToQueue = async (req, res, next) => {
         const newTotalCPU = userData.availCPU + serverData.serverCPU;
         const newTotalSlots = userData.availSlots + 1;
         deletedServer(userData.username, serverData.serverMemory, serverData.serverCPU, serverData.serverDisk, serverData.serverNode)
-        await Server.deleteOne({ _id: serverId});
+        await Server.deleteOne({ _id: server});
         await User.findByIdAndUpdate(userId, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
-        return res.json({status: 200, msg: 'Server deleted successfully.'})
+        return res.json({status: 200})
       }else{
         return res.json({status: 401, msg: 'You do not have the permission to delete this server.'})
       }

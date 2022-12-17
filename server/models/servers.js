@@ -25,10 +25,10 @@ const serversSechma = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    serverSuspended: {
-        type: Boolean,
+    serverStatus: {
+        type: String,
         required: true,
-        default: false
+        default: "Active"
     },
     serverOwner: {
         type: String,

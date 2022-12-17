@@ -7,8 +7,8 @@ const {
   const router = require("express").Router();
   
   router.post("/create", createServer);
-  router.get("/getServers/:id", getServers)
-  router.get("/delete/:uid/:pid", deleteServer)
+  router.get("/getServers", getServers)
+  router.post("/remove", deleteServer)
   
   module.exports = router;
   

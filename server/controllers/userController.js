@@ -6,13 +6,15 @@ const uid = new ShortUniqueId({ length: 10 });
 const { makeid, getIP, sendWelcome } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const fetch = require('node-fetch');
-const {pteroKey} = require('../config.json');
+const {pteroKey, jwtToken} = require('../config.json');
 const noRegister = false;
+const jwt = require('jsonwebtoken')
 
 module.exports.getData = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    let userData = await User.findById(userId).select([
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    let userData = await User.findById(jwtVerify._id).select([
       "_id",
       "uid",
       "username",
@@ -27,7 +29,7 @@ module.exports.getData = async (req, res, next) => {
       "availSlots",
       "role",
     ]);
-    return res.json({ userData })
+    return res.json(userData)
   } catch(ex){
     next(ex)
   }
@@ -36,13 +38,16 @@ module.exports.getData = async (req, res, next) => {
   module.exports.login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
-    const userIP = getIP()
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email: email });
       if (!user)
         return res.json({ msg: "Incorrect Email or Password", status: false });
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         return res.json({ msg: "Incorrect Email or Password", status: false });
+        const ip = req.headers['x-forwarded-for'];
+        const checkIP = await User.find({ lastIP: ip }).count();
+        if(checkIP > 0)
+          return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
         const userData = await User.findOne({ email }).select([
           "_id",
           "uid",
@@ -57,10 +62,27 @@ module.exports.getData = async (req, res, next) => {
           "availCPU",
           "availSlots",
           "role",
+          "linkId"
         ]);
-        console.log(userData)
+      const token = jwt.sign(
+        {
+          _id: userData._id,
+          username: userData.username,
+          email: userData.email,
+          pteroId: userData.pteroId,
+          pteroPwd: userData.Pwd,
+          credits: userData.credits,
+          availMem: userData.availMem,
+          availDisk: userData.availDisk,
+          availCPU: userData.availCPU,
+          availSlots: userData.availSlots,
+          role: userData.role,
+          linkId: userData.linkId
+        },
+        `${jwtToken}`
+      )
       userLogin(user.username)
-      return res.json({ status: true, userData });
+      return res.json({ status: true, user: token });
     } catch (ex) {
       next(ex);
     }
@@ -86,9 +108,11 @@ module.exports.register = async (req, res, next) => {
     }else{
       const userUid = uid()
     const { username, email, password } = req.body;
-    const {ip} = await fetch('https://api.ipify.org?format=json', { method: 'GET' })
-      .then(res => res.json())
-      .catch(error => console.error(error));
+    console.log(req.body)
+    const ip = req.headers['x-forwarded-for'];
+    const ipInfo = await fetch('http://api.db-ip.com/v2/free/'+req.headers['x-forwarded-for'], { method: 'GET' })
+    .then(res => res.json())
+    .catch(error => console.error(error));
     if (username == '[Banned]')
       return res.json({ msg: "Sorry, you can't use that username. Please try a different one.", status: false });
     const usernameCheck = await User.findOne({ username });
@@ -97,9 +121,9 @@ module.exports.register = async (req, res, next) => {
     const emailCheck = await User.findOne({ email });
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
-    //const checkIP = await User.find({ lastIP: ip }).count();
-    //if(checkIP > 0)
-      //return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
+    const checkIP = await User.find({ lastIP: ip }).count();
+    if(checkIP > 0)
+      return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
     const pteroIdu = makeid(10);
     const pteroPass = makeid(15)
@@ -109,6 +133,7 @@ module.exports.register = async (req, res, next) => {
     const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
       method: 'post',
       headers: {
+        "Accept": "application/json",
         'Content-Type': 'application/json',
         Authorization: `Bearer `+pteroKey
       },
@@ -117,7 +142,7 @@ module.exports.register = async (req, res, next) => {
         email: email,
         first_name: 'Force Host',
         last_name: 'Registered User',
-        password: pteroPass
+        password: pteroPass,
       })
     });
     const pteroData = await pteroReq.json();
@@ -140,6 +165,7 @@ module.exports.register = async (req, res, next) => {
       password: hashedPassword,
       role: "Customer",
       linkId: newLinkId,
+      countryCode: ipInfo.countryCode,
     });
     const userData = await User.findOne({ email }).select([
       "_id",
@@ -155,10 +181,29 @@ module.exports.register = async (req, res, next) => {
       "availCPU",
       "availSlots",
       "role",
+      "linkId"
     ]);
+    const token = jwt.sign(
+      {
+        _id: userData._id,
+        username: userData.username,
+        email: userData.email,
+        pteroId: userData.pteroId,
+        pteroPwd: userData.Pwd,
+        credits: userData.credits,
+        availMem: userData.availMem,
+        availDisk: userData.availDisk,
+        availCPU: userData.availCPU,
+        availSlots: userData.availSlots,
+        role: userData.role,
+        linkId: userData.linkId
+      },
+      `${jwtToken}`
+    )
+    console.log(token)
     userRegister(user.username)
     sendWelcome(userData.email)
-    return res.json({ status: true, userData });
+    return res.json({ status: true, user: token });
     }
   } catch (ex) {
     next(ex);

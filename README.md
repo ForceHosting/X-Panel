@@ -1,2 +1,0 @@
-# X-Panel (Force Host Client Area)
-X-Panel is Force Hostings open source client panel. Force Hosting decided to make X-Panel as there is a lack of transparency to users. Users are able to freely look at our source code, allowing them to see what we log, and where data goes. 
