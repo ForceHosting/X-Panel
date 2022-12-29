@@ -82,8 +82,6 @@ const userSchema = new mongoose.Schema({
   },
   discordId: {
     type: Long,
-    required: false,
-    unique: true,
   },
   countryCode: {
     type: String,

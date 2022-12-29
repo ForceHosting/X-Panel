@@ -43,6 +43,11 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/server'),
     create: path(ROOTS_DASHBOARD, '/server/create'),
   },
+  chat: {
+    root: path(ROOTS_DASHBOARD, '/chat'),
+    new: path(ROOTS_DASHBOARD, '/chat/new'),
+    view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
+  },
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   user: {
     account: path(ROOTS_DASHBOARD, '/user/account'),

@@ -82,6 +82,12 @@ export default function Router() {
           ],
         },
         {
+          path: 'support',
+          children: [
+            { element: <Chat/>, index: true },
+          ],
+        },
+        {
           path: 'server',
           children: [
             { element: <Chat />, index: true },

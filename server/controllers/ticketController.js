@@ -3,7 +3,8 @@ const Ticket = require("../models/ticketModel");
 const User = require('../models/userModel');
 const Filter = require("badwords-filter");
 const { newTicketAlert } = require('../bot/index');
-
+const jwt = require('jsonwebtoken');
+const { jwtToken } = require('../config.json');
 
 module.exports.getTicket = async (req, res, next) => {
   try{
@@ -93,3 +94,16 @@ module.exports.addMessage = async (req, res, next) => {
     next(ex);
   }
 };
+
+
+module.exports.getList = async (req, res, next) => {
+  try {
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    const userUid = jwtVerify._id;
+    const tickets = await Ticket.find({ owner: userUid });
+    res.json({ tickets });
+  }catch (ex) {
+    next(ex);
+  }
+}

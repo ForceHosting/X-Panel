@@ -1,10 +1,21 @@
+# ----------------------------------
+# Pterodactyl Core Dockerfile
+# Environment: NodeJS
+# Minimum Panel Version: 1.11.2
+# ----------------------------------
+
+
 FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
+
+RUN adduser --disabled-password --home /home/container container
+
+USER container
+ENV USER=container HOME=/home/container NODE_ENV=production
+
+WORKDIR /home/container
+
+COPY ./entrypoint.sh /entrypoint.sh
+
 EXPOSE 25566
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+
+CMD ["/bin/bash", "/entrypoint.sh"]

@@ -52,17 +52,13 @@ export default function ChatSidebar() {
 
   const [openSidebar, setOpenSidebar] = useState(true);
 
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const [searchResults, setSearchResults] = useState([]);
-
   const [isSearchFocused, setSearchFocused] = useState(false);
+
+  const [tickets, setTickets] = useState(null);
 
   const { conversations, activeConversationId } = useSelector((state) => state.chat);
 
   const isDesktop = useResponsive('up', 'md');
-
-  const displayResults = searchQuery && isSearchFocused;
 
   const isCollapse = isDesktop && !openSidebar;
 
@@ -72,6 +68,15 @@ export default function ChatSidebar() {
     }
     return handleOpenSidebar();
   }, [isDesktop, pathname]);
+
+  useEffect(async () => {
+    const ticketListForUser = await axios.get('/api/ticket/list', {
+      headers: {
+        'Authorization': `${localStorage.getItem('token')}`
+      }
+    })
+    setTickets(ticketListForUser.data.tickets);
+  }, []);
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
@@ -92,43 +97,6 @@ export default function ChatSidebar() {
     setOpenSidebar((prev) => !prev);
   };
 
-  const handleClickAwaySearch = () => {
-    setSearchFocused(false);
-    setSearchQuery('');
-  };
-
-  const handleChangeSearch = async (event) => {
-    try {
-      const { value } = event.target;
-      setSearchQuery(value);
-      if (value) {
-        const response = await axios.get('/api/chat/search', {
-          params: { query: value },
-        });
-        setSearchResults(response.data.results);
-      } else {
-        setSearchResults([]);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSearchFocus = () => {
-    setSearchFocused(true);
-  };
-
-  const handleSearchSelect = (username) => {
-    setSearchFocused(false);
-    setSearchQuery('');
-    navigate(PATH_DASHBOARD.chat.view(username));
-  };
-
-  const handleSelectContact = (result) => {
-    if (handleSearchSelect) {
-      handleSearchSelect(result.username);
-    }
-  };
 
   const renderContent = (
     <>
@@ -155,28 +123,15 @@ export default function ChatSidebar() {
             </IconButton>
           )}
         </Stack>
-
-        {!isCollapse && (
-          <ChatContactSearch
-            query={searchQuery}
-            onFocus={handleSearchFocus}
-            onChange={handleChangeSearch}
-            onClickAway={handleClickAwaySearch}
-          />
-        )}
       </Box>
 
       <Scrollbar>
-        {!displayResults ? (
           <ChatConversationList
-            conversations={conversations}
+            conversations={tickets}
             isOpenSidebar={openSidebar}
             activeConversationId={activeConversationId}
             sx={{ ...(isSearchFocused && { display: 'none' }) }}
           />
-        ) : (
-          <ChatSearchResults query={searchQuery} results={searchResults} onSelectContact={handleSelectContact} />
-        )}
       </Scrollbar>
     </>
   );

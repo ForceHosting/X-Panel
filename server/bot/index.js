@@ -11,7 +11,7 @@ const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const fetch = require('node-fetch');
 client.once('ready', () => {
-    console.log("Bot is online, and ready!");
+    console.log("Controller bot is online and ready to play on some servers...");
 	
 	setInterval(
 		async () => {
@@ -161,6 +161,36 @@ function Addedcoins(giver,accepter,coins){
 	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
 }
+
+
+client.on("guildMemberAdd", async member => {
+console.log('test')
+	const newInvites = await member.guild.invites.fetch();
+	const oldInvites = await invites.get(member.guild.id);
+	const invite = newInvites.find(i => i.uses > oldInvites.get(i.code));
+	const inviter = await client.users.fetch(invite.inviter.id);
+	const jfrLogs = client.channels.cache.get('1057025130196373524');
+
+	    const jfrLogEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('JFR Claimed')
+	.addFields(
+		{ name: 'User', value: `${member.user.tag}`, inline: true },
+		{ name: 'Invite', value: `${invite.code}`, inline: true},
+		{ name: 'Invite Uses', value: `${invite.uses}`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+const noInviteFound = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('JFR Claimed')
+	.description(`${member.user.tag} joined but I couldn't find what invite was used. JFR claim was not processed properly.`)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	inviter
+	  ? jfrLogs.send({ embeds: [jfrLogEmbed]})
+	  : jfrLogs.send({ embeds: [noInviteFound]})
+
+});
 
 client.on('interactionCreate', async interaction => {
 
