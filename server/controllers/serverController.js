@@ -1,11 +1,15 @@
-const User = require("../models/userModel");
+// const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
+const dbc = require("./catodb");
+const catodb = require('catodb')
 const { pteroKey, jwtToken } = require('../config.json');
 const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
+
+const db = new catodb('localhost:4020', 'CatoDB_Master')
 
 module.exports.createServer = async (req, res, next) => {
   try {
@@ -13,7 +17,8 @@ module.exports.createServer = async (req, res, next) => {
     const jwtVerify = jwt.verify(bearerHeader,jwtToken)
     const userUid = jwtVerify._id;
     const { name, location, software, memory, disk, cpu } = req.body;
-    const user = await User.findById(userUid);
+    const usere = await dbc.fetch({table:"users",filters:{column:"_id",value:userUid}});
+    const user = usere.data;
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
@@ -127,7 +132,11 @@ module.exports.createServer = async (req, res, next) => {
     })
     const pteroData = await pteroCreate.json();
     if(pteroData.attributes.id){
-      await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
+      // await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
+      await db.update({table:"users",row:user.row,data:{'availMem': newTotalMem},mode:"adjust"})
+      await db.update({table:"users",row:user.row,data:{'availDisk': newTotalDisk},mode:"adjust"})
+      await db.update({table:"users",row:user.row,data:{'availCPU': newTotalCPU},mode:"adjust"})
+      await db.update({table:"users",row:user.row,data:{'availSlots': newTotalSlots},mode:"adjust"})
       const server = await Server.create({
         serverName: name,
         serverId: pteroData.attributes.id,
