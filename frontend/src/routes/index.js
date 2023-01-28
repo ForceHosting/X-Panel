@@ -12,6 +12,7 @@ import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 
+
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) => (props) => {
@@ -67,6 +68,12 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
         {
+          path: 'web',
+          children: [ 
+            { element: <CreateWeb />, path: 'create' },
+          ],
+        },
+        {
           path: 'user',
           children: [
             { element: <Navigate to="/user/account" replace />, index: true },
@@ -79,6 +86,13 @@ export default function Router() {
             { element: <Navigate to="/blog/posts" replace />, index: true },
             { path: 'posts', element: <BlogPosts /> },
             { path: 'post/:title', element: <BlogPost /> },
+          ],
+        },
+        {
+          path: 'invoice',
+          children: [
+            { element: <InvoiceList />, index: true },
+            { element: <InvoiceDetails />, path: ':id' }
           ],
         },
         {
@@ -123,10 +137,12 @@ const NewPassword = Loadable(lazy(() => import('../pages/auth/NewPassword')));
 const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 
 // DASHBOARD
-
+const InvoiceList = Loadable(lazy(() => import('../pages/dashboard/InvoiceList')));
+const InvoiceDetails = Loadable(lazy(() => import('../pages/dashboard/InvoiceDetails')));
 // GENERAL
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const CreateServer = Loadable(lazy(() => import('../pages/dashboard/CreateServer')));
+const CreateWeb = Loadable(lazy(() => import('../pages/dashboard/CreateWeb')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 

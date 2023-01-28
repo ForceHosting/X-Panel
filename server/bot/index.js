@@ -162,6 +162,20 @@ function Addedcoins(giver,accepter,coins){
     client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
 }
 
+function createPaymentLog(subId, oId, uId){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor('Green')
+	.setTitle('New Payment')
+	.setDescription(`The user ${uId} has bought a new plan.`)
+    .addFields(
+        { name: 'Subscription Id', value: `${subId}`, inline: true},
+        { name: 'Order Id', value: `${oId}`, inline: true},
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535882002878504').send({embeds: [newLoginEmbed]})
+}
+
 
 client.on("guildMemberAdd", async member => {
 console.log('test')
@@ -770,4 +784,4 @@ client.on('guildDelete', guild => {
 })
 
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer };
+module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog };

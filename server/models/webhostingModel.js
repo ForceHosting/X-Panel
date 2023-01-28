@@ -19,11 +19,13 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   accountHolder: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    type: String,
     required: true,
+  },
+  paidPlan: {
+    type: String,
+    required: false,
   }
-
 });
 
 module.exports = mongoose.model("Webhosting", userSchema);

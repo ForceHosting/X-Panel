@@ -6,8 +6,8 @@ import { PATH_DASHBOARD } from './routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const serverIP = `http://localhost:25566`;
-
+export const serverIP = `https://my.forcehost.net`;
+export const paypalKey = "";
 export const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
 
 export const FIREBASE_API = {

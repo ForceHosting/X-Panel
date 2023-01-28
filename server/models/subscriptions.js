@@ -1,30 +1,30 @@
 const mongoose = require("mongoose");
-
+const {Types: {Long}} = mongoose;
 const paymentsSechma = new mongoose.Schema({
     paymentUser: {
         type: String,
         required: true,
     },
-    subscriptionId: {
+    productType: {
         type: String,
         required: true
     },
-    invoiceId: {
-        type: String,
-        required: true,
-    },
-    productName: {
-        type: String,
-        required: true,
-    },
     productPrice: {
+        type: Number,
+        required: true,
+    },
+    subscriptionId: {
         type: String,
         required: true,
     },
-    productDescription: {
+    orderId: {
         type: String,
         required: true,
     },
+    nextPurchaseTime: {
+        type: Long,
+        required: true,
+    }
 });
 
-module.exports = mongoose.model("Payments", paymentsSechma);
+module.exports = mongoose.model("Subscriptions", paymentsSechma);

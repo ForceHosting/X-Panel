@@ -41,13 +41,6 @@ export default function VerifyCode() {
           <Box sx={{ mt: 5, mb: 3 }}>
             <VerifyCodeForm />
           </Box>
-
-          <Typography variant="body2">
-            Don’t have a code? &nbsp;
-            <Link variant="subtitle2" onClick={() => {}}>
-              Resend code
-            </Link>
-          </Typography>
         </ContentStyle>
       </Container>
     </Page>

@@ -54,6 +54,9 @@ export default function RegisterForm() {
         password: data.password,
         username: data.username,
       });
+      if(res.data.status === 201){
+        navigate("/auth/verify")
+      }
       if(res.data.status === true){
         localStorage.setItem(
           'token',

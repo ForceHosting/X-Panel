@@ -2,12 +2,13 @@ import { PlanFreeIcon, PlanStarterIcon, PlanPremiumIcon } from '../assets';
 
 // ----------------------------------------------------------------------
 
-const LICENSES = ['Standard', 'Standard Plus', 'Extended'];
+
+const LICENSES = ['Beginner', 'Startup', 'Business'];
 
 export const _homePlans = [...Array(3)].map((_, index) => ({
   license: LICENSES[index],
-  commons: ['One end products', '12 months updates', '6 months of support'],
-  options: ['JavaScript version', 'TypeScript version', 'Design Resources', 'Commercial applications'],
+  commons: ['Free Support', 'Site Builder', 'NVMe SSD'],
+  options: ['JavaScript ds', 'TypeScript version', 'Design Resources', 'Commercial applications'],
   icons: [
     'https://minimal-assets-api-dev.vercel.app/assets/images/home/ic_sketch.svg',
     'https://minimal-assets-api-dev.vercel.app/assets/images/home/ic_figma.svg',
