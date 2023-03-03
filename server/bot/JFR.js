@@ -21,33 +21,26 @@ client.once('ready', () => {
 
 client.on("guildMemberAdd", async member => {
 
-const invites = await member.guild.invites.fetch();
-if(!invites){return;}
-
 const jfrLogs = client.channels.cache.get('1057025130196373524');
-  const invite = invites.find((inv) => inv.code)
-  const results = await JFR.find({inviteCode: invite.code}).count();
-  //if(!results){ return;}
-  if(results > 0){
-	const checkIfClaimed = await loggedJFR.find({claimCode: invite.code, userClaimed: member.user.id}).count();
+
+	const checkIfClaimed = await loggedJFR.find({guildId: member.guild.id, userClaimed: member.id}).count();
 	//if(!checkIfClaimed) { return;}
 	if(checkIfClaimed > 0){
 		const inviteUsed = new EmbedBuilder()
 		.setColor(0x0099FF)
 		.setTitle('JFR Already Claimed')
-		.setDescription(`The user ${member.user.tag} (${member.user.id}) has already claimed the server ${invite.guild.name}. No resources were given.`)
+		.setDescription(`The user ${member.user.tag} (${member.id}) has already claimed the server ${member.guild.name}. No resources were given.`)
 		.setTimestamp()
 		.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		jfrLogs.send({ embeds: [inviteUsed]})
 	}else{
-		const user = await userModel.findOne({discordId: member.user.id});
-		console.log(user)
-		const jfrRe = await JFR.findOne({inviteCode: invite.code});
+		const user = await userModel.findOne({discordId: member.id});
+		const jfrRe = await JFR.findOne({guildId: member.guild.id});
 		const newCredits = user.credits + jfrRe.claimAmount;
-		await userModel.findOneAndUpdate({ discordId: member.user.id}, { credits: newCredits });
+		await userModel.findOneAndUpdate({ discordId: member.id}, { credits: newCredits });
 
 		await loggedJFR.create({
-			claimCode: invite.code,
+			guildId: member.guild.id,
 			userClaimed: member.user.id,
 		})
 		const jfrLogEmbed = new EmbedBuilder()
@@ -55,18 +48,40 @@ const jfrLogs = client.channels.cache.get('1057025130196373524');
 		.setTitle('JFR Claimed')
 		.addFields(
 			{ name: 'User', value: `${member.user.tag}`, inline: true },
-			{ name: 'Invite', value: `${invite.code}`, inline: true},
-			{ name: 'Invite Uses', value: `${invite.uses}`, inline: true})
+			{ name: 'Guild', value: `${member.guild.id} (${member.guild.name})`, inline: true})
 		.setTimestamp()
 		.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 jfrLogs.send({ embeds: [jfrLogEmbed]})	
-	}
+
   }
 	
 
 	
 
 });
+
+client.on("guildMemberRemove", async member => {
+
+	const jfrLogs = client.channels.cache.get('1057025130196373524');
+	
+		const checkIfClaimed = await loggedJFR.find({guildId: member.guild.id, userClaimed: member.id}).count();
+		console.log(checkIfClaimed)
+		if(checkIfClaimed > 0){
+			const user = await userModel.findOne({discordId: member.id});
+			const jfrRe = await JFR.findOne({guildId: member.guild.id});
+			const newCredits = user.credits - jfrRe.claimAmount;
+			await userModel.findOneAndUpdate({ discordId: member.id}, { credits: newCredits });
+			await loggedJFR.deleteOne({guildId: member.guild.id, userClaimed: member.id})
+			const inviteUsed = new EmbedBuilder()
+			.setColor('DarkRed')
+			.setTitle('JFR Claim Removed')
+			.setDescription(`The user ${member.user.tag} \`(${member.id})\` has left the claimed server ${member.guild.name}. The resources were taken away.`)
+			.setTimestamp()
+			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			jfrLogs.send({ embeds: [inviteUsed]})
+		}
+});
+
 
 client.on('guildCreate', guild => {
 	const newEmbed = new EmbedBuilder()

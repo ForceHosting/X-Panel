@@ -23,8 +23,12 @@ export default function AuthGuard({ children }) {
   const [authenticated, setAuth] = useState();
 
   useEffect(() => {
+    console.log('AuthGuard')
     if(!localStorage.getItem('token')){
       setAuth(false)
+      
+    }else if (localStorage.getItem('token') === 'undefined'){
+        setAuth(false);
     }else{
       setAuth(true)
     }

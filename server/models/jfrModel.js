@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const claimsSchema = new mongoose.Schema({
-    inviteCode: {
+    guildId: {
         type: String,
         required: true,
     },

@@ -320,7 +320,7 @@ module.exports.sendVerify = async function sendWelcome(to,verifyCode){
       pass: emailPassword
     }
   });
-
+try{
   let info = await transporter.sendMail({
     from: '"Force Host" <no-reply@forcehost.net>',
     to: to,
@@ -555,7 +555,11 @@ module.exports.sendVerify = async function sendWelcome(to,verifyCode){
     </tbody>
   </table>
   `,
-  });
+  }[callback]);
+}catch(callback){
+  console.error(callback);
+}
+
 }
 
 module.exports.sendSuspension = async function sendSuspension(to, reason){
@@ -568,7 +572,7 @@ module.exports.sendSuspension = async function sendSuspension(to, reason){
       pass: emailPassword
     }
   });
-
+try{
   let info = await transporter.sendMail({
     from: '"Force Host" <no-reply@forcehost.net>',
     to: to,
@@ -846,5 +850,8 @@ module.exports.sendSuspension = async function sendSuspension(to, reason){
     </tbody>
   </table>
    `,
-  });
+  }[callback]);
+}catch(callback){
+  console.error(callback);
+}
 }

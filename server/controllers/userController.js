@@ -123,10 +123,9 @@ module.exports.register = async (req, res, next) => {
     var rawPteroPass = Buffer.from(pteroPass);
     var encryptedPteroPass = rawPteroPass.toString('base64');
 
-    const pteroReq = await fetch('https://control.forcehost.net/api/application/users/', {
+    const pteroReq = await fetch('https://control.forcehost.net/api/application/users', {
       method: 'post',
       headers: {
-        "Accept": "application/json",
         'Content-Type': 'application/json',
         Authorization: `Bearer `+pteroKey
       },
@@ -135,42 +134,14 @@ module.exports.register = async (req, res, next) => {
         email: email,
         first_name: 'Force Host',
         last_name: 'Registered User',
-        password: pteroPass,
+        password: pteroPass
       })
     });
     const pteroData = await pteroReq.json();
-    if(pteroReq.status != 201){
-      const pteroRequest = await fetch('https://control.forcehost.net/api/application/users/?filter[email]='+email+'', {
-        method: 'get',
-        headers: {
-          "Accept": "application/json",
-          'Content-Type': 'application/json',
-          Authorization: `Bearer `+pteroKey
-        },
-      });
-      const pterodData = await pteroRequest.json();
-      const pteroInfo = JSON.stringify(pterodData.data[0].attributes);
-      //console.log(pteroInfo);
-      if(pteroRequest.status != 200){
-        //console.log(pteroRequest)
-        const errorCode = makeid(5)
-      sendErrorCode(errorCode, 'Pterodactyl account creation issue')
-      return res.json({ msg: `There was an issue with creating your account. Please contact support. Err code: ${errorCode}`, status: false});
-      }else{
-        const verifyCode = makeid(6);
-        Verify.create({
-          email: email,
-          code: verifyCode,
-          expires: Math.floor(Date.now() / 1000) + 600,
-          hashPass: hashedPassword,
-          username: username,
-        })
-        sendVerify(email,verifyCode);
-        return res.json({status: 201})
-      }
-      
-    }
-    const newLinkId = makeid(10)
+    console.log('test'+pteroReq.status)
+    if(pteroReq.status === 201 || pteroReq.status === 200){
+      console.log(`Creating account`)
+      const newLinkId = makeid(10)
     const pterodactylUid = pteroData.attributes.id;
     const user = await User.create({
       uid: userUid,
@@ -220,6 +191,36 @@ module.exports.register = async (req, res, next) => {
     userRegister(user.username)
     sendWelcome(userData.email)
     return res.json({ status: true, user: token });
+      
+    }else{
+      const pteroRequest = await fetch('https://control.forcehost.net/api/application/users/?filter[email]='+email+'', {
+        method: 'get',
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer `+pteroKey
+        },
+      });
+      if(pteroRequest.status !== 200){
+        const errorCode = makeid(5)
+      sendErrorCode(errorCode, 'Pterodactyl account creation issue')
+      return res.json({ msg: `There was an issue with creating your account. Please contact support. Err code: ${errorCode}`, status: false});
+      }else{
+        const verifyCode = makeid(6);
+        Verify.create({
+          email: email,
+          code: verifyCode,
+          expires: Math.floor(Date.now() / 1000) + 600,
+          hashPass: hashedPassword,
+          username: username,
+        })
+        //sendVerify(email,verifyCode);
+        return res.json({status: 201})
+      }
+
+      
+    }
+    
     }
   } catch (ex) {
     next(ex);
