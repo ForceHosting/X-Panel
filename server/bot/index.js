@@ -782,6 +782,6 @@ client.on('guildDelete', guild => {
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	client.channels.cache.get('1041066863792246794').send({embeds: [newEmbed]})
 })
-
+require('./JFR')
 client.login(token);
 module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog };

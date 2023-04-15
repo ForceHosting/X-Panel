@@ -41,14 +41,14 @@ module.exports.getData = async (req, res, next) => {
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
       if (!user)
-        return res.json({ msg: "Incorrect Email or Password", status: false });
+        return res.status(409).json({ msg: "Incorrect Email or Password", status: false });
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
-        return res.json({ msg: "Incorrect Email or Password", status: false });
+        return res.status(409).json({ msg: "Incorrect Email or Password", status: false });
         const ip = req.headers['x-forwarded-for'];
         const checkIP = await User.find({ lastIP: ip }).count();
-        if(checkIP > 0)
-          return res.json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
+        if(checkIP > 1)
+          return res.status(426).json({ msg: "Another account is already using that IP address. Please contact support.", status: false });
         const userData = await User.findOne({ email }).select([
           "_id",
           "uid",

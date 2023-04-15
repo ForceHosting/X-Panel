@@ -83,6 +83,7 @@ export default function LoginForm() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+        <Alert severity="warning">All legacy accounts are requested to move to a Discord account as soon as possible.</Alert>
 
         <RHFTextField name="email" label="Email address" />
 
@@ -112,7 +113,9 @@ export default function LoginForm() {
       <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
         Login
       </LoadingButton>
-      <LoadingButton fullWidth size="large" variant="contained" sx={{color:'white', my: 2}}><a sx={{ textDecoration: 'none', color: 'white' }} href="/api/auth">Login With Discord</a></LoadingButton>
+      <LoadingButton fullWidth size="large" sx={{my:2}} type="submit" variant="contained" loading={isSubmitting} href="/api/auth">
+        Login with Discord
+      </LoadingButton>
     </FormProvider>
   );
 }
