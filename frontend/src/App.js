@@ -1,5 +1,4 @@
 // routes
-import Snowfall from 'react-snowfall'
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
@@ -21,7 +20,6 @@ export default function App() {
       <ThemeProvider>
         <ThemeSettings>
           <NotistackProvider>
-          <Snowfall/>
             <ProgressBarStyle />
             <ChartStyle />
             <ScrollToTop />

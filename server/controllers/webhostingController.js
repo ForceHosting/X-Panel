@@ -2,7 +2,8 @@ const Web = require('../models/webhostingModel')
 const { makeid, makeWebUser } = require('../functions');
 const { newWebUser, sendErrorCode } = require("../bot");
 const fetch = require('node-fetch');
-
+const { jwtToken } = require("../config")
+const jwt = require('jsonwebtoken')
 
 module.exports.createWeb = async(req, res, next) => {
     try{
@@ -53,11 +54,11 @@ module.exports.createWeb = async(req, res, next) => {
 
 module.exports.getWeb = async(req, res, next) => {
     try {
-        const userId = req.params.userId;
-        console.log(userId)
-        const webData = Web.findOne({ 'accountHolder': userId})
-        console.log(webData.panelUser)
-        return res.json(webData)
+        const bearerHeader = req.headers['authorization'];
+        const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+        const userId = jwtVerify._id;
+        const webData = await Web.find({ 'accountHolder': userId})
+        return res.json({status: 200, webData})
     }catch(ex){
         next(ex)
     }

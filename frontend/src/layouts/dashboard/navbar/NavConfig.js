@@ -32,6 +32,8 @@ const navConfig = [
     items: [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
+      { title: 'create website', path: PATH_DASHBOARD.web.create, icon: ICONS.analytics },
+      { title: 'View Invoices', path: PATH_DASHBOARD.invoice.root, icon: ICONS.invoice },
     ],
     
   },

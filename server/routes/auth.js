@@ -6,7 +6,8 @@ const {
   getData,
   getUserLevel,
   banUser,
-  generateAccLink
+  generateAccLink,
+  verifyCodeRegister
 } = require("../controllers/userController");
 const passport = require('passport');
 
@@ -22,6 +23,9 @@ router.get("/logout/:id", logOut);
 router.get('/getmodlevel/:id', getUserLevel);
 router.get('/ban/:id', banUser);
 router.post('/link/generate', generateAccLink);
+router.post('/verify', verifyCodeRegister)
+
+
 router.get('/', passport.authenticate('discord'));
 router.get('/redirect', passport.authenticate('discord', { 
     failureRedirect: '/forbidden',

@@ -5,7 +5,7 @@ const {
   const router = require("express").Router();
 
   router.post('/create', createWeb);
-  router.get('/get/:userId', getWeb);
+  router.get('/get', getWeb);
 
 
 

@@ -20,7 +20,6 @@ ChatConversationList.propTypes = {
 
 export default function ChatConversationList({ conversations, isOpenSidebar, activeConversationId, sx, ...other }) {
   const navigate = useNavigate();
-
   const handleSelectConversation = (conversationId) => {
     let conversationKey = '';
     const conversation = conversations.byId[conversationId];
@@ -41,18 +40,14 @@ export default function ChatConversationList({ conversations, isOpenSidebar, act
 
   return (
     <List disablePadding sx={sx} {...other}>
-      {(loading ? [...Array(12)] : conversations.allIds).map((conversationId, index) =>
-        conversationId ? (
+      {(loading ? [...Array(12)] : conversations).map((conversation) =>
+  
           <ChatConversationItem
-            key={conversationId}
+            key={conversation._id}
             isOpenSidebar={isOpenSidebar}
-            conversation={conversations.byId[conversationId]}
-            isSelected={activeConversationId === conversationId}
-            onSelectConversation={() => handleSelectConversation(conversationId)}
+            conversation={conversations}
+            onSelectConversation={() => handleSelectConversation(conversation._id)}
           />
-        ) : (
-          <SkeletonConversationItem key={index} />
-        )
       )}
     </List>
   );

@@ -8,6 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Stack, OutlinedInput, FormHelperText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from '../../../utils/axios';
+import { verifyCodeRoute } from '../../../utils/APIRoutes';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -105,11 +107,19 @@ export default function VerifyCodeForm() {
   const onSubmit = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log('data', Object.values(data).join(''));
-
-      enqueueSnackbar('Verify success!');
-
-      navigate(PATH_DASHBOARD.root, { replace: true });
+      const codeInput = Object.values(data).join('');
+      const res = await axios.post(`${verifyCodeRoute}`,{
+        verifyCode: codeInput,
+      });
+      if(res.status === 200){
+        localStorage.setItem(
+          'token',
+          res.data.user
+        )
+        navigate(PATH_DASHBOARD.root, { replace: true });
+      }else{
+        navigate("/auth/register")
+      }
     } catch (error) {
       console.error(error);
     }

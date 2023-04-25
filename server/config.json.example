@@ -1,4 +1,5 @@
 {
+    "port": "",
     "token": "",
     "sessionSecrets": "",
     "paypal_cid": "",
@@ -7,5 +8,10 @@
     "pteroKey": "",
     "emailPassword": "",
     "jwtToken": "",
-    "licenseKey": ""
+    "licenseKey": "",
+    "directAdminAuth": "",
+    "CLIENT_ID": "",
+    "CLIENT_SECRET": "",
+    "CLIENT_REDIRECT_URI": "",
+    "JFRToken": ""
 }

@@ -1,6 +1,6 @@
 const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
-const DiscordUser = require('../models/userModel');
+const User = require('../models/userModel');
 const { CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI } = require('../config')
 const { sendErrorCode, userRegister} = require('../bot/index');
 const {sendWelcome, makeid} = require('../functions');
@@ -14,7 +14,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-    const user = await DiscordUser.findOne({_id: id._id});
+    const user = await User.findOne({_id: id._id});
     if(user) 
         done(null, user);
 });
@@ -26,7 +26,7 @@ passport.use(new DiscordStrategy({
     scope: ['identify', 'guilds', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        const user = await DiscordUser.findOne({discordId: profile.id});
+        const user = await User.findOne({discordId: profile.id});
         if(user){
             await user.updateOne({
                 username: `${profile.username}#${profile.discriminator}`,
@@ -54,33 +54,60 @@ passport.use(new DiscordStrategy({
       })
     });
     const pteroData = await pteroReq.json();
-    if(pteroReq.status != 201){
-      const errorCode = makeid(5)
-      sendErrorCode(errorCode, 'Pterodactyl account creation issue')
-      done(`Please contact support. Err Code: ${errorCode}`)
+    if(pteroReq.status === 201 || pteroReq.status === 200){
+      const newLinkId = makeid(10)
+      const pterodactylUid = pteroData.attributes.id;
+      const newUser = await User.create({
+        uid: uid,
+        username: `${profile.username}#${profile.discriminator}`,
+        email: profile.email,
+        pteroUserId: pteroIdu,
+        pteroId: pterodactylUid,
+        pteroPwd: encryptedPteroPass,
+        credits: 20,
+        role: "Customer",
+        linkId: newLinkId,
+        discordId: profile.id
+      });
+      userRegister(`<@${profile.id}>`)
+      sendWelcome(newUser.email)
+      done(null, newUser)
+    }else{
+      const pteroRequest = await fetch('https://control.forcehost.net/api/application/users/?filter[email]='+profile.email+'', {
+        method: 'GET',
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer `+pteroKey
+        },
+      });
+      const pteroUser = await pteroRequest.json();
+      if(pteroRequest.status !== 200){
+        const errorCode = makeid(5)
+        sendErrorCode(errorCode, 'Pterodactyl account creation issues. No email found, but registered (?)')
+        done(null)
+      }else{
+      const newLinkId = makeid(10)
+
+        const newUser = await User.create({
+          uid: uid,
+          username: `${profile.username}#${profile.discriminator}`,
+          email: profile.email,
+          pteroUserId: pteroIdu,
+          pteroId: pteroUser.data[0].attributes.id,
+          pteroPwd: encryptedPteroPass,
+          credits: 20,
+          role: "Customer",
+          linkId: newLinkId,
+          discordId: profile.id
+        });
+        userRegister(`<@${profile.id}>`)
+        sendWelcome(newUser.email)
+        done(null, newUser)
+      }
     }
-    const userUid = uid()
-    const newLinkId = makeid(10)
-    const pterodactylUid = pteroData.attributes.id;
-    const newUser = await DiscordUser.create({
-      uid: userUid,
-      username: `${profile.username}#${profile.discriminator}`,
-      email: profile.email,
-      pteroUserId: pteroIdu,
-      pteroId: pterodactylUid,
-      pteroPwd: encryptedPteroPass,
-      credits: 0,
-      role: "Customer",
-      linkId: newLinkId,
-      discordId: profile.id
-    });
-    userRegister(`<@${profile.id}>`)
-    sendWelcome(newUser.email)
-    done(null, newUser)
-        }
-    }
-    catch(err) {
+  }
+}catch(err) {
         console.log(err);
         done(err, null);
-    }
-}));
+}}));

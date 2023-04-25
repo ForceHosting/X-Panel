@@ -1,11 +1,11 @@
 // @mui
 import { useState, useEffect } from 'react';
-import { Container, Grid, Stack, Box } from '@mui/material';
+import { Container, Grid, Stack, Box, Divider } from '@mui/material';
 
 // hooks
 import jwtDecode from 'jwt-decode';
 import useSettings from '../../hooks/useSettings';
-import { getUserDataRoute, getServersRoute } from '../../utils/APIRoutes';
+import { getUserDataRoute, getServersRoute, getSitesRoute } from '../../utils/APIRoutes';
 import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
@@ -16,7 +16,7 @@ import {
 } from '../../sections/@dashboard/general/app';
 // assets
 import { SeoIllustration } from '../../assets';
-import { UserCard } from '../../sections/@dashboard/user/cards';
+import { UserCard, SiteCard } from '../../sections/@dashboard/user/cards';
 
 const serverBG = [
   "https://wallpaperaccess.com/download/minecraft-121124",
@@ -35,6 +35,7 @@ export default function GeneralApp() {
   const [userSlots, setSlots] = useState(null)
   const [userServers, setServers] = useState([])
   const [ranOnce, setRanOnce] = useState(false);
+  const [userSites, setSites] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -71,23 +72,39 @@ useEffect(() => {
                 setServers(data.data.servers);
                 
               })();
-  }, 60000)
+  }, 120000)
       })
       
       useEffect(() => {
         if(ranOnce === false){ 
           (async function getData() {
-                  const data = await axios.get(`${getServersRoute}`,{
-                    headers: {
-                      'Authorization': `${localStorage.getItem('token')}`
-                    }
-                  });
-                      setServers(data.data.servers);
+            const data = await axios.get(`${getServersRoute}`,{
+              headers: {
+                'Authorization': `${localStorage.getItem('token')}`
+              }
+            });
+                  setServers(data.data.servers);
                       setRanOnce(true)
                     })();
                   }
   
             })
+
+
+            useEffect(() => {
+              setInterval(()=>{
+              (async function getData() {
+                const data = await axios.get(`${getSitesRoute}`,{
+                  headers: {
+                    'Authorization': `${localStorage.getItem('token')}`
+                  }
+                });
+                          setSites(data.data.webData);
+                        })();
+                      }, 240000)
+                      
+      
+                })
 
   return (
     <Page title="Home">
@@ -122,6 +139,7 @@ useEffect(() => {
             </Stack>
           </Grid>
         </Grid>
+        <Divider>SERVERS</Divider>
         <Box
           sx={{
             display: 'grid',
@@ -137,8 +155,27 @@ useEffect(() => {
           {userServers.map((server) => (
             <UserCard key={user.id} server={server} background={serverBG[random]} />
           ))}
+            
+          
         </Box>
-        
+        <Divider>WEBSITES</Divider>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gap: 3,
+            mt: '20px',
+            gridTemplateColumns: {
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            },
+          }}
+        >
+          {userSites.map((site) => (
+            <SiteCard key={user.id} server={site} background={serverBG[random]} />
+          ))}
+        </Box>
       </Container>
     </Page>
   );
