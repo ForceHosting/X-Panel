@@ -11,6 +11,16 @@ const noRegister = false;
 const jwt = require('jsonwebtoken')
 const Verify = require('../models/verifyCodes')
 
+module.exports.newEarn = async (req, res, next) => {
+try{
+  const bearerHeader = req.headers['authorization'];
+  const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+  const userUid = jwtVerify._id;
+}catch(ex){
+  next(ex);
+}
+}
+
 module.exports.getData = async (req, res, next) => {
   try {
     const bearerHeader = req.headers['authorization'];
@@ -101,6 +111,14 @@ module.exports.getUserLevel = async (req, res, next) => {
     next(ex);
   }
 };
+
+module.exports.registerNew = async (req, res, next) => {
+try{
+res.status(503).json({msg: "Registration is done via Discord. Please try that instead."})
+}catch(ex) {
+next(ex);
+}
+}
 
 module.exports.register = async (req, res, next) => {
   try {

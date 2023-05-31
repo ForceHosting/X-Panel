@@ -23,7 +23,6 @@ export default function AuthGuard({ children }) {
   const [authenticated, setAuth] = useState();
 
   useEffect(() => {
-    console.log(localStorage.getItem('token'))
     if(!localStorage.getItem('token')){
       setAuth(false)
       return <Navigate to={PATH_AUTH.login} />

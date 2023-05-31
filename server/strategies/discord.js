@@ -30,7 +30,7 @@ passport.use(new DiscordStrategy({
         if(user){
             await user.updateOne({
                 username: `${profile.username}#${profile.discriminator}`,
-                email: profile.email
+                email: profile.email,
             });
             done(null, user);
         }else{
@@ -58,13 +58,17 @@ passport.use(new DiscordStrategy({
       const newLinkId = makeid(10)
       const pterodactylUid = pteroData.attributes.id;
       const newUser = await User.create({
-        uid: uid,
+        uid: profile.id,
         username: `${profile.username}#${profile.discriminator}`,
         email: profile.email,
         pteroUserId: pteroIdu,
         pteroId: pterodactylUid,
         pteroPwd: encryptedPteroPass,
-        credits: 20,
+        credits: 700,
+        availMem: 2048,
+        availDisk: 15360,
+        availCPU: 60,
+        availSlots: 3,
         role: "Customer",
         linkId: newLinkId,
         discordId: profile.id
@@ -88,15 +92,19 @@ passport.use(new DiscordStrategy({
         done(null)
       }else{
       const newLinkId = makeid(10)
-
+      const nuid = new ShortUniqueId({ length: 20 });
         const newUser = await User.create({
-          uid: uid,
+          uid: profile.id,
           username: `${profile.username}#${profile.discriminator}`,
           email: profile.email,
           pteroUserId: pteroIdu,
           pteroId: pteroUser.data[0].attributes.id,
           pteroPwd: encryptedPteroPass,
-          credits: 20,
+          credits: 700,
+          availMem: 2048,
+          availDisk: 15360,
+          availCPU: 60,
+          availSlots: 3,
           role: "Customer",
           linkId: newLinkId,
           discordId: profile.id

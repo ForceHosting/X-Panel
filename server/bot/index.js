@@ -20,11 +20,11 @@ client.once('ready', () => {
 				const web = await Web.find().count();
 				const dServers = await client.guilds.cache.size;
 				const usersChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020537846542635079');
-				usersChannel.setName(`✨ ${users} users!`)
+				//usersChannel.setName(`✨ ${users} users!`)
 				const serversChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020539431670780027');
-				serversChannel.setName(`✨ ${servers} servers!`)
+				//serversChannel.setName(`✨ ${servers} servers!`)
 				const webChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020538820925603850');
-				webChannel.setName(`✨ ${web} websites!`)
+				//webChannel.setName(`✨ ${web} websites!`)
 			var statusArray = [
 				`my.forcehost.net`,
 				`What is DAv2?`,

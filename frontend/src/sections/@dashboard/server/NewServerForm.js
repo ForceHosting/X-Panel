@@ -84,11 +84,11 @@ export default function NewServerForm() {
 
   const NewServerSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    location: Yup.string().required('Phone number is required'),
-    software: Yup.string().required('Address is required'),
-    memory: Yup.string().required('country is required'),
-    cpu: Yup.string().required('Company is required'),
-    disk: Yup.string().required('State is required'),
+    location: Yup.string().required('Location is required'),
+    software: Yup.string().required('Software is required'),
+    memory: Yup.string().required('Memory is required'),
+    cpu: Yup.string().required('CPU is required'),
+    disk: Yup.string().required('Disk is required'),
   });
 
   const methods = useForm({

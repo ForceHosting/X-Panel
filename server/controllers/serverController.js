@@ -14,15 +14,15 @@ module.exports.createServer = async (req, res, next) => {
     const userUid = jwtVerify._id;
     const { name, location, software, memory, disk, cpu } = req.body;
     const user = await User.findById(userUid);
+      console.log(location)
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
     if(software == ""){
       return res.json({added: false, msg: "Please select a server software."});
     }
-    const getNodeStats = await Node.findOne({ pteroId: location }).select([
-      "nodeSlots"
-    ]);
+    const getNodeStats = await Node.findOne({ PteroId: `'${location}'` });
+        console.log(getNodeStats)
     if(getNodeStats.nodeSlots <= 0){
       return res.json({ added: false, msg: "This node currently does not have any slots available."});
     }else{
