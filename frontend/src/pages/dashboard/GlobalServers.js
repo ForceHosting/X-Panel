@@ -1,11 +1,11 @@
 // @mui
 import { useState, useEffect } from 'react';
-import { Container, Grid, Stack, Box, Divider } from '@mui/material';
+import { Container, Grid, Stack, Box, Button } from '@mui/material';
 
 // hooks
 import jwtDecode from 'jwt-decode';
 import useSettings from '../../hooks/useSettings';
-import { getUserDataRoute, getServersRoute, getSitesRoute } from '../../utils/APIRoutes';
+import { getUserDataRoute, getServersRoute, getSitesRoute, getGlobalServers } from '../../utils/APIRoutes';
 import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
@@ -15,8 +15,8 @@ import {
   AppWelcome
 } from '../../sections/@dashboard/general/app';
 // assets
-import { SeoIllustration } from '../../assets';
-import { UserCard, SiteCard } from '../../sections/@dashboard/user/cards';
+import { MotivationIllustration } from '../../assets';
+import { GlobalCard, SiteCard } from '../../sections/@dashboard/user/cards';
 
 const serverBG = [
   "https://wallpaperaccess.com/download/minecraft-121124",
@@ -27,7 +27,7 @@ const random = Math.floor(Math.random() * serverBG.length);
 
 // ----------------------------------------------------------------------
 
-export default function GeneralApp() {
+export default function GlobalServers() {
   const [user, setUserInfo] = useState([]);
   const [userMem, setMemory] = useState(null)
   const [userCPU, setCPU] = useState(null)
@@ -35,7 +35,6 @@ export default function GeneralApp() {
   const [userSlots, setSlots] = useState(null)
   const [userServers, setServers] = useState([])
   const [ranOnce, setRanOnce] = useState(false);
-  const [userSites, setSites] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -61,61 +60,33 @@ export default function GeneralApp() {
 })();
 }, []);
 
-useEffect(() => { 
-  setInterval(()=>{
-    (async function getData() {
-            const data = await axios.get(`${getServersRoute}`,{
-              headers: {
-                'Authorization': `${localStorage.getItem('token')}`
-              }
-            });
-                setServers(data.data.servers);
-                
-              })();
-  }, 120000)
-      })
+
       
       useEffect(() => {
         if(ranOnce === false){ 
           (async function getData() {
-            const data = await axios.get(`${getServersRoute}`,{
+            const data = await axios.get(`${getGlobalServers}`,{
               headers: {
                 'Authorization': `${localStorage.getItem('token')}`
               }
             });
-                  setServers(data.data.servers);
+                  setServers(data.data.globalServers);
                       setRanOnce(true)
                     })();
                   }
   
             })
 
-
-            useEffect(() => {
-              setInterval(()=>{
-              (async function getData() {
-                const data = await axios.get(`${getSitesRoute}`,{
-                  headers: {
-                    'Authorization': `${localStorage.getItem('token')}`
-                  }
-                });
-                          setSites(data.data.webData);
-                        })();
-                      }, 240000)
-                      
-      
-                })
-
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} >
           <Grid item xs={12} md={8} lg={4}>
             <AppWelcome
               title={`Welcome back, \n ${user.username}`}
-              description="Manage your servers, websites, and account all from one place!"
+              description="Take a look at all the public servers that we host!"
               img={
-                <SeoIllustration
+                <MotivationIllustration
                   sx={{
                     p: 3,
                     width: 360,
@@ -125,21 +96,21 @@ useEffect(() => {
               }
             />
           </Grid>
-
           <Grid item xs={12} md={4} lg={4}>
             <Stack spacing={1}>
-              <AppWidget title="Memory" total={userMem} icon={'fa-solid:memory'} chartData={userMem / 10240 * 100} />
-              <AppWidget title="CPU" total={userCPU} icon={'mdi:memory'} chartData={userCPU / 500 * 100} />
+            <Button variant="contained" sx={{mt: 10}} color="primary">
+  Delete Server
+</Button>
             </Stack>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <Stack spacing={1}>
-              <AppWidget title="Disk" total={userDisk} icon={'clarity:hard-disk-solid'} chartData={userDisk / 25600 * 100} />
-              <AppWidget title="Server Slots" total={userSlots} icon={'icon-park-solid:memory-one'} chartData={userSlots / 7 * 100} />
+            <Button variant="contained" sx={{ mt: 10}} color="primary">
+  Delete Server
+</Button>
             </Stack>
           </Grid>
         </Grid>
-        <Divider>SERVERS</Divider>
         <Box
           sx={{
             display: 'grid',
@@ -153,28 +124,10 @@ useEffect(() => {
           }}
         >
           {userServers.map((server) => (
-            <UserCard key={user.id} server={server} background={serverBG[random]} />
+            <GlobalCard key={user.id} server={server} background={serverBG[random]} />
           ))}
             
           
-        </Box>
-        <Divider>WEBSITES</Divider>
-
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 3,
-            mt: '20px',
-            gridTemplateColumns: {
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-            },
-          }}
-        >
-          {userSites.map((site) => (
-            <SiteCard key={user.id} server={site} background={serverBG[random]} />
-          ))}
         </Box>
       </Container>
     </Page>

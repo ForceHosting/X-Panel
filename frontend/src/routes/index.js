@@ -67,6 +67,8 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
+        { path: '/app/earn', element: <EarnPage />},
+        { path: '/app/servers/global', element: <GlobalServers />},
         {
           path: 'web',
           children: [ 
@@ -145,6 +147,8 @@ const CreateServer = Loadable(lazy(() => import('../pages/dashboard/CreateServer
 const CreateWeb = Loadable(lazy(() => import('../pages/dashboard/CreateWeb')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
+const EarnPage = Loadable(lazy(() => import('../pages/dashboard/EarnPage')));
+const GlobalServers = Loadable(lazy(() => import('../pages/dashboard/GlobalServers')));
 
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));

@@ -33,6 +33,15 @@ const serversSechma = new mongoose.Schema({
     serverOwner: {
         type: String,
         required: true,
+    },
+    isGlobal: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    serverIP: {
+        type: String,
+        required: true,
     }
 });
 

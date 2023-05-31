@@ -13,7 +13,7 @@ import axios from '../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import { FormProvider, RHFSelect, RHFTextField } from '../../../components/hook-form';
+import { FormProvider, RHFCheckbox, RHFSelect, RHFTextField } from '../../../components/hook-form';
 
 
 
@@ -103,8 +103,8 @@ export default function NewServerForm() {
 
   const onSubmit = async (event) => {
     try {
-        const { name, location, software, memory, disk, cpu } = event;
-        const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu},{
+        const { name, location, software, memory, disk, cpu, global } = event;
+        const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu,global},{
             headers: {
               'Authorization': `${localStorage.getItem('token')}`
             }
@@ -160,6 +160,7 @@ export default function NewServerForm() {
               <RHFTextField name="memory" label="Memory" />
               <RHFTextField name="cpu" label="CPU" />
               <RHFTextField name="disk" label="Disk" />
+              <RHFCheckbox name="global" label="Global Server List?" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

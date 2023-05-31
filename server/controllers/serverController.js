@@ -6,13 +6,15 @@ const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
+const Nodeactyl = require('nodeactyl');
+const PteroAPI = new Nodeactyl.NodeactylApplication("https://control.forcehost.net", pteroKey);
 
 module.exports.createServer = async (req, res, next) => {
   try {
     const bearerHeader = req.headers['authorization'];
     const jwtVerify = jwt.verify(bearerHeader,jwtToken)
     const userUid = jwtVerify._id;
-    const { name, location, software, memory, disk, cpu } = req.body;
+    const { name, location, software, memory, disk, cpu, global } = req.body;
     const user = await User.findById(userUid);
       console.log(location)
     if(location == ""){
@@ -127,6 +129,9 @@ module.exports.createServer = async (req, res, next) => {
     })
     const pteroData = await pteroCreate.json();
     if(pteroData.attributes.id){
+      const Allocs = await PteroAPI.getNodeAllocations(location);
+      console.log(Allocs[pteroData.attributes.allocation])
+
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
       const server = await Server.create({
         serverName: name,
@@ -136,7 +141,8 @@ module.exports.createServer = async (req, res, next) => {
         serverCPU: cpu,
         serverDisk: disk,
         serverSuspended: false,
-        serverOwner: userUid
+        serverOwner: userUid,
+        isGlobal: global,
       });
       delete user.password
       const updatedSlots = getNodeStats.nodeSlots -1;
@@ -240,4 +246,21 @@ module.exports.addToQueue = async (req, res, next) => {
     }catch(ex){
       next(ex)
     }
+  }
+
+
+  module.exports.getGlobalServers = async (req, res, next) => {
+try{
+  const showPerPage = 6;
+  const currentPage = 1;
+  const globalServers = await Server.aggregate([
+    { $match: {'isGlobal' : true}},
+    { $skip : showPerPage * currentPage},
+    { $limit : showPerPage }
+  ]);
+  console.log(globalServers)
+  return res.json({globalServers});
+}catch(ex){
+  next(ex)
+}
   }

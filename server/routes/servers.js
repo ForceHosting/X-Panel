@@ -1,7 +1,8 @@
 const {
     createServer,
     getServers,
-    deleteServer
+    deleteServer,
+    getGlobalServers,
   } = require("../controllers/serverController");
   
   const router = require("express").Router();
@@ -9,6 +10,6 @@ const {
   router.post("/create", createServer);
   router.get("/getServers", getServers)
   router.post("/remove", deleteServer)
-  
+  router.get("/global", getGlobalServers)
   module.exports = router;
   

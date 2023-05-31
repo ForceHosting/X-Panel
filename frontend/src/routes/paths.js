@@ -38,6 +38,7 @@ export const PATH_DASHBOARD = {
   root: '/app',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
+    earn: path(ROOTS_DASHBOARD, '/app/earn'),
   },
   server: {
     root: path(ROOTS_DASHBOARD, '/server'),

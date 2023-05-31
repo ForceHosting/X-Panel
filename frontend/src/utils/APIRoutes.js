@@ -19,3 +19,4 @@ export const fetchPaymentDetailsRoute = `/api/payments`
 export const getSitesRoute = `/api/web/get`
 export const verifyCodeRoute = `/api/auth/verify`
 export const newEarnCoin = `/api/auth/coins`
+export const getGlobalServers = `/api/server/global`
