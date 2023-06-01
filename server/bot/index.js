@@ -303,9 +303,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 2.5);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 2.5;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -345,9 +345,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 50);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 50;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -389,9 +389,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 2.5);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 2.5;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -432,9 +432,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 200);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 200;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
