@@ -33,24 +33,20 @@ GlobalCard.propTypes = {
 
 
 export default function GlobalCard({ server, background }) {
-  const { serverName, serverMemory, serverCPU, serverDisk, serverId } = server;
 
+  const { serverIP, serverName, serverId } = server;
+  let knownIP;
+  if(serverIP === undefined){
+    knownIP = 'UNKNOWN';
+  }
+  if(serverIP === null){
+     knownIP = 'UNKNOWN';
+  }
+  if(serverIP){
+     knownIP = serverIP
+  }
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteServer = async (event,server) => {
-    console.log(server.id)
-    const getDeleteData = await axios.post(`${deleteServerRoute}`,{server: server._id},
-    {headers:
-      {'Authorization': `${localStorage.getItem('token')}`
-    }}
-    );
-    if(getDeleteData.data.status !== 200){
-      enqueueSnackbar(getDeleteData.data.msg, {variant: 'error'});
-    }else{
-      enqueueSnackbar('Server deleted successfully')
-    }
-
-  }
 
   return (
     <Card sx={{ textAlign: 'center', height: 250 }}>
@@ -99,24 +95,16 @@ export default function GlobalCard({ server, background }) {
 
       <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />
 
-      <Box sx={{ py: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <Box sx={{ py: 1, display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
             IP
           </Typography>
-          <Typography variant="subtitle1">{serverMemory}</Typography>
+          <Typography variant="subtitle1">{knownIP}</Typography>
         </div>
 
-        <div/>
-          
 
-
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Owner
-          </Typography>
-          <Typography variant="subtitle1">{serverDisk}</Typography>
-        </div>
+        
       </Box>
     </Card>
   );

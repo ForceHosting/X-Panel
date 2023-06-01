@@ -35,11 +35,13 @@ export default function GlobalServers() {
   const [userSlots, setSlots] = useState(null)
   const [userServers, setServers] = useState([])
   const [ranOnce, setRanOnce] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
       const decoded = jwtDecode(token);
       setUserInfo(decoded)
+      setCurrentPage(0)
   }, [])
 
   const { themeStretch } = useSettings();
@@ -65,7 +67,7 @@ export default function GlobalServers() {
       useEffect(() => {
         if(ranOnce === false){ 
           (async function getData() {
-            const data = await axios.get(`${getGlobalServers}`,{
+            const data = await axios.get(`${getGlobalServers}/${currentPage}`,{
               headers: {
                 'Authorization': `${localStorage.getItem('token')}`
               }
@@ -77,6 +79,36 @@ export default function GlobalServers() {
   
             })
 
+            const furtherPage = async (event,page) => {
+              const newPage = page + 1;
+              if(newPage < 0){
+                console.log('no!');
+              }else{
+              const getNewData = await axios.get(`${getGlobalServers}/${newPage}`,
+              {headers:
+                {'Authorization': `${localStorage.getItem('token')}`
+              }}
+              );
+              setCurrentPage(newPage);
+              setServers(getNewData.data.globalServers);
+            }
+            }
+            const prevPage = async (event,page) => {
+              const newPage = page - 1;
+              if(newPage <= -1){
+                console.log('no!');
+              }else{
+              const getNewData = await axios.get(`${getGlobalServers}/${newPage}`,
+              {headers:
+                {'Authorization': `${localStorage.getItem('token')}`
+              },
+          }
+              );
+              setCurrentPage(newPage);
+              setServers(getNewData.data.globalServers);
+
+            }
+            }
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
@@ -98,15 +130,15 @@ export default function GlobalServers() {
           </Grid>
           <Grid item xs={12} md={4} lg={4}>
             <Stack spacing={1}>
-            <Button variant="contained" sx={{mt: 10}} color="primary">
-  Delete Server
+            <Button variant="contained" sx={{mt: 10}} color="primary" onClick={(event) => prevPage(event, currentPage)}>
+  Previous Page
 </Button>
             </Stack>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <Stack spacing={1}>
-            <Button variant="contained" sx={{ mt: 10}} color="primary">
-  Delete Server
+            <Button variant="contained" sx={{ mt: 10}} color="primary" onClick={(event) => furtherPage(event, currentPage)}>
+  Next Page
 </Button>
             </Stack>
           </Grid>

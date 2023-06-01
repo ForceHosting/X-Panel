@@ -68,7 +68,7 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
         { path: '/app/earn', element: <EarnPage />},
-        { path: '/app/servers/global', element: <GlobalServers />},
+        { path: '/servers/global', element: <GlobalServers />},
         {
           path: 'web',
           children: [ 

@@ -42,6 +42,7 @@ const serversSechma = new mongoose.Schema({
     serverIP: {
         type: String,
         required: true,
+        default: "UNKNOWN IP",
     }
 });
 

@@ -20,11 +20,14 @@ client.once('ready', () => {
 })
 
 client.on("guildMemberAdd", async member => {
-
+const checkIfJfr = await loggedJFR.find({guildId: member.guild.id}).count();
+if(checkIfJfr <= 0){
+	return;
+}else{
 const jfrLogs = client.channels.cache.get('1057025130196373524');
-
 	const checkIfClaimed = await loggedJFR.find({guildId: member.guild.id, userClaimed: member.id}).count();
 	//if(!checkIfClaimed) { return;}
+
 	if(checkIfClaimed > 0){
 		const inviteUsed = new EmbedBuilder()
 		.setColor(0x0099FF)
@@ -35,6 +38,16 @@ const jfrLogs = client.channels.cache.get('1057025130196373524');
 		jfrLogs.send({ embeds: [inviteUsed]})
 	}else{
 		const user = await userModel.findOne({discordId: member.id});
+		console.log(user)
+		if(!user){
+			const noUser = new EmbedBuilder()
+		.setColor(0x0099FF)
+		.setTitle('User Unavailable')
+		.setDescription(`The user was not found.`)
+		.setTimestamp()
+		.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+		 return jfrLogs.send({ embeds: [inviteUsed]});
+		}else{
 		const jfrRe = await JFR.findOne({guildId: member.guild.id});
 		const newCredits = user.credits + jfrRe.claimAmount;
 		await userModel.findOneAndUpdate({ discordId: member.id}, { credits: newCredits });
@@ -52,9 +65,9 @@ const jfrLogs = client.channels.cache.get('1057025130196373524');
 		.setTimestamp()
 		.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 jfrLogs.send({ embeds: [jfrLogEmbed]})	
-
+}
   }
-	
+}
 
 	
 

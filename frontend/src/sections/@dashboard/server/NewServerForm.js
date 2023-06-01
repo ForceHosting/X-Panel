@@ -111,10 +111,13 @@ export default function NewServerForm() {
           });
       reset();
       console.log(data)
-      if(data.added === false){
+      if(data.status === 400){
+        enqueueSnackbar(data.msg, {variant: 'error'});
+      }
+      if(data.status !== 200){
         enqueueSnackbar(data.msg, { variant: 'error'})
       }
-      if(data.added === true){
+      if(data.status === 200){
         enqueueSnackbar('Server created successfully')
         navigate(PATH_DASHBOARD.root);
       }

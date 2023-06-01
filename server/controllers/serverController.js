@@ -6,8 +6,6 @@ const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
-const Nodeactyl = require('nodeactyl');
-const PteroAPI = new Nodeactyl.NodeactylApplication("https://control.forcehost.net", pteroKey);
 
 module.exports.createServer = async (req, res, next) => {
   try {
@@ -16,7 +14,6 @@ module.exports.createServer = async (req, res, next) => {
     const userUid = jwtVerify._id;
     const { name, location, software, memory, disk, cpu, global } = req.body;
     const user = await User.findById(userUid);
-      console.log(location)
     if(location == ""){
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
@@ -24,7 +21,6 @@ module.exports.createServer = async (req, res, next) => {
       return res.json({added: false, msg: "Please select a server software."});
     }
     const getNodeStats = await Node.findOne({ PteroId: `'${location}'` });
-        console.log(getNodeStats)
     if(getNodeStats.nodeSlots <= 0){
       return res.json({ added: false, msg: "This node currently does not have any slots available."});
     }else{
@@ -117,7 +113,7 @@ module.exports.createServer = async (req, res, next) => {
           databases: 3,
           backups: 1,
         },
-        allocation: {
+        allocation:{
           default: 0,
         },
         deploy: {
@@ -127,11 +123,18 @@ module.exports.createServer = async (req, res, next) => {
         }
       })
     })
+
     const pteroData = await pteroCreate.json();
     if(pteroData.attributes.id){
-      const Allocs = await PteroAPI.getNodeAllocations(location);
-      console.log(Allocs[pteroData.attributes.allocation])
-
+      const pteroAllocs = await fetch('https://control.forcehost.net/api/application/nodes/'+location+'/allocations/?filter[server_id]='+pteroData.attributes.id+'', {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+    })
+    const pteroAlloc = await pteroAllocs.json();
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
       const server = await Server.create({
         serverName: name,
@@ -143,14 +146,15 @@ module.exports.createServer = async (req, res, next) => {
         serverSuspended: false,
         serverOwner: userUid,
         isGlobal: global,
+        serverIP: pteroAlloc.data[0].attributes.alias+':'+pteroAlloc.data[0].attributes.port
       });
       delete user.password
       const updatedSlots = getNodeStats.nodeSlots -1;
       await Node.findOneAndUpdate({'pteroId':location},{'nodeSlots': updatedSlots});
       createdServer(user.username, name, memory, cpu, disk, location, pteroData.attributes.id)
-      return res.json({ status: 200, added: true, server})
+      return res.status(200).json({ status: 200, added: true, server})
     }else{
-      return res.json({status: 500, added: false, msg: "Pterodactyl server creation error."})
+      return res.status(400).json({status: 500, added: false, msg: "Pterodactyl server creation error."})
     }
       }
     }
@@ -252,13 +256,12 @@ module.exports.addToQueue = async (req, res, next) => {
   module.exports.getGlobalServers = async (req, res, next) => {
 try{
   const showPerPage = 6;
-  const currentPage = 1;
+  const currentPage = req.params.page;
   const globalServers = await Server.aggregate([
     { $match: {'isGlobal' : true}},
     { $skip : showPerPage * currentPage},
     { $limit : showPerPage }
   ]);
-  console.log(globalServers)
   return res.json({globalServers});
 }catch(ex){
   next(ex)

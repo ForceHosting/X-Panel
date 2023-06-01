@@ -10,6 +10,6 @@ const {
   router.post("/create", createServer);
   router.get("/getServers", getServers)
   router.post("/remove", deleteServer)
-  router.get("/global", getGlobalServers)
+  router.get("/global/:page", getGlobalServers)
   module.exports = router;
   

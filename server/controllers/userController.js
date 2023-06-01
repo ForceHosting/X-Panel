@@ -156,9 +156,7 @@ module.exports.register = async (req, res, next) => {
       })
     });
     const pteroData = await pteroReq.json();
-    console.log('test'+pteroReq.status)
     if(pteroReq.status === 201 || pteroReq.status === 200){
-      console.log(`Creating account`)
       const newLinkId = makeid(10)
     const pterodactylUid = pteroData.attributes.id;
     const user = await User.create({
@@ -306,7 +304,6 @@ module.exports.verifyCodeRegister = async (req, res, next) => {
 })
         
         const chngReg = await changeRequest.json();
-        //console.log(chngReg)
         if(changeRequest.status != 200){
           const errorCode = makeid(5)
       sendErrorCode(errorCode, 'Pterodactyl account creation issue. Could not update password.')
