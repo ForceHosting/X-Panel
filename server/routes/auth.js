@@ -12,7 +12,8 @@ const {
 const {
   initDiscordAuth,
   tokenDiscordAuth,
-  getDiscordAuth
+  getDiscordAuth,
+  getJFRDiscord
 } = require("../controllers/discordController");
 const router = require("express").Router();
 
@@ -36,7 +37,7 @@ router.post('/verify', verifyCodeRegister)
 router.get('/', initDiscordAuth)
 router.get('/discord', tokenDiscordAuth);
 router.get('/discord/data', getDiscordAuth)
-
+router.get('/discord/jfr/servers/list', getJFRDiscord)
 
 
 module.exports = router;

@@ -8,6 +8,8 @@ const {pteroKey, JFRToken, authUrl, successUrl, jwtToken} = require('../config.j
 const axios = require('axios');
 const queryString = require('querystring');
 const fetch = require('node-fetch');
+const JFR = require('../models/jfrModel');
+const { response } = require("express");
 module.exports.initDiscordAuth = async (req, res, next) => {
 try{
     res.redirect(authUrl)
@@ -185,4 +187,13 @@ module.exports.getDiscordAuth = async (req, res, next) => {
     }catch(ex){
         next(ex);
     }
+}
+
+module.exports.getJFRDiscord = async (req, res, next) => {
+try{
+  const jfrData = await JFR.find({active: true});
+  return res.json({jfrData})
+}catch(ex){
+  next(ex);
+}
 }

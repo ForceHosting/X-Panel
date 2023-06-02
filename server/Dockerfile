@@ -1,21 +1,16 @@
-# ----------------------------------
-# Pterodactyl Core Dockerfile
-# Environment: NodeJS
-# Minimum Panel Version: 1.11.2
-# ----------------------------------
+FROM node:lts
 
+ENV NODE_ENV production
 
-FROM node:lts-alpine
+FROM base as deps
 
-RUN adduser --disabled-password --home /home/container container
+FROM base
 
-USER container
-ENV USER=container HOME=/home/container NODE_ENV=production
+ENV PORT="25566"
+ENV NODE_ENV production
 
-WORKDIR /home/container
+WORKDIR /xpanel
 
-COPY ./entrypoint.sh /entrypoint.sh
+RUN npm install
 
-EXPOSE 25566
-
-CMD ["/bin/bash", "/entrypoint.sh"]
+ENTRYPOINT [ "./start.sh" ]

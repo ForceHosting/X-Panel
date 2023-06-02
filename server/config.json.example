@@ -1,5 +1,5 @@
 {
-    "port": "",
+    "serverPort": "",
     "token": "",
     "sessionSecrets": "",
     "paypal_cid": "",
@@ -13,5 +13,8 @@
     "CLIENT_ID": "",
     "CLIENT_SECRET": "",
     "CLIENT_REDIRECT_URI": "",
-    "JFRToken": ""
+    "JFRToken": "",
+    "corsOrigin": "",
+    "authUrl": "",
+    "successUrl": ""
 }

@@ -20,3 +20,4 @@ export const getSitesRoute = `/api/web/get`
 export const verifyCodeRoute = `/api/auth/verify`
 export const newEarnCoin = `/api/auth/coins`
 export const getGlobalServers = `/api/server/global`
+export const getJFRServers = `/api/auth/discord/jfr/servers/list`

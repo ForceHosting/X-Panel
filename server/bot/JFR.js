@@ -20,7 +20,7 @@ client.once('ready', () => {
 })
 
 client.on("guildMemberAdd", async member => {
-const checkIfJfr = await loggedJFR.find({guildId: member.guild.id}).count();
+const checkIfJfr = await JFR.find({guildId: member.guild.id}).count();
 if(checkIfJfr <= 0){
 	return;
 }else{

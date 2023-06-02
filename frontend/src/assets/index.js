@@ -11,6 +11,7 @@ export { default as MotivationIllustration } from './illustration_motivation';
 export { default as ComingSoonIllustration } from './illustration_coming_soon';
 export { default as MaintenanceIllustration } from './illustration_maintenance';
 export { default as OrderCompleteIllustration } from './illustration_order_complete';
+export { default as CommunityIllustration } from './illustration_community';
 
 export { default as SentIcon } from './icon_sent';
 export { default as PlanFreeIcon } from './icon_plan_free';

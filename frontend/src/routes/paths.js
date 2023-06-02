@@ -39,6 +39,7 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     earn: path(ROOTS_DASHBOARD, '/app/earn'),
+    jfr: path(ROOTS_DASHBOARD, '/join-for-resources'),
   },
   server: {
     root: path(ROOTS_DASHBOARD, '/server'),

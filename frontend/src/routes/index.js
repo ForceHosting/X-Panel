@@ -69,6 +69,7 @@ export default function Router() {
         { path: '/app', element: <GeneralApp /> },
         { path: '/app/earn', element: <EarnPage />},
         { path: '/servers/global', element: <GlobalServers />},
+        { path: '/join-for-resources', element: <JFR />},
         {
           path: 'web',
           children: [ 
@@ -149,7 +150,7 @@ const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const EarnPage = Loadable(lazy(() => import('../pages/dashboard/EarnPage')));
 const GlobalServers = Loadable(lazy(() => import('../pages/dashboard/GlobalServers')));
-
+const JFR = Loadable(lazy(() => import('../pages/dashboard/JFR')));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
