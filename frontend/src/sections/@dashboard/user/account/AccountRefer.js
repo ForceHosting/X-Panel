@@ -29,7 +29,6 @@ export default function ReferralAccount() {
         'Authorization': `${localStorage.getItem('token')}`
       }
     });
-    console.log(userData)
     setRefCode(userData.data.refCode);
     setRefUses(userData.data.refUses);
     console.log(`Hey, ${user.username}! Want a job?`)

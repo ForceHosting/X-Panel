@@ -164,7 +164,6 @@ try{
 module.exports.getDiscordAuth = async (req, res, next) => {
     try{
         const user = req.session.user;
-        console.log(user)
   const userUpdating = await User.findOne({discordId: user.discordId});
   if(userUpdating){
     const ip = req.headers['x-forwarded-for'];

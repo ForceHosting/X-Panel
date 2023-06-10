@@ -42,7 +42,6 @@ module.exports.getData = async (req, res, next) => {
       "refCode",
       "refUses"
     ]);
-    console.log(userData);
     if(!userData.refCode){
       const randomRefId = makeid(5)
       await User.findByIdAndUpdate(jwtVerify._id,{'refCode': randomRefId, 'refUse': 0})
