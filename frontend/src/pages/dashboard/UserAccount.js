@@ -16,6 +16,7 @@ import {
   AccountGeneral,
   AccountNotifications,
   AccountChangePassword,
+  ReferralAccount
 } from '../../sections/@dashboard/user/account';
 
 // ----------------------------------------------------------------------
@@ -40,6 +41,11 @@ export default function UserAccount() {
       value: 'link_account',
       icon: <Iconify icon={'mdi:link-variant'} width={20} height={20} />,
       component: <AccountNotifications />,
+    },
+    {
+      value: 'refer',
+      icon: <Iconify icon={'mdi:cash-multiple'} width={20} height={20} />,
+      component: <ReferralAccount />,
     },
   ];
 

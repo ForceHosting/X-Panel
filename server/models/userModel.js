@@ -86,6 +86,15 @@ const userSchema = new mongoose.Schema({
   countryCode: {
     type: String,
     required: false,
+  },
+  refCode: {
+    type: String,
+    required: true,
+  },
+  refUse: {
+    type: Number,
+    required: true,
+    default: 0,
   }
 });
 

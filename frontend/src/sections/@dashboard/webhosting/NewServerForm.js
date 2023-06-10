@@ -74,7 +74,7 @@ export default function NewServerForm() {
                 rowGap: 3,
               }}
             >
-              <RHFTextField name="name" label="Domain Name - Currently Unavailable" disabled xs={12} />
+              <RHFTextField name="name" label="Free Web Creation available via Discord." disabled xs={12} />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

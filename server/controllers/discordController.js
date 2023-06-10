@@ -84,6 +84,10 @@ try{
     const pteroData = await pteroReq.json();
     if(pteroReq.status === 201 || pteroReq.status === 200){
       const newLinkId = makeid(10)
+      let startCoins = 700;
+      if(req.session.ref === true){
+        startCoins = 700 + 75;
+      }
       const pterodactylUid = pteroData.attributes.id;
       const newUser = await User.create({
         uid: profile.id,
@@ -92,14 +96,16 @@ try{
         pteroUserId: pteroIdu,
         pteroId: pterodactylUid,
         pteroPwd: encryptedPteroPass,
-        credits: 700,
+        credits: startCoins,
         availMem: 2048,
         availDisk: 15360,
         availCPU: 60,
         availSlots: 3,
         role: "Customer",
         linkId: newLinkId,
-        discordId: profile.id
+        discordId: profile.id,
+        refCode: makeid(5),
+        refUse: 0
       });
       userRegister(`<@${profile.id}>`)
       sendWelcome(newUser.email)
@@ -122,6 +128,10 @@ try{
       }else{
       const newLinkId = makeid(10)
       const nuid = new ShortUniqueId({ length: 20 });
+      let startCoins = 700;
+      if(req.session.ref == true){
+        startCoins = 700 + 75;
+      }
         const newUser = await User.create({
           uid: profile.id,
           username: `${profile.username}`,
@@ -129,14 +139,16 @@ try{
           pteroUserId: pteroIdu,
           pteroId: pteroUser.data[0].attributes.id,
           pteroPwd: encryptedPteroPass,
-          credits: 700,
+          credits: startCoins,
           availMem: 2048,
           availDisk: 15360,
           availCPU: 60,
           availSlots: 3,
           role: "Customer",
           linkId: newLinkId,
-          discordId: profile.id
+          discordId: profile.id,
+          refCode: makeid(5),
+          refUse: 0
         });
         userRegister(`<@${profile.id}>`)
         sendWelcome(newUser.email)
@@ -152,6 +164,7 @@ try{
 module.exports.getDiscordAuth = async (req, res, next) => {
     try{
         const user = req.session.user;
+        console.log(user)
   const userUpdating = await User.findOne({discordId: user.discordId});
   if(userUpdating){
     const ip = req.headers['x-forwarded-for'];

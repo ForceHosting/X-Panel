@@ -39,8 +39,33 @@ module.exports.getData = async (req, res, next) => {
       "availCPU",
       "availSlots",
       "role",
+      "refCode",
+      "refUses"
     ]);
+    console.log(userData);
+    if(!userData.refCode){
+      const randomRefId = makeid(5)
+      await User.findByIdAndUpdate(jwtVerify._id,{'refCode': randomRefId, 'refUse': 0})
+      let userData = await User.findById(jwtVerify._id).select([
+        "_id",
+        "uid",
+        "username",
+        "email",
+        "pteroUserId",
+        "pteroId",
+        "pteroPwd",
+        "credits",
+        "availMem",
+        "availDisk",
+        "availCPU",
+        "availSlots",
+        "role",
+        "refCode",
+        "refUse"
+      ]);
+    }else{
     return res.json(userData)
+  }
   } catch(ex){
     next(ex)
   }
