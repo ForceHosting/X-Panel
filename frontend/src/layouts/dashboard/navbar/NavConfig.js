@@ -35,7 +35,8 @@ const navConfig = [
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
       { title: 'create website', path: PATH_DASHBOARD.web.create, icon: ICONS.analytics },
       { title: 'View Invoices', path: PATH_DASHBOARD.invoice.root, icon: ICONS.invoice },
-      { title: 'Global Servers', path: PATH_DASHBOARD.server.global, icon: ICONS.globe}
+      { title: 'Global Servers', path: PATH_DASHBOARD.server.global, icon: ICONS.globe},
+      { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking}
     ],
     
   },

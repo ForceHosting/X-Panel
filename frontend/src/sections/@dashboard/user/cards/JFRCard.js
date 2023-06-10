@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
+import {Link} from 'react-router-dom'
 import { Box, Card, Avatar, Divider, Typography, Button } from '@mui/material';
 // utils
 import { deleteServerRoute } from '../../../../utils/APIRoutes';
@@ -36,7 +37,6 @@ export default function JFRCard({ server, background }) {
 
   const { guildId, guildName, guildBanner, guildIcon, claimAmount, guildInvite } = server;
   const { enqueueSnackbar } = useSnackbar();
-
 
   return (
     <Card sx={{ textAlign: 'center', height: 275 }}>
@@ -80,7 +80,7 @@ export default function JFRCard({ server, background }) {
       </Typography>
 
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        <Button variant="contained" onClick={window.open(guildInvite)} color="primary">Join Server</Button>
+        <Button variant="contained" color="primary"><a href={`https://${guildInvite}`} target='noreferrer'>Join Server</a></Button>
       </Typography>
 
       <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />

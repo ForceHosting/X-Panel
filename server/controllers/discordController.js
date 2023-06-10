@@ -191,9 +191,18 @@ module.exports.getDiscordAuth = async (req, res, next) => {
 
 module.exports.getJFRDiscord = async (req, res, next) => {
 try{
-  const jfrData = await JFR.find({active: true});
-  return res.json({jfrData})
+  const jfrData = await JFR.find({active: true, isGold: false});
+  const goldJFRData = await JFR.find({active: true, isGold: true});
+    return res.json({jfrData,goldJFRData})
 }catch(ex){
   next(ex);
 }
 }
+module.exports.getGoldJFRDiscord = async (req, res, next) => {
+  try{
+    const jfrData = await JFR.find({active: true, isGold: true});
+    return res.json({jfrData,goldJFRData})
+  }catch(ex){
+    next(ex);
+  }
+  }

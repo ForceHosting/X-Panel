@@ -33,6 +33,10 @@ const claimsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isGold:{
+        type: Boolean,
+        required: true,
+    }
 });
 
 module.exports = mongoose.model("JFR", claimsSchema);

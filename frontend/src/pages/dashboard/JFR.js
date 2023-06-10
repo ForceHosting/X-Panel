@@ -16,7 +16,7 @@ import {
 } from '../../sections/@dashboard/general/app';
 // assets
 import { CommunityIllustration } from '../../assets';
-import { JFRCard } from '../../sections/@dashboard/user/cards';
+import { JFRCard, GoldJFR } from '../../sections/@dashboard/user/cards';
 
 const serverBG = [
   "https://wallpaperaccess.com/download/minecraft-121124",
@@ -34,14 +34,13 @@ export default function JFR() {
   const [userDisk, setDisk] = useState(null)
   const [userSlots, setSlots] = useState(null)
   const [userServers, setServers] = useState([])
+  const [goldServers, setGoldServers] = useState([])
   const [ranOnce, setRanOnce] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
       const decoded = jwtDecode(token);
       setUserInfo(decoded)
-      setCurrentPage(0)
   }, [])
 
   const { themeStretch } = useSettings();
@@ -72,43 +71,14 @@ export default function JFR() {
                 'Authorization': `${localStorage.getItem('token')}`
               }
             });
+            console.log(data);
                   setServers(data.data.jfrData);
+                  setGoldServers(data.data.goldJFRData);
                       setRanOnce(true)
                     })();
                   }
   
             })
-
-            const furtherPage = async (event,page) => {
-              const newPage = page + 1;
-              if(newPage < 0){
-                console.log('no!');
-              }else{
-              const getNewData = await axios.get(`${getJFRServers}`,
-              {headers:
-                {'Authorization': `${localStorage.getItem('token')}`
-              }}
-              );
-              setCurrentPage(newPage);
-              setServers(getNewData.data.jfrData);
-            }
-            }
-            const prevPage = async (event,page) => {
-              const newPage = page - 1;
-              if(newPage <= -1){
-                console.log('no!');
-              }else{
-              const getNewData = await axios.get(`${getJFRServers}`,
-              {headers:
-                {'Authorization': `${localStorage.getItem('token')}`
-              },
-          }
-              );
-              setCurrentPage(newPage);
-              setServers(getNewData.data.jfrData);
-
-            }
-            }
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
@@ -130,17 +100,13 @@ export default function JFR() {
           </Grid>
           <Grid item xs={12} md={4} lg={4}>
             <Stack spacing={1}>
-            <Button variant="contained" sx={{mt: 10}} color="primary" onClick={(event) => prevPage(event, currentPage)}>
-  Previous Page
-</Button>
+            {goldServers.map((server) => (
+            <GoldJFR key={user.id} server={server} background={serverBG[random]} />
+          ))}
             </Stack>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Stack spacing={1}>
-            <Button variant="contained" sx={{ mt: 10}} color="primary" onClick={(event) => furtherPage(event, currentPage)}>
-  Next Page
-</Button>
-            </Stack>
+            <Stack spacing={1}/>
           </Grid>
         </Grid>
         <Box
