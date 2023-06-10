@@ -553,7 +553,8 @@ client.on('interactionCreate', async interaction => {
             const newRandomPass = makeid(15)
             var newRandomPassBuffer = Buffer.from(newRandomPass);
             var encryptedPass = newRandomPassBuffer.toString('base64');
-            const webData = await fetch(`https://web.forcehost.net:2222/CMD_API_ACCOUNT_USER?action=create&add=Submit&username=${randomUsername}&email=${userInfo.email}&passwd=${newRandomPass}&passwd2=${newRandomPass}&domain=${domain}&package=free&ip=181.214.41.250&notify=yes`, {
+			
+            const webData = await fetch(`https://d2.my-control-panel.com:2222/CMD_API_ACCOUNT_USER?action=create&add=Submit&username=${randomUsername}&email=${userInfo.email}&passwd=${newRandomPass}&passwd2=${newRandomPass}&domain=${domain}.delete&package=free&ip=198.251.83.217&notify=yes`, {
       headers: {
         'Content-Type': 'text/plain',
         'Authorization': `Basic ${directAdminAuth}`
