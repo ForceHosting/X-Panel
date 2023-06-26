@@ -144,6 +144,72 @@ next(ex);
 }
 }
 
+module.exports.earningCoins = async (req, res, next) => {
+try{
+  const bearerHeader = req.headers['authorization'];
+  const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+  const userUid = jwtVerify._id;
+  console.log(userUid);
+  const userData = await User.findById(userUid).select([
+    'credits',
+    'role',
+  ]);
+  console.log(userData)
+  if(userData.role === 'Customer'){
+    const newCredits = userData.credits + 1;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }else if(userData.role === 'rt1'){
+    const newCredits = userData.credits + 1.25;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }else if(userData.role === 'rt2'){
+    const newCredits = userData.credits + 1.6;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'rt3'){
+    const newCredits = userData.credits + 2;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'rpleg'){
+    const newCredits = userData.credits + 2;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'sprt'){
+    const newCredits = userData.credits + 1.3;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'mgmt'){
+    const newCredits = userData.credits + 1.3;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'exec'){
+    const newCredits = userData.credits + 2;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'fhfound'){
+    const newCredits = userData.credits + 3;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }
+  else if(userData.role === 'sysad'){
+    const newCredits = userData.credits + 1.3;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    return res.status(200).json({msg: 'Added one coin!'});
+  }else{
+    return res.status(500).json({msg: 'Could not find role in database.'})
+  }
+}catch(ex) {
+  next(ex);
+}
+}
+
 module.exports.register = async (req, res, next) => {
   try {
     if(noRegister == true){

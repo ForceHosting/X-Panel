@@ -7,7 +7,8 @@ const {
   getUserLevel,
   banUser,
   generateAccLink,
-  verifyCodeRegister
+  verifyCodeRegister,
+  earningCoins
 } = require("../controllers/userController");
 const {
   initDiscordAuth,
@@ -29,6 +30,7 @@ router.get('/getmodlevel/:id', getUserLevel);
 router.get('/ban/:id', banUser);
 router.post('/link/generate', generateAccLink);
 router.post('/verify', verifyCodeRegister)
+router.get('/coins', earningCoins)
 // --------------------------------
 // --------------------------------
 // DISCORD ROUTERS

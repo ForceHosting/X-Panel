@@ -39,6 +39,8 @@ try{
         }
     })
     const profile = await tokenResponseData.data;
+    req.session.discord = profile.id;
+    console.log(profile)
     await fetch(
         `https://discord.com/api/guilds/783416129908899860/members/${profile.id}`,
         {
@@ -175,7 +177,6 @@ module.exports.getDiscordAuth = async (req, res, next) => {
         lastIP: ip,
       });
   }
-
   const token = jwt.sign(
     {
       _id: user._id,
@@ -194,7 +195,7 @@ module.exports.getDiscordAuth = async (req, res, next) => {
     },
     `${jwtToken}`
   )
-  userLogin(`<@${user.uid}>`)
+  userLogin(`<@${req.session.discord}>`)
   return res.send(token)
     }catch(ex){
         next(ex);

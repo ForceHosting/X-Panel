@@ -135,7 +135,7 @@ useEffect(() => {
           <Grid item xs={12} md={6} lg={4}>
             <Stack spacing={1}>
               <AppWidget title="Disk" total={userDisk} icon={'clarity:hard-disk-solid'} chartData={userDisk / 25600 * 100} />
-              <AppWidget title="Server Slots" total={userSlots} icon={'icon-park-solid:memory-one'} chartData={userSlots / 7 * 100} />
+              <AppWidget title="Server Slots" total={userSlots} icon={'icon-park-solid:memory-one'} chartData={userSlots / 10 * 100} />
             </Stack>
           </Grid>
         </Grid>

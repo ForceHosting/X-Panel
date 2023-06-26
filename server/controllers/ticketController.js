@@ -21,6 +21,20 @@ module.exports.getTicket = async (req, res, next) => {
   }
 }
 
+module.exports.getAllTickets = async (req, res, next) => {
+try{
+  let ticketData = await Ticket.find().select([
+    "owner",
+    "ticketReason",
+    "severId",
+    "ticketStatus"
+  ]);
+  return res.json({ ticketData })
+}catch(ex){
+  next(ex);
+}
+}
+
 module.exports.newTicket = async (req, res, next) => {
 
   try {

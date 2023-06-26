@@ -67,7 +67,7 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
-        { path: '/app/earn', element: <EarnPage />},
+        { path: '/earn', element: <EarnPage />},
         { path: '/servers/global', element: <GlobalServers />},
         { path: '/join-for-resources', element: <JFR />},
         {
@@ -107,7 +107,6 @@ export default function Router() {
         {
           path: 'server',
           children: [
-            { element: <Chat />, index: true },
             { path: 'create', element: <CreateServer /> },
           ],
         },
