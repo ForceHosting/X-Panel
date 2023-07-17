@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
-import { m } from 'framer-motion';
-// @mui
-import { Container, Typography } from '@mui/material';
-// hooks
-import useAuth from '../hooks/useAuth';
-// components
-import { MotionContainer, varBounce } from '../components/animate';
-// assets
-import { ForbiddenIllustration } from '../assets';
+import { useNavigate } from 'react-router';
+import jwtDecode from 'jwt-decode';
 
 // ----------------------------------------------------------------------
 
@@ -19,28 +12,18 @@ RoleBasedGuard.propTypes = {
 
 export default function RoleBasedGuard({ hasContent, roles, children }) {
   // Logic here to get current user role
-  const { user } = useAuth();
+  const nagivate = useNavigate();
+  const token = localStorage.getItem('token')
+      const user = jwtDecode(token);
 
   // const currentRole = 'user';
   const currentRole = user?.role; // admin;
 
   if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
     return hasContent ? (
-      <Container component={MotionContainer} sx={{ textAlign: 'center' }}>
-        <m.div variants={varBounce().in}>
-          <Typography variant="h3" paragraph>
-            Permission Denied
-          </Typography>
-        </m.div>
-
-        <m.div variants={varBounce().in}>
-          <Typography sx={{ color: 'text.secondary' }}>You do not have permission to access this page</Typography>
-        </m.div>
-
-        <m.div variants={varBounce().in}>
-          <ForbiddenIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
-        </m.div>
-      </Container>
+      <>
+      {nagivate("/403")}
+      </>
     ) : null;
   }
 

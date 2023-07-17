@@ -1,5 +1,6 @@
 const {
-    addRefToAcc
+    addRefToAcc,
+    getSiteStats,
   } = require("../controllers/miscController");
   const router = require("express").Router();
   
@@ -7,4 +8,5 @@ const {
   
   
   router.get("/ref", addRefToAcc);
+  router.get("/staff/stats", getSiteStats)
   module.exports = router;

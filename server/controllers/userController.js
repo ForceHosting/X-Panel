@@ -154,7 +154,6 @@ try{
     'credits',
     'role',
   ]);
-  console.log(userData)
   if(userData.role === 'Customer'){
     const newCredits = userData.credits + 1;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});

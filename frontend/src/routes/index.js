@@ -6,6 +6,7 @@ import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
+import RoleBasedGuard from '../guards/RoleBasedGuard';
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
@@ -71,6 +72,12 @@ export default function Router() {
         { path: '/servers/global', element: <GlobalServers />},
         { path: '/join-for-resources', element: <JFR />},
         {
+          path: '/staff',
+          children: [
+            { element: <GeneralStaff />, index: true},
+          ],
+        },
+        {
           path: 'web',
           children: [ 
             { element: <CreateWeb />, path: 'create' },
@@ -130,6 +137,8 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
+
+const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
 
 // AUTHENTICATION
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));

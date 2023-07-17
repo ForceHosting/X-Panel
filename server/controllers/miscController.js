@@ -1,4 +1,7 @@
 const User = require("../models/userModel");
+const Server = require("../models/servers");
+const Web = require("../models/webhostingModel");
+const Tickets = require("../models/ticketModel");
 const ShortUniqueId = require("short-unique-id");
 const { makeid, getIP, sendWelcome, sendVerify } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
@@ -40,3 +43,15 @@ module.exports.getGoldJFRDiscord = async (req, res, next) => {
     next(ex);
   }
   }
+
+module.exports.getSiteStats = async (req, res, next) => {
+try{
+  const userCount = await User.find().count();
+  const serverCount = await Server.find().count();
+  const webCount = await Web.find().count();
+  const ticketCount = await Tickets.find().count();
+  return res.json({users: userCount, servers: serverCount, sites: webCount, tickets: ticketCount})
+}catch(ex){
+  next(ex);
+}
+}

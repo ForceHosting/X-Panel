@@ -31,6 +31,7 @@ useEffect(()=>{
     const res = await axios.get('/api/auth/discord/data');
     if(res.status === 200){
       localStorage.setItem('token', res.data)
+      localStorage.setItem('role', res.data.role)
       navigate("/app")
     }else{
       navigate("/auth/login")
