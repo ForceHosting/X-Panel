@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Avatar, SpeedDial, Typography, SpeedDialAction } from '@mui/material';
+import MyAvatar from '../../../components/MyAvatar';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
@@ -76,9 +77,10 @@ const FooterStyle = styled('div')(({ theme }) => ({
 
 BlogPostHero.propTypes = {
   post: PropTypes.object.isRequired,
+  date: PropTypes.object.isRequired,
 };
 
-export default function BlogPostHero({ post }) {
+export default function BlogPostHero({ post, date }) {
   const { postImage, postTitle, postedBy, postedOn } = post;
 
   const isDesktop = useResponsive('up', 'sm');
@@ -89,13 +91,13 @@ export default function BlogPostHero({ post }) {
 
       <FooterStyle>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={postedBy} sx={{ width: 48, height: 48 }} />
+          <MyAvatar name={postedBy} sx={{ width: 48, height: 48 }} />
           <Box sx={{ ml: 2 }}>
             <Typography variant="subtitle1" sx={{ color: 'common.white' }}>
               {postedBy}
             </Typography>
             <Typography variant="body2" sx={{ color: 'grey.500' }}>
-              {postedOn}
+              {date}
             </Typography>
           </Box>
         </Box>

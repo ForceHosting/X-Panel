@@ -29,6 +29,7 @@ export default function BlogPost() {
   const { title } = useParams();
 
   const [post, setPost] = useState(null);
+  const [date, setDate] = useState(null);
 
   const [error, setError] = useState(null);
 
@@ -38,6 +39,11 @@ export default function BlogPost() {
       console.log(title)
       if (isMountedRef.current) {
         setPost(response.data[0]);
+        const epoch = response.data[0].postedOn;
+        const myDate = new Date(epoch*1000);
+        const month = myDate.getMonth();
+        const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+        setDate(`${myDate.getDate()} ${nameMonth[month]}, ${myDate.getFullYear()}. ${myDate.getHours()}:${myDate.getMinutes()}`)
       }
     } catch (error) {
       console.error(error);
@@ -48,6 +54,8 @@ export default function BlogPost() {
   useEffect(() => {
     getPost();
   }, [getPost]);
+
+
 
   return (
     <Page title="Blog: Post Details">
@@ -63,11 +71,11 @@ export default function BlogPost() {
 
         {post && (
           <Card>
-            <BlogPostHero post={post} />
+            <BlogPostHero post={post} date={date} />
 
             <Box sx={{ p: { xs: 3, md: 5 } }}>
               <Typography variant="h6" sx={{ mb: 5 }}>
-                {post.postedOn}
+                {date}
               </Typography>
 
               <Markdown children={post.postContent} />

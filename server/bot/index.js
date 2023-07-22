@@ -636,11 +636,22 @@ client.on('interactionCreate', async interaction => {
 		}else {
 			const uid = interaction.options.getString('postuid');
 			const lookUpPost = await Posts.findOne({ postUid: uid })
+
+			const epoch = postedOn;
+  const myDate = new Date(epoch*1000);
+  const month = myDate.getMonth();
+  const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  const datePosted = `${myDate.getDate()} ${nameMonth[month]}, ${myDate.getFullYear()}. ${myDate.getHours()}:${myDate.getMinutes()}`
+
 			const newAnnouncementEmbed = new EmbedBuilder()
 				.setTitle(`${lookUpPost.postTitle}`)
 				.setURL('https://my.forcehost.net/blog/post/'+lookUpPost.postUid)
 				.setColor('#1490D2')
 				.setDescription(lookUpPost.postContent)
+				.addFields(
+					{ name: 'Author', value: `${lookUpPost.postedBy}`},
+					{ name: 'Posted On', value: `${datePosted}`}
+				)
 				.setThumbnail(lookUpPost.postImage)
 				.setTimestamp()
 				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
