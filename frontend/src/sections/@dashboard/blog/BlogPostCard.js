@@ -42,7 +42,6 @@ export default function BlogPostCard({ post, index }) {
   const month = myDate.getMonth();
   const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
   const datePosted = `${myDate.getDate()} ${nameMonth[month]}, ${myDate.getFullYear()}. ${myDate.getHours()}:${myDate.getMinutes()}`
-console.log(datePosted)
   if (isDesktop && latestPost) {
     return (
       <Card>
