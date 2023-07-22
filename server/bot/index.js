@@ -6,6 +6,7 @@ const Server = require("../models/servers");
 const Web = require("../models/webhostingModel");
 const License = require('../models/licenseModel');
 const Credits = require('../models/creditCodes');
+const Posts = require('../models/blogPostModel');
 const creditClaims = require('../models/creditClaims');
 const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -626,6 +627,25 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}else {
 			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'fetchupdate'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952999825080342');
+		if(hasAnnouncePerm !== true){ //usually what i do is if(!hasAnnouncePerm){} but it doesnt matter bec it still works lmao
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}else {
+			const uid = interaction.options.getString('postuid');
+			const lookUpPost = await Posts.findOne({ postUid: uid })
+			const newAnnouncementEmbed = new EmbedBuilder()
+				.setTitle(`${lookUpPost.postTitle}`)
+				.setURL('https://my.forcehost.net/blog/post/'+lookUpPost.postUid)
+				.setColor('#1490D2')
+				.setDescription(lookUpPost.postContent)
+				.setThumbnail(lookUpPost.postImage)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+			client.channels.cache.get('797953387534483476').send({embeds: [newAnnouncementEmbed]})
+			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}
 	}
 	if(interaction.commandName === 'genlicense'){

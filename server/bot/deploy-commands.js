@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, Routes } = require('discord.js');
 const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
-const clientId = '793633534803443743'
+const clientId = '895694315492343832'
 const guildId = '783416129908899860'
 const { token } = require("../config.json");
 const data1 = new ContextMenuCommandBuilder()
@@ -53,6 +53,15 @@ const updateCmd = new SlashCommandBuilder()
 		.setDescription('The update description.')
 		.setRequired(true)
 	)
+
+const fetchUpdate = new SlashCommandBuilder()
+	.setName('fetchupdate')	
+	.setDescription('Fetch the latest developer update, and post it in the announcements channel.')
+	.addStringOption((option)=> option.setName('postuid')
+		.setDescription('The UID for the post to fetch.')
+		.setRequired(true)
+	)
+
 const getLicense = new SlashCommandBuilder()
 	.setName('genlicense')
 	.setDescription('Creates an X-Panel license.')
@@ -108,7 +117,7 @@ const getCredits = new SlashCommandBuilder()
 		.setRequired(true)
 	)
 const forceCommands = [
-	announceCmd, updateCmd, getLicense, webhostingCommand, buyRam, buyCPU, buyDisk, buySlots, getCredits
+	announceCmd, updateCmd, getLicense, webhostingCommand, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate
 ]
 
 
