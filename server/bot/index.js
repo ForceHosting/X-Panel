@@ -637,7 +637,7 @@ client.on('interactionCreate', async interaction => {
 			const uid = interaction.options.getString('postuid');
 			const lookUpPost = await Posts.findOne({ postUid: uid })
 
-			const epoch = postedOn;
+			const epoch = lookUpPost.postedOn;
   const myDate = new Date(epoch*1000);
   const month = myDate.getMonth();
   const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
@@ -650,7 +650,7 @@ client.on('interactionCreate', async interaction => {
 				.setDescription(lookUpPost.postContent)
 				.addFields(
 					{ name: 'Author', value: `${lookUpPost.postedBy}`},
-					{ name: 'Posted On', value: `${datePosted}`}
+					{ name: 'Posted On', value: `<t:${lookUpPost.postedOn}:f> (<t:${lookUpPost.postedOn}:R>)`}
 				)
 				.setThumbnail(lookUpPost.postImage)
 				.setTimestamp()
