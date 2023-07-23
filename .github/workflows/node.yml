@@ -1,5 +1,4 @@
 name: CI
-​
 on:
     push:
         branches: [master]
@@ -7,12 +6,11 @@ on:
 jobs:
     deploy:
         runs-on: self-hosted
+        strategy:
+            matrix:
+                node-version: [18.x]
 
-    strategy:
-        matrix:
-            node-version: [18.x]
-
-    steps:
+        steps:
         - uses: actions/checkout@v2
         - name: Use Node.js ${{ matrix.node-version }}
           uses: actions/setup-node@v1
