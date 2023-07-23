@@ -16,8 +16,8 @@ jobs:
           uses: actions/setup-node@v1
           with:
               node-version: ${{ matrix.node-version }}
-        - run: cp /action-runner/fh/config.json server/
-        - run: cp /action-runner/fh/.env server/
+        - run: cp ../../../action-runner/fh/config.json server/
+        - run: cp ../../../action-runner/fh/.env server/
         - run: cd server && npm install
         - run: cd frontend && npm install --legacy-peer-deps && npm run build
         - run: cp frontend/build/* server/site
