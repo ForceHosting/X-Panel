@@ -1,11 +1,20 @@
 {
-    "token": "ODk1Njk0MzE1NDkyMzQzODMy.GfuJDH.JLyEQcPBEtb4Ul7cm65be18Z4boV8hk9tnZ6XQ",
+    "serverPort": "25566",
+    "token": "ODk1Njk0MzE1NDkyMzQzODMy.G9UYua.7t2jrturXAbfBfIjoz58yjq6TvGSwojPawWYCY",
     "sessionSecrets": "massivesecretshere",
     "paypal_cid": "noturs",
     "paypal_secret": "noturs",
     "paypal_mode": "sandbox",
-    "pteroKey": "ptla_E5ZKqdUZ6bK0hT9YYmf4kqlIy9ZB3uIbPLg2uXp4eSX",
-    "emailPassword": "7wP5agor",
+    "pteroKey": "ptla_SbzvDjJtIzqGKH6NaTrGuqLY4mVzSMXkUXzS3b84b2i",
+    "emailPassword": "iDGouoBkVa",
     "jwtToken": "ForceHostingJWTAUTH",
-    "licenseKey": "123"
-    }
+    "licenseKey": "XPNLSECR.065mU7stjbeuA8b86857",
+    "directAdminAuth": "bHlsYXh4eXo6NGNnMjR4N01tWQ==",
+    "CLIENT_ID": "1057030220898635847",
+    "CLIENT_SECRET": "GFMwEmx5B-HnAy_cQoUg12cAqi9BFP6T",
+    "CLIENT_REDIRECT_URI": "https://my.forcehost.net/api/auth/discord",
+    "JFRToken": "MTA1NzAzMDIyMDg5ODYzNTg0Nw.G0yAXT.mJDHa8Jxezwgyl2s1f3GIcdVPBBbX5uIviXjqY",
+    "corsOrigin": "https://my.forcehost.net",
+    "authUrl": "https://discord.com/api/oauth2/authorize?client_id=1057030220898635847&redirect_uri=https%3A%2F%2Fmy.forcehost.net%2Fapi%2Fauth%2Fdiscord&response_type=code&scope=identify%20guilds%20email%20guilds.join",
+    "successUrl": "https://my.forcehost.net/auth/authorizing"
+}
