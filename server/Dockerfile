@@ -1,10 +1,16 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
-EXPOSE 25566
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+FROM node:lts
+
+ENV NODE_ENV production
+
+FROM base as deps
+
+FROM base
+
+ENV PORT="25566"
+ENV NODE_ENV production
+
+WORKDIR /xpanel
+
+RUN npm install
+
+ENTRYPOINT [ "./start.sh" ]

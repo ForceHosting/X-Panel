@@ -6,11 +6,13 @@ import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
+import RoleBasedGuard from '../guards/RoleBasedGuard';
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +68,21 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
+        { path: '/earn', element: <EarnPage />},
+        { path: '/servers/global', element: <GlobalServers />},
+        { path: '/join-for-resources', element: <JFR />},
+        {
+          path: '/staff',
+          children: [
+            { element: <GeneralStaff />, index: true},
+          ],
+        },
+        {
+          path: 'web',
+          children: [ 
+            { element: <CreateWeb />, path: 'create' },
+          ],
+        },
         {
           path: 'user',
           children: [
@@ -82,9 +99,21 @@ export default function Router() {
           ],
         },
         {
+          path: 'invoice',
+          children: [
+            { element: <InvoiceList />, index: true },
+            { element: <InvoiceDetails />, path: ':id' }
+          ],
+        },
+        {
+          path: 'support',
+          children: [
+            { element: <Chat/>, index: true },
+          ],
+        },
+        {
           path: 'server',
           children: [
-            { element: <Chat />, index: true },
             { path: 'create', element: <CreateServer /> },
           ],
         },
@@ -109,6 +138,8 @@ export default function Router() {
   ]);
 }
 
+const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
+
 // AUTHENTICATION
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
@@ -117,13 +148,17 @@ const NewPassword = Loadable(lazy(() => import('../pages/auth/NewPassword')));
 const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 
 // DASHBOARD
-
+const InvoiceList = Loadable(lazy(() => import('../pages/dashboard/InvoiceList')));
+const InvoiceDetails = Loadable(lazy(() => import('../pages/dashboard/InvoiceDetails')));
 // GENERAL
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const CreateServer = Loadable(lazy(() => import('../pages/dashboard/CreateServer')));
+const CreateWeb = Loadable(lazy(() => import('../pages/dashboard/CreateWeb')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
-
+const EarnPage = Loadable(lazy(() => import('../pages/dashboard/EarnPage')));
+const GlobalServers = Loadable(lazy(() => import('../pages/dashboard/GlobalServers')));
+const JFR = Loadable(lazy(() => import('../pages/dashboard/JFR')));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));

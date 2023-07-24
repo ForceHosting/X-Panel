@@ -13,6 +13,7 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import NewServerForm from '../../sections/@dashboard/server/NewServerForm';
+import CreateServerForm from '../../sections/@dashboard/server/CreateServerForm';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ export default function CreateServer() {
           ]}
         />
 
-        <NewServerForm isEdit={isEdit} currentUser={currentUser} />
+        <CreateServerForm isEdit={isEdit} currentUser={currentUser}/>
       </Container>
     </Page>
   );

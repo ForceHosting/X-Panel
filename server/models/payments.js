@@ -2,22 +2,29 @@ const mongoose = require("mongoose");
 
 const paymentsSechma = new mongoose.Schema({
     paymentUser: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
         required: true,
     },
-    productBought: {
+    subscriptionId: {
+        type: String,
+        required: true
+    },
+    invoiceId: {
+        type: String,
+        required: true,
+    },
+    productName: {
         type: String,
         required: true,
     },
     productPrice: {
-        type: Number,
-        required: true,
-    },
-    transactionId: {
         type: String,
         required: true,
-    }
+    },
+    productDescription: {
+        type: String,
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("Payments", paymentsSechma);

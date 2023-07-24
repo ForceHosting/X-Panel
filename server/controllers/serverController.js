@@ -16,18 +16,18 @@ module.exports.createServer = async (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
     const jwtVerify = jwt.verify(bearerHeader,jwtToken)
     const userUid = jwtVerify._id;
-    const { name, location, software, memory, disk, cpu } = req.body;
-    const usere = await dbc.fetch({table:"users",filters:{column:"_id",value:userUid}});
-    const user = usere.data;
-    if(location == ""){
+
+    const { name, location, software, memory, disk, cpu, global } = req.body;
+    const user = await User.findById(userUid);
+    if(location == "" || location == null){
+
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
-    if(software == ""){
+    if(software == "" || software == null){
       return res.json({added: false, msg: "Please select a server software."});
     }
-    const getNodeStats = await Node.findOne({ pteroId: location }).select([
-      "nodeSlots"
-    ]);
+    
+    const getNodeStats = await Node.findOne({ PteroId: `'${location}'` });
     if(getNodeStats.nodeSlots <= 0){
       return res.json({ added: false, msg: "This node currently does not have any slots available."});
     }else{
@@ -120,7 +120,7 @@ module.exports.createServer = async (req, res, next) => {
           databases: 3,
           backups: 1,
         },
-        allocation: {
+        allocation:{
           default: 0,
         },
         deploy: {
@@ -130,13 +130,20 @@ module.exports.createServer = async (req, res, next) => {
         }
       })
     })
+
     const pteroData = await pteroCreate.json();
     if(pteroData.attributes.id){
-      // await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
-      await db.update({table:"users",row:user.row,data:{'availMem': newTotalMem},mode:"adjust"})
-      await db.update({table:"users",row:user.row,data:{'availDisk': newTotalDisk},mode:"adjust"})
-      await db.update({table:"users",row:user.row,data:{'availCPU': newTotalCPU},mode:"adjust"})
-      await db.update({table:"users",row:user.row,data:{'availSlots': newTotalSlots},mode:"adjust"})
+      const pteroAllocs = await fetch('https://control.forcehost.net/api/application/nodes/'+location+'/allocations/?filter[server_id]='+pteroData.attributes.id+'', {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+    })
+    const pteroAlloc = await pteroAllocs.json();
+      await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
+
       const server = await Server.create({
         serverName: name,
         serverId: pteroData.attributes.id,
@@ -145,15 +152,17 @@ module.exports.createServer = async (req, res, next) => {
         serverCPU: cpu,
         serverDisk: disk,
         serverSuspended: false,
-        serverOwner: userUid
+        serverOwner: userUid,
+        isGlobal: global,
+        serverIP: pteroAlloc.data[0].attributes.alias+':'+pteroAlloc.data[0].attributes.port
       });
       delete user.password
       const updatedSlots = getNodeStats.nodeSlots -1;
       await Node.findOneAndUpdate({'pteroId':location},{'nodeSlots': updatedSlots});
       createdServer(user.username, name, memory, cpu, disk, location, pteroData.attributes.id)
-      return res.json({ status: 200, added: true, server})
+      return res.status(200).json({ status: 200, added: true, server})
     }else{
-      return res.json({status: 500, added: false, msg: "Pterodactyl server creation error."})
+      return res.status(400).json({status: 500, added: false, msg: "Pterodactyl server creation error."})
     }
       }
     }
@@ -249,4 +258,20 @@ module.exports.addToQueue = async (req, res, next) => {
     }catch(ex){
       next(ex)
     }
+  }
+
+
+  module.exports.getGlobalServers = async (req, res, next) => {
+try{
+  const showPerPage = 6;
+  const currentPage = req.params.page;
+  const globalServers = await Server.aggregate([
+    { $match: {'isGlobal' : true}},
+    { $skip : showPerPage * currentPage},
+    { $limit : showPerPage }
+  ]);
+  return res.json({globalServers});
+}catch(ex){
+  next(ex)
+}
   }

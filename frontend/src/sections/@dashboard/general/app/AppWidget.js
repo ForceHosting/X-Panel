@@ -32,7 +32,7 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 AppWidget.propTypes = {
-  chartData: PropTypes.number.isRequired,
+  chartData: PropTypes.number,
   color: PropTypes.oneOf(['primary', 'secondary', 'info', 'success', 'warning', 'error']),
   icon: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -69,7 +69,6 @@ export default function AppWidget({ title, total, icon, color = 'primary', chart
       }}
       {...other}
     >
-      <ReactApexChart type="radialBar" series={[chartData]} options={chartOptions} width={86} height={86} />
 
       <Box sx={{ ml: 3, color: 'common.white' }}>
         <Typography variant="h4"> {fNumber(total)}</Typography>

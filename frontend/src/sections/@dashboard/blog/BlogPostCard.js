@@ -37,6 +37,11 @@ export default function BlogPostCard({ post, index }) {
 
   const latestPost = index === 0 || index === 1 || index === 2;
 
+  const epoch = postedOn;
+  const myDate = new Date(epoch*1000);
+  const month = myDate.getMonth();
+  const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  const datePosted = `${myDate.getDate()} ${nameMonth[month]}, ${myDate.getFullYear()}. ${myDate.getHours()}:${myDate.getMinutes()}`
   if (isDesktop && latestPost) {
     return (
       <Card>
@@ -51,7 +56,7 @@ export default function BlogPostCard({ post, index }) {
             position: 'absolute',
           }}
         />
-        <PostContent postTitle={postTitle} postedOn={postedOn} index={index} postUid={postUid} />
+        <PostContent postTitle={postTitle} postedOn={datePosted} index={index} postUid={postUid} />
         <OverlayStyle />
         <Image alt="cover" src={postImage} sx={{ height: 360 }} />
       </Card>
@@ -86,7 +91,7 @@ export default function BlogPostCard({ post, index }) {
         <Image alt="cover" src={postImage} ratio="4/3" />
       </Box>
 
-      <PostContent postTitle={postTitle} postedOn={postedOn} postUid={postUid} />
+      <PostContent postTitle={postTitle} postedOn={datePosted} postUid={postUid} />
     </Card>
   );
 }

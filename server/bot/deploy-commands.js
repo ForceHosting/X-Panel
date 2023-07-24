@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, Routes } = require('discord.js');
 const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
-const clientId = '793633534803443743'
+const clientId = '895694315492343832'
 const guildId = '783416129908899860'
 const { token } = require("../config.json");
 const data1 = new ContextMenuCommandBuilder()
@@ -53,6 +53,15 @@ const updateCmd = new SlashCommandBuilder()
 		.setDescription('The update description.')
 		.setRequired(true)
 	)
+
+const fetchUpdate = new SlashCommandBuilder()
+	.setName('fetchupdate')	
+	.setDescription('Fetch the latest developer update, and post it in the announcements channel.')
+	.addStringOption((option)=> option.setName('postuid')
+		.setDescription('The UID for the post to fetch.')
+		.setRequired(true)
+	)
+
 const getLicense = new SlashCommandBuilder()
 	.setName('genlicense')
 	.setDescription('Creates an X-Panel license.')
@@ -67,30 +76,38 @@ const webhostingCommand = new SlashCommandBuilder()
 const buyRam = new SlashCommandBuilder()
 	.setName('buymemory')
 	.setDescription("Purchase memory (ram) using Force Coins.")
-	.addStringOption((option) => option.setName('amount')
+	.addIntegerOption((option) => option.setName('amount')
 		.setDescription('The amount of memory you plan to purchase in mb. No more than 2GB. Each gigabyte is 2,500 credits.')
 		.setRequired(true)
+		.setMinValue(2)
+                .setMaxValue(2048)
 	)
 const buyCPU = new SlashCommandBuilder()
 	.setName('buycpu')
 	.setDescription("Purchase cpu (processing power) using Force Coins.")
-	.addStringOption((option) => option.setName('amount')
+	.addIntegerOption((option) => option.setName('amount')
 		.setDescription('The amount of cpu you plan to purchase. No more than 100(%). Every 50% is 2,500 credits.')
 		.setRequired(true)
+		.setMinValue(1)
+                .setMaxValue(100)
 	)
 const buyDisk = new SlashCommandBuilder()
 	.setName('buydisk')
 	.setDescription("Purchase disk using Force Coins.")
-	.addStringOption((option) => option.setName('amount')
+	.addIntegerOption((option) => option.setName('amount')
 		.setDescription('The amount of disk you plan to purchase. No more than 2GB. Each gigabyte is 1,500 credits.')
 		.setRequired(true)
+		.setMinValue(2)
+                .setMaxValue(2048)
 	)
 const buySlots = new SlashCommandBuilder()
 	.setName('buyslots')
 	.setDescription("Purchase slots using Force Coins.")
-	.addStringOption((option) => option.setName('amount')
+	.addIntegerOption((option) => option.setName('amount')
 		.setDescription('The amount of slots you plan to purchase. No more than 2. Each slot is 200 credits.')
 		.setRequired(true)
+		.setMinValue(1)
+                .setMaxValue(2)
 	)
 const getCredits = new SlashCommandBuilder()
 	.setName('claim')
@@ -100,7 +117,7 @@ const getCredits = new SlashCommandBuilder()
 		.setRequired(true)
 	)
 const forceCommands = [
-	announceCmd, updateCmd, getLicense, webhostingCommand, buyRam, buyCPU, buyDisk, buySlots, getCredits
+	announceCmd, updateCmd, getLicense, webhostingCommand, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate
 ]
 
 

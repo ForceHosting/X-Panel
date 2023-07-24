@@ -38,10 +38,26 @@ export const PATH_DASHBOARD = {
   root: '/app',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
+    earn: path(ROOTS_DASHBOARD, '/app/earn'),
+    jfr: path(ROOTS_DASHBOARD, '/join-for-resources'),
   },
   server: {
     root: path(ROOTS_DASHBOARD, '/server'),
     create: path(ROOTS_DASHBOARD, '/server/create'),
+    global: path(ROOTS_DASHBOARD, '/servers/global'),
+  },
+  invoice: {
+    root: path(ROOTS_DASHBOARD, '/invoice'),
+    view: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}`),
+  },
+  web: {
+    root: path(ROOTS_DASHBOARD, '/web'),
+    create: path(ROOTS_DASHBOARD, '/web/create'),
+  },
+  chat: {
+    root: path(ROOTS_DASHBOARD, '/chat'),
+    new: path(ROOTS_DASHBOARD, '/chat/new'),
+    view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
   },
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   user: {

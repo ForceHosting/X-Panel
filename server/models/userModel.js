@@ -82,12 +82,19 @@ const userSchema = new mongoose.Schema({
   },
   discordId: {
     type: Long,
-    required: false,
-    unique: true,
   },
   countryCode: {
     type: String,
     required: false,
+  },
+  refCode: {
+    type: String,
+    required: true,
+  },
+  refUse: {
+    type: Number,
+    required: true,
+    default: 0,
   }
 });
 

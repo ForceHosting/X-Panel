@@ -39,7 +39,11 @@ export default function BlogPosts() {
       const response = await axios.get('/api/dev/posts/all');
 
       if (isMountedRef.current) {
-        setPosts(response.data);
+        const sortedPosts = response.data
+        const thesorted = sortedPosts.sort((x,y)=>{
+          return x.postedOn - y.postedOn;
+        })
+        setPosts(thesorted.reverse());
       }
     } catch (error) {
       console.error(error);

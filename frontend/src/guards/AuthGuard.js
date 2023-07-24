@@ -25,22 +25,36 @@ export default function AuthGuard({ children }) {
   useEffect(() => {
     if(!localStorage.getItem('token')){
       setAuth(false)
-    }else{
-      setAuth(true)
+      return <Navigate to={PATH_AUTH.login} />
     }
+    if (localStorage.getItem('token') === undefined){
+      setAuth(false)
+      return <Navigate to={PATH_AUTH.login} />;
+    }
+    if (localStorage.getItem('token') === "undefined"){
+      setAuth(false)
+      return <Navigate to={PATH_AUTH.login} />;
+    }
+    if(localStorage.getItem('token') === null) {
+      setAuth(false)
+      return <Navigate to={PATH_AUTH.login} />;
+    }
+      setAuth(true)
+    
   }, [])
+
+
 
   if (!isInitialized) {
     return <LoadingScreen />;
   }
-
+  
   if (authenticated === false) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }
     return <Navigate to={PATH_AUTH.login} />;
   }
-
   if (requestedLocation && pathname !== requestedLocation) {
     setRequestedLocation(null);
     return <Navigate to={requestedLocation} />;

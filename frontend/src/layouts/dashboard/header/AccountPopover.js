@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
 // @mui
 import jwtDecode from 'jwt-decode';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
 // components
 import MyAvatar from '../../../components/MyAvatar';
 import MenuPopover from '../../../components/MenuPopover';
@@ -43,13 +43,12 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
-    setOpen(event.currentTarget);
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(null);
   };
-
 
   return (
     <>
@@ -78,6 +77,7 @@ export default function AccountPopover() {
         anchorEl={open}
         onClose={handleClose}
         sx={{
+          top: 0,
           p: 0,
           mt: 1.5,
           ml: 0.75,
@@ -89,28 +89,13 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.username}
+            {user.username}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            {user.email}
           </Typography>
         </Box>
-
         <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} to={option.linkTo} component={RouterLink} onClick={handleClose}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem sx={{ m: 1 }}>
-          Logout
-        </MenuItem>
       </MenuPopover>
     </>
   );

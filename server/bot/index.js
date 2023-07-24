@@ -6,12 +6,13 @@ const Server = require("../models/servers");
 const Web = require("../models/webhostingModel");
 const License = require('../models/licenseModel');
 const Credits = require('../models/creditCodes');
+const Posts = require('../models/blogPostModel');
 const creditClaims = require('../models/creditClaims');
 const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const fetch = require('node-fetch');
 client.once('ready', () => {
-    console.log("Bot is online, and ready!");
+    console.log("Controller bot is online and ready to play on some servers...");
 	
 	setInterval(
 		async () => {
@@ -20,11 +21,11 @@ client.once('ready', () => {
 				const web = await Web.find().count();
 				const dServers = await client.guilds.cache.size;
 				const usersChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020537846542635079');
-				usersChannel.setName(`✨ ${users} users!`)
+				//usersChannel.setName(`✨ ${users} users!`)
 				const serversChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020539431670780027');
-				serversChannel.setName(`✨ ${servers} servers!`)
+				//serversChannel.setName(`✨ ${servers} servers!`)
 				const webChannel = client.guilds.cache.get('783416129908899860').channels.cache.get('1020538820925603850');
-				webChannel.setName(`✨ ${web} websites!`)
+				//webChannel.setName(`✨ ${web} websites!`)
 			var statusArray = [
 				`my.forcehost.net`,
 				`What is DAv2?`,
@@ -162,6 +163,50 @@ function Addedcoins(giver,accepter,coins){
     client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
 }
 
+function createPaymentLog(subId, oId, uId){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor('Green')
+	.setTitle('New Payment')
+	.setDescription(`The user ${uId} has bought a new plan.`)
+    .addFields(
+        { name: 'Subscription Id', value: `${subId}`, inline: true},
+        { name: 'Order Id', value: `${oId}`, inline: true},
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535882002878504').send({embeds: [newLoginEmbed]})
+}
+
+
+client.on("guildMemberAdd", async member => {
+console.log('test')
+	const newInvites = await member.guild.invites.fetch();
+	const oldInvites = await invites.get(member.guild.id);
+	const invite = newInvites.find(i => i.uses > oldInvites.get(i.code));
+	const inviter = await client.users.fetch(invite.inviter.id);
+	const jfrLogs = client.channels.cache.get('1057025130196373524');
+
+	    const jfrLogEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('JFR Claimed')
+	.addFields(
+		{ name: 'User', value: `${member.user.tag}`, inline: true },
+		{ name: 'Invite', value: `${invite.code}`, inline: true},
+		{ name: 'Invite Uses', value: `${invite.uses}`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+const noInviteFound = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('JFR Claimed')
+	.description(`${member.user.tag} joined but I couldn't find what invite was used. JFR claim was not processed properly.`)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	inviter
+	  ? jfrLogs.send({ embeds: [jfrLogEmbed]})
+	  : jfrLogs.send({ embeds: [noInviteFound]})
+
+});
+
 client.on('interactionCreate', async interaction => {
 
 	if (!interaction.isChatInputCommand()) return;
@@ -259,9 +304,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 2.5);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 2.5;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -301,9 +346,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 50);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 50;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -345,9 +390,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 2.5);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 2.5;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -388,9 +433,9 @@ client.on('interactionCreate', async interaction => {
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
-			const getPurchaseAmount = parseInt(interaction.options.getString('amount'));
-			const price = parseInt(getPurchaseAmount * 200);
-			const creditMath = parseInt(userCredits - price);
+			const getPurchaseAmount = interaction.options.getInteger('amount');
+			const price = getPurchaseAmount * 200;
+			const creditMath = userCredits - price;
 			if(creditMath < 0){
 				const deniedEmbed = new EmbedBuilder()
 					.setColor(0x0099FF)
@@ -509,7 +554,8 @@ client.on('interactionCreate', async interaction => {
             const newRandomPass = makeid(15)
             var newRandomPassBuffer = Buffer.from(newRandomPass);
             var encryptedPass = newRandomPassBuffer.toString('base64');
-            const webData = await fetch(`https://web.forcehost.net:2222/CMD_API_ACCOUNT_USER?action=create&add=Submit&username=${randomUsername}&email=${userInfo.email}&passwd=${newRandomPass}&passwd2=${newRandomPass}&domain=${domain}&package=free&ip=181.214.41.250&notify=yes`, {
+			
+            const webData = await fetch(`https://d2.my-control-panel.com:2222/CMD_API_ACCOUNT_USER?action=create&add=Submit&username=${randomUsername}&email=${userInfo.email}&passwd=${newRandomPass}&passwd2=${newRandomPass}&domain=${domain}.delete&package=free&ip=198.251.83.217&notify=yes`, {
       headers: {
         'Content-Type': 'text/plain',
         'Authorization': `Basic ${directAdminAuth}`
@@ -581,6 +627,36 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}else {
 			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'fetchupdate'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952999825080342');
+		if(hasAnnouncePerm !== true){ //usually what i do is if(!hasAnnouncePerm){} but it doesnt matter bec it still works lmao
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}else {
+			const uid = interaction.options.getString('postuid');
+			const lookUpPost = await Posts.findOne({ postUid: uid })
+
+			const epoch = lookUpPost.postedOn;
+  const myDate = new Date(epoch*1000);
+  const month = myDate.getMonth();
+  const nameMonth = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  const datePosted = `${myDate.getDate()} ${nameMonth[month]}, ${myDate.getFullYear()}. ${myDate.getHours()}:${myDate.getMinutes()}`
+
+			const newAnnouncementEmbed = new EmbedBuilder()
+				.setTitle(`${lookUpPost.postTitle}`)
+				.setURL('https://my.forcehost.net/blog/post/'+lookUpPost.postUid)
+				.setColor('#1490D2')
+				.setDescription(lookUpPost.postContent)
+				.addFields(
+					{ name: 'Author', value: `${lookUpPost.postedBy}`},
+					{ name: 'Posted On', value: `<t:${lookUpPost.postedOn}:f> (<t:${lookUpPost.postedOn}:R>)`}
+				)
+				.setThumbnail(lookUpPost.postImage)
+				.setTimestamp()
+				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+			client.channels.cache.get('797953387534483476').send({embeds: [newAnnouncementEmbed]})
+			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}
 	}
 	if(interaction.commandName === 'genlicense'){
@@ -738,6 +814,6 @@ client.on('guildDelete', guild => {
 			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	client.channels.cache.get('1041066863792246794').send({embeds: [newEmbed]})
 })
-
+require('./JFR')
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer };
+module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog };

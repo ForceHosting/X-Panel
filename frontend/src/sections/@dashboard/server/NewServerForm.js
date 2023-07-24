@@ -13,7 +13,7 @@ import axios from '../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import { FormProvider, RHFSelect, RHFTextField } from '../../../components/hook-form';
+import { FormProvider, RHFCheckbox, RHFSelect, RHFTextField } from '../../../components/hook-form';
 
 
 
@@ -84,11 +84,11 @@ export default function NewServerForm() {
 
   const NewServerSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    location: Yup.string().required('Phone number is required'),
-    software: Yup.string().required('Address is required'),
-    memory: Yup.string().required('country is required'),
-    cpu: Yup.string().required('Company is required'),
-    disk: Yup.string().required('State is required'),
+    location: Yup.string().required('Location is required'),
+    software: Yup.string().required('Software is required'),
+    memory: Yup.string().required('Memory is required'),
+    cpu: Yup.string().required('CPU is required'),
+    disk: Yup.string().required('Disk is required'),
   });
 
   const methods = useForm({
@@ -103,18 +103,21 @@ export default function NewServerForm() {
 
   const onSubmit = async (event) => {
     try {
-        const { name, location, software, memory, disk, cpu } = event;
-        const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu},{
+        const { name, location, software, memory, disk, cpu, global } = event;
+        const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu,global},{
             headers: {
               'Authorization': `${localStorage.getItem('token')}`
             }
           });
       reset();
       console.log(data)
-      if(data.added === false){
+      if(data.status === 400){
+        enqueueSnackbar(data.msg, {variant: 'error'});
+      }
+      if(data.status !== 200){
         enqueueSnackbar(data.msg, { variant: 'error'})
       }
-      if(data.added === true){
+      if(data.status === 200){
         enqueueSnackbar('Server created successfully')
         navigate(PATH_DASHBOARD.root);
       }
@@ -160,6 +163,7 @@ export default function NewServerForm() {
               <RHFTextField name="memory" label="Memory" />
               <RHFTextField name="cpu" label="CPU" />
               <RHFTextField name="disk" label="Disk" />
+              <RHFCheckbox name="global" label="Global Server List?" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
