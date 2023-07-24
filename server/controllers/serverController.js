@@ -1,20 +1,26 @@
-const User = require("../models/userModel");
+// const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
+const dbc = require("./catodb");
+const catodb = require('catodb')
 const { pteroKey, jwtToken } = require('../config.json');
 const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
 
+const db = new catodb('localhost:4020', 'CatoDB_Master')
+
 module.exports.createServer = async (req, res, next) => {
   try {
     const bearerHeader = req.headers['authorization'];
     const jwtVerify = jwt.verify(bearerHeader,jwtToken)
     const userUid = jwtVerify._id;
+
     const { name, location, software, memory, disk, cpu, global } = req.body;
     const user = await User.findById(userUid);
     if(location == "" || location == null){
+
       return res.json({ added: false, msg: "You need to select a node first."});
     }else{
     if(software == "" || software == null){
@@ -137,6 +143,7 @@ module.exports.createServer = async (req, res, next) => {
     })
     const pteroAlloc = await pteroAllocs.json();
       await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
+
       const server = await Server.create({
         serverName: name,
         serverId: pteroData.attributes.id,
