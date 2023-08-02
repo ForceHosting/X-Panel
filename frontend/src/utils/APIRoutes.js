@@ -24,3 +24,9 @@ export const getGlobalServers = `/api/server/global`
 export const getJFRServers = `/api/auth/discord/jfr/servers/list`
 
 export const getSiteStats = `/api/staff/stats`
+export const getAllUsers = `/api/staff/users`
+export const getUserDetails = `/api/staff/user`
+export const updateUserDetails = `/api/staff/user/update`
+export const getAllServers = `/api/staff/servers`
+export const getServerDetails = `/api/staff/server`
+export const updateServerDetails = `/api/staff/server/update`

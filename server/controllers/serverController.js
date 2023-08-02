@@ -1,15 +1,12 @@
 // const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
-const dbc = require("./catodb");
-const catodb = require('catodb')
 const { pteroKey, jwtToken } = require('../config.json');
 const { addedToQueue, createdServer, deletedServer } = require("../bot");
 const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
 
-const db = new catodb('localhost:4020', 'CatoDB_Master')
 
 module.exports.createServer = async (req, res, next) => {
   try {

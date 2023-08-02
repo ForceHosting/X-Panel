@@ -69,7 +69,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <MyAvatar name={user.username} />
+        <MyAvatar user={user} name={user.username} />
       </IconButtonAnimate>
 
       <MenuPopover

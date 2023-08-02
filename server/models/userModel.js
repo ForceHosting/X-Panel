@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
+  profilePicture: {
+    type: String,
+    required: true,
+    default: 'https://cdn.discordapp.com/attachments/768247396374544425/1136389322904440904/Force_Host_-_Mascot_no_bg-removebg.png',
+  },
   lastIP: {
     type: String,
   },
@@ -95,6 +100,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
+  },
+  isBanned: {
+    type: Boolean,
+    default: false
   }
 });
 

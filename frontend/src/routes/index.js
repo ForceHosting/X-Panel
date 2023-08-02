@@ -75,6 +75,11 @@ export default function Router() {
           path: '/staff',
           children: [
             { element: <GeneralStaff />, index: true},
+            { element: <UserList />, path: '/staff/users' },
+            { element: <ViewUser />, path: '/staff/user/:id' },
+            { element: <ServerList />, path: '/staff/servers' },
+            { element: <ViewServer />, path: '/staff/server/:id' },
+
           ],
         },
         {
@@ -139,7 +144,10 @@ export default function Router() {
 }
 
 const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
-
+const UserList = Loadable(lazy(() => import('../pages/staff/UserList')));
+const ViewUser = Loadable(lazy(() => import('../pages/staff/ViewUser')));
+const ServerList = Loadable(lazy(() => import('../pages/staff/ServerList')))
+const ViewServer = Loadable(lazy(() => import('../pages/staff/ViewServer')));
 // AUTHENTICATION
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));

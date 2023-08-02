@@ -68,6 +68,12 @@ export const PATH_DASHBOARD = {
     posts: path(ROOTS_DASHBOARD, '/blog/posts'),
     view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
   },
+  staff: {
+    root: path(ROOTS_DASHBOARD, '/staff'),
+    users: path(ROOTS_DASHBOARD, '/staff/users'),
+    udetails: (id) => path(ROOTS_DASHBOARD, `/staff/user/${id}`),
+
+  }
 };
 
 export const PATH_DOCS = 'https://docs-minimals.vercel.app/introduction';

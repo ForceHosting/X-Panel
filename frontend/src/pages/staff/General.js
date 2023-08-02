@@ -1,5 +1,5 @@
 // @mui
-import { useState, useEffect } from 'react';
+import { useState, useEffect, componentDidMount } from 'react';
 import { Container, Grid, Stack, Box, Divider } from '@mui/material';
 
 // hooks
@@ -43,8 +43,10 @@ export default function GeneralStaff() {
   }, [])
 
   const { themeStretch } = useSettings();
+
     useEffect(() => {
         
+    setTimeout(() => {
     (async function getUData() {
         const userData = await axios.get(`${getSiteStats}`,{
           headers: {
@@ -52,25 +54,26 @@ export default function GeneralStaff() {
           }
         });
         console.log(userData)
-        setUsers(userData.users)
-        setServers(userData.servers)
-        setTickets(userData.tickets)
-        setSites(userData.sites)
+        setUsers(userData.data.users)
+        setServers(userData.data.servers)
+        setTickets(userData.data.tickets)
+        setSites(userData.data.sites)
         
         
     })();
+  },1500)
     }, [])
 
 
   return (
-    <Page title="Home">
+    <Page title="Staff">
     <RoleBasedGuard hasContent roles={roles}>
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={8} lg={4}>
             <AppWelcome
               title={`Welcome back, \n ${user.username}`}
-              description="View and manage all the users from one place!"
+              description="You must be a special staff member here!"
               img={
                 <SeoIllustration
                   sx={{
@@ -85,47 +88,17 @@ export default function GeneralStaff() {
 
           <Grid item xs={12} md={4} lg={4}>
             <Stack spacing={1}>
-              <AppWidget title="Memory" total={users} icon={'fa-solid:memory'} />
-              <AppWidget title="CPU" total={tickets} icon={'mdi:memory'} />
+              <AppWidget title="Total Users" total={users} icon={'fa-solid:users'} />
+              <AppWidget title="Total Tickets" total={tickets} icon={'fa:ticket'} />
             </Stack>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <Stack spacing={1}>
-              <AppWidget title="Disk" total={sites} icon={'clarity:hard-disk-solid'} />
-              <AppWidget title="Server Slots" total={servers} icon={'icon-park-solid:memory-one'} />
+              <AppWidget title="Total Sites" total={sites} icon={'fa-solid:cloud'} />
+              <AppWidget title="Total Servers" total={servers} icon={'fa-solid:sitemap'} />
             </Stack>
           </Grid>
         </Grid>
-        <Divider>SERVERS</Divider>
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 3,
-            mt: '20px',
-            gridTemplateColumns: {
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-            },
-          }}
-        />
-            
-          
-
-        <Divider>WEBSITES</Divider>
-
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 3,
-            mt: '20px',
-            gridTemplateColumns: {
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-            },
-          }}
-        />
       </Container>
       </RoleBasedGuard>
     </Page>

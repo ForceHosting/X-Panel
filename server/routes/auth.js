@@ -14,12 +14,17 @@ const {
   initDiscordAuth,
   tokenDiscordAuth,
   getDiscordAuth,
-  getJFRDiscord
+  getJFRDiscord,
+  linkMewGem
 } = require("../controllers/discordController");
 const router = require("express").Router();
 
 
-
+// --------------------------------
+// --------------------------------
+// BASIC ROUTES
+// --------------------------------
+// --------------------------------
 
 router.post("/login", login);
 router.get("/getData", getData);
@@ -31,15 +36,26 @@ router.get('/ban/:id', banUser);
 router.post('/link/generate', generateAccLink);
 router.post('/verify', verifyCodeRegister)
 router.get('/coins', earningCoins)
+
+
 // --------------------------------
 // --------------------------------
-// DISCORD ROUTERS
+// DISCORD ROUTES
 // --------------------------------
 // --------------------------------
+
 router.get('/', initDiscordAuth)
 router.get('/discord', tokenDiscordAuth);
 router.get('/discord/data', getDiscordAuth)
 router.get('/discord/jfr/servers/list', getJFRDiscord)
 
+
+// --------------------------------
+// --------------------------------
+// MEWGEM ROUTES
+// --------------------------------
+// --------------------------------
+
+router.get('/mewgem', linkMewGem)
 
 module.exports = router;
