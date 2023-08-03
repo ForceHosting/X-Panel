@@ -4,7 +4,7 @@ const { makeid, getIP, sendWelcome, sendVerify } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const jwt = require('jsonwebtoken')
 const { CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI, MG_APP_ID, MG_TOKEN, encryptKey } = require('../config')
-const {pteroKey, JFRToken, authUrl, successUrl, jwtToken} = require('../config.json');
+const {pteroKey, JFRToken, authUrl, successUrl, jwtToken, bannedUrl} = require('../config.json');
 const axios = require('axios');
 const queryString = require('querystring');
 const fetch = require('node-fetch');
@@ -63,6 +63,7 @@ try{
 
     const user = await User.findOne({discordId: profile.id});
         if(user){
+          if(user.isBanned === false){
             await user.updateOne({
                 username: `${profile.username}`,
                 email: profile.email,
@@ -70,6 +71,9 @@ try{
             });
             req.session.user = user;
             return res.redirect(successUrl);
+          }else{
+            return res.redirect(bannedUrl);
+          }
         }else{
     const pteroIdu = makeid(10);
     const pteroPass = makeid(15)
@@ -203,6 +207,7 @@ module.exports.getDiscordAuth = async (req, res, next) => {
       role: user.role,
       linkId: user.linkId,
       discordId: user.discordId,
+      exp: Math.floor(Date.now() / 1000) + (60 * 60)
     },
     `${jwtToken}`
   )

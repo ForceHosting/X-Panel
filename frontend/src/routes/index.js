@@ -136,6 +136,7 @@ export default function Router() {
         { path: '500', element: <Page500 /> },
         { path: '404', element: <Page404 /> },
         { path: '403', element: <Page403 /> },
+        { path: 'banned', element: <PageBanned /> },
         { path: '*', element: <Navigate to="/404" replace /> },
       ],
     },
@@ -181,4 +182,5 @@ const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+const PageBanned = Loadable(lazy(() => import('../pages/PageBanned')));
 const DiscordAuth = Loadable(lazy(() => import('../pages/auth/DiscordAuth')));
