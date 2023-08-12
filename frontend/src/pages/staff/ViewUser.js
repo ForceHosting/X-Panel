@@ -6,6 +6,7 @@ import { Container } from '@mui/material';
 // routes
 import axios from '../../utils/axios';
 // hooks
+import RoleBasedGuard from '../../guards/RoleBasedGuard';
 import useSettings from '../../hooks/useSettings';
 // _mock_
 import { _userList } from '../../_mock';
@@ -20,6 +21,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // ----------------------------------------------------------------------
 
 export default function ViewUser() {
+  const roles = ['mgmt', 'exec', 'fhfound', 'sysad'];
   const { themeStretch } = useSettings();
   const [user, setUser] = useState(null);
   const { pathname } = useLocation();
@@ -39,6 +41,7 @@ export default function ViewUser() {
 console.log(user);
   return (
     <Page title="User: Create a new user">
+      <RoleBasedGuard hasContent roles={roles}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
       <HeaderBreadcrumbs
           heading={'Edit user'}
@@ -51,6 +54,7 @@ console.log(user);
 
         <UserNewEditForm currentUser={user} />
       </Container>
+      </RoleBasedGuard>
     </Page>
   );
 }

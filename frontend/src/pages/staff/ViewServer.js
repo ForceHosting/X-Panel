@@ -48,8 +48,6 @@ export default function ViewServer() {
             { name: server?.serverName },
           ]}
         />
-
-        <UserNewEditForm currentServer={server} />
       </Container>
     </Page>
   );
