@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Card, Typography, CardHeader, Stack } from '@mui/material';
+import Markdown from '../../../../components/Markdown';
 // components
 import Iconify from '../../../../components/Iconify';
 
@@ -29,7 +30,7 @@ export default function ProfileAbout({ profile }) {
       <CardHeader title="About" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography variant="body2">{aboutMe}</Typography>
+        <Markdown variant="body2">{aboutMe}</Markdown>
 
         <Stack direction="row">
           <IconStyle icon={'ic:round-business-center'} />

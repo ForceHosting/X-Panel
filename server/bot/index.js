@@ -612,6 +612,39 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply({content: 'You have improper information.', ephemeral: true});
 		}
 	}
+	if(interaction.commandName === 'userinfo'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '875410970367897630');
+		if(hasAnnouncePerm === true){
+			const target = interaction.options.getUser('user');
+			const infoUser = await User.findOne({ discordId: target.id })
+			const newUserInfo = new EmbedBuilder()
+				.setTitle(`${target.username}'s Information`)
+				.addFields(
+					{ name: 'User Id', value: `${infoUser._id}`},
+					{ name: "Public Profile", value: `https://my.forcehost.net/user/${infoUser._id}`},
+					{ name: "Staff Page", value: `https://my.forcehost.net/staff/user/${infoUser._id}`},
+					{ name: "About Me", value: `${infoUser.aboutMe}`}
+				)
+				
+				.setFooter({ text: '©️ Force Host 2023', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				await interaction.reply({content:'',embeds: [newUserInfo], ephemeral: true})
+		}else {
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'user'){
+			const target = interaction.options.getUser('user');
+			const infoUser = await User.findOne({ discordId: target.id })
+			const newUserInfo = new EmbedBuilder()
+				.setTitle(`${target.username}'s Information`)
+				.addFields(
+					{ name: 'User Id', value: `${infoUser._id}`},
+					{ name: "Public Profile", value: `https://my.forcehost.net/user/${infoUser._id}`},
+				)
+				
+				.setFooter({ text: '©️ Force Host 2023', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				await interaction.reply({content:'',embeds: [newUserInfo], ephemeral: true})
+	}
 	if(interaction.commandName === 'update'){
 		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952995806543902');
 		if(hasAnnouncePerm === true){

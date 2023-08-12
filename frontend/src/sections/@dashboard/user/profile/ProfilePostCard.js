@@ -26,6 +26,8 @@ import { fDate } from '../../../../utils/formatTime';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 // components
 import Image from '../../../../components/Image';
+import Markdown from '../../../../components/Markdown';
+
 import Iconify from '../../../../components/Iconify';
 import MyAvatar from '../../../../components/MyAvatar';
 import { EmojiPicker } from '../../../../components/emoji-picker';
@@ -84,7 +86,7 @@ export default function ProfilePostCard({ post, profile }) {
       />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        <Typography>{post.postContent}</Typography>
+        <Markdown>{post.postContent}</Markdown>
 
 
       </Stack>

@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const Posts = require("../models/userPostModel");
 var Filter = require('bad-words'),
-    filter = new Filter();
+    filter = new Filter({ placeHolder: 'x'});
 
 module.exports.getUserProfile = async (req, res, next) => {
     try{
