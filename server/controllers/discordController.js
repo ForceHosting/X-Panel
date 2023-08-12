@@ -207,6 +207,11 @@ module.exports.getDiscordAuth = async (req, res, next) => {
       role: user.role,
       linkId: user.linkId,
       discordId: user.discordId,
+      isRocket: user.isRocket,
+      compRole: user.compRole,
+      company: user.company,
+      profileCover: user.profileCover,
+      aboutMe: user.aboutMe,
       exp: Math.floor(Date.now() / 1000) + (60 * 60)
     },
     `${jwtToken}`

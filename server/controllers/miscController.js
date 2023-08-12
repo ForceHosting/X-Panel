@@ -40,6 +40,79 @@ module.exports.getGoldJFRDiscord = async (req, res, next) => {
   }
   }
 
+
+  module.exports.updateUserProfile = async (req, res, next) => {
+    try {
+      const bearerHeader = req.headers['authorization'];
+      const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+      const { aboutMe, compRole, company, profileCover } = req.body
+      const forceHostWords = [
+        'forcehosting',
+        'force host',
+        'force hosting',
+        'Force Hosting',
+        'Force Host',
+        'force',
+        'host',
+        'f0rce',
+        'f0rse',
+        'f0rc3',
+        'h0st',
+        'h0s7',
+        'h0ste',
+        'h0st3',
+        'h0stz',
+        '4orce',
+        'f0rc3h0st',
+        'h0stf0rce',
+        'f0rceh0st',
+        'f0rsehost',
+        'h0stf0rse',
+        'h0ste4orce',
+        'h0st3f0rc3',
+        'h0stz4orce',
+        '4orceh0st',
+        'f0rc3_h0st',
+        'h0st_f0rce',
+        'f0rce_h0st',
+        'f0rse_host',
+        'h0st_f0rse',
+        'h0ste_4orce',
+        'h0st3_f0rc3',
+        'h0stz_4orce',
+        '4orce_h0st',
+        'f0rc3host',
+        'h0stf0rce',
+        'f0rceh0st',
+        'f0rsehost',
+        'h0stf0rse',
+        'h0ste4orce',
+        'h0st3f0rc3',
+        'h0stz4orce',
+        '4orceh0st',
+        'force_host',
+        'host_force',
+        'forcehost',
+        'hostforce',
+        'fh',
+        'forcehosting',
+        'hosting',
+        'host',
+        'force'
+      ];
+      if(forceHostWords.indexOf(company.toLowerCase()) !== -1){
+        return res.status(409).json({msg: 'You cannot save yourself as a FH employee.'})
+      }
+      const updateUser = await User.findByIdAndUpdate(jwtVerify._id,{aboutMe: aboutMe, company: company, compRole: compRole, profileCover: profileCover});
+      return res.status(200).json({msg: 'Update ok'})
+      
+    }catch(ex){
+      next(ex);
+    }
+  }
+
+
+
 module.exports.getSiteStats = async (req, res, next) => {
 try{
   const userCount = await User.find().count();

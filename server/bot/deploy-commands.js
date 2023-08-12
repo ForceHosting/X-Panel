@@ -117,7 +117,7 @@ const getCredits = new SlashCommandBuilder()
 		.setRequired(true)
 	)
 const forceCommands = [
-	announceCmd, updateCmd, getLicense, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate
+	announceCmd, updateCmd, getLicense, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate,
 ]
 
 

@@ -101,6 +101,30 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  aboutMe: {
+    type: String,
+    required: true,
+    default: "No bio yet."
+  },
+  isRocket: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  profileCover: {
+    type: String,
+    required: true, 
+    default: "https://phoenixnap.com/kb/wp-content/uploads/2023/02/data-center-example.jpg"
+  },
+  compRole: {
+    type: String,
+    required: false,
+  },
+  company: {
+    type: String,
+    required: false,
+    default: "No registered company available"
+  },
   isBanned: {
     type: Boolean,
     default: false

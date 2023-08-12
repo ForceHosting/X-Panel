@@ -93,6 +93,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/user/account" replace />, index: true },
             { path: 'account', element: <UserAccount /> },
+            { path: ':id', element: <UserProfile /> },
           ],
         },
         {
@@ -168,6 +169,7 @@ const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const EarnPage = Loadable(lazy(() => import('../pages/dashboard/EarnPage')));
 const GlobalServers = Loadable(lazy(() => import('../pages/dashboard/GlobalServers')));
 const JFR = Loadable(lazy(() => import('../pages/dashboard/JFR')));
+const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));

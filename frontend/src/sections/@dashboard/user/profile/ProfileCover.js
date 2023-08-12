@@ -1,14 +1,19 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, IconButton } from '@mui/material';
 // utils
+import Tooltip from '@mui/material/Tooltip';
 import cssStyles from '../../../../utils/cssStyles';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // components
-import MyAvatar from '../../../../components/MyAvatar';
+import UserAvatar from '../../../../components/UserAvatar';
 import Image from '../../../../components/Image';
+import Iconify from '../../../../components/Iconify';
+
+
+
 
 // ----------------------------------------------------------------------
 
@@ -45,15 +50,37 @@ ProfileCover.propTypes = {
   myProfile: PropTypes.object,
 };
 
+function staffBadge(){
+  return (
+    <Tooltip title="Force Team" placement="top" describeChild>
+    <IconButton sx={{mb:1}}>
+    <Iconify icon={'mdi:badge'} sx={{color: '#708090 ' }} width={22} height={22} />
+    </IconButton>
+    </Tooltip>
+  )
+}
+
+function rocketBadge(){
+  return (
+    <Tooltip title="Rocket User" placement="top" describeChild>
+    <IconButton sx={{mb:1, ml:-1}}>
+    <Iconify icon={'ion:rocket-sharp'} sx={{color: '#DC143C ' }} width={22} height={22} />
+    </IconButton>
+    </Tooltip>
+  )
+}
+
+
 export default function ProfileCover({ myProfile }) {
   const { user } = useAuth();
 
-  const { position, cover } = myProfile;
+  const { position, profileCover, compRole, company, isRocket } = myProfile;
 
   return (
     <RootStyle>
       <InfoStyle>
-        <MyAvatar
+        <UserAvatar
+          user={myProfile}
           sx={{
             mx: 'auto',
             borderWidth: 2,
@@ -71,11 +98,11 @@ export default function ProfileCover({ myProfile }) {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          <Typography variant="h4">{user?.displayName}</Typography>
-          <Typography sx={{ opacity: 0.72 }}>{position}</Typography>
+          <Typography variant="h4">{myProfile?.username}{company === 'Force Host' ? staffBadge() : '' }{isRocket ? rocketBadge() : '' }</Typography>
+          <Typography sx={{ opacity: 0.72 }}>{compRole}</Typography>
         </Box>
       </InfoStyle>
-      <Image alt="profile cover" src={cover} sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <Image alt="profile cover" src={profileCover} sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
     </RootStyle>
   );
 }

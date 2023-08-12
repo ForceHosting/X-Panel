@@ -22,6 +22,9 @@ export const verifyCodeRoute = `/api/auth/verify`
 export const newEarnCoin = `/api/auth/coins`
 export const getGlobalServers = `/api/server/global`
 export const getJFRServers = `/api/auth/discord/jfr/servers/list`
+export const updateUserProfile = `/api/user/update`
+export const getUserPubProf = `/api/poster`
+export const createNewPost = `/api/post/new`
 
 export const getSiteStats = `/api/staff/stats`
 export const getAllUsers = `/api/staff/users`

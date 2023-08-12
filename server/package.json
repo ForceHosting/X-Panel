@@ -14,6 +14,7 @@
     "@discordjs/rest": "^1.1.0",
     "@toolz/create-random-id": "^1.0.5",
     "axios": "^0.27.2",
+    "bad-words": "^3.0.4",
     "badwords-filter": "^1.3.0",
     "bcrypt": "^5.0.1",
     "catodb": "^1.2.0",

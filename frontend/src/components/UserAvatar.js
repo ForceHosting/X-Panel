@@ -4,7 +4,7 @@ import createAvatar from '../utils/createAvatar';
 //
 import Avatar from './Avatar';
 
-export default function MyAvatar({ user, ...other }) {
+export default function UserAvatar({ user, ...other }) {
 
   const palette = ['#FFAD08', '#EDD75A', '#73B06F', '#0C8F8F', '#587291'];
   return (

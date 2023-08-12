@@ -1,8 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 // @mui
-import { Box, Card, Button, TextField, IconButton } from '@mui/material';
+import { Box, Card, Button, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../../components/Iconify';
+import jwtDecode from 'jwt-decode';
+
+import axios from '../../../../utils/axios';
+import { createNewPost } from '../../../../utils/APIRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +16,30 @@ export default function ProfilePostInput() {
   const handleAttach = () => {
     fileInputRef.current?.click();
   };
+  const [count, setCount] = useState(0);
+  const [postContents, setPostContents] = useState(null);
+  const [userId, setUserId] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+      const decoded = jwtDecode(token);
+      setUserId(decoded._id)
+  }, [])
+
+  function updateNewPost(e){
+    setCount(e.target.value.length);
+    setPostContents(e.target.value);
+  }
+
+  const onSubmit = async (e) => {
+    setPostContents('');
+    setCount(0)
+    const {data} = await axios.post(createNewPost,{postContents, userId},{
+      headers: {
+        'Authorization': `${localStorage.getItem('token')}`
+      }
+    });
+  };
+
 
   return (
     <Card sx={{ p: 3 }}>
@@ -19,7 +47,10 @@ export default function ProfilePostInput() {
         multiline
         fullWidth
         rows={4}
+        inputProps={{maxLength: 336}}
         placeholder="Share what you are thinking here..."
+        value={postContents}
+        onChange={e => updateNewPost(e)}
         sx={{
           '& fieldset': {
             borderWidth: `1px !important`,
@@ -27,7 +58,6 @@ export default function ProfilePostInput() {
           },
         }}
       />
-
       <Box
         sx={{
           mt: 3,
@@ -37,17 +67,11 @@ export default function ProfilePostInput() {
         }}
       >
         <Box sx={{ display: 'flex' }}>
-          <IconButton size="small" onClick={handleAttach} sx={{ mr: 1 }}>
-            <Iconify icon={'ic:round-add-photo-alternate'} width={24} height={24} />
-          </IconButton>
-          <IconButton size="small" onClick={handleAttach}>
-            <Iconify icon={'eva:attach-2-fill'} width={24} height={24} />
-          </IconButton>
-        </Box>
-        <Button variant="contained">Post</Button>
+        <Typography sx={{ opacity: 0.72 }}>{count}/336</Typography>
+          </Box>
+        <LoadingButton variant="contained" onClick={() => onSubmit()}>Post</LoadingButton>
       </Box>
 
-      <input ref={fileInputRef} type="file" style={{ display: 'none' }} />
     </Card>
   );
 }
