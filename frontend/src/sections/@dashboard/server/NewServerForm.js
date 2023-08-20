@@ -53,8 +53,12 @@ export default function NewServerForm() {
         uid: '16',
     },
     {
-        name: 'Vanilla',
+        name: 'Vanilla (Java)',
         uid: '17',
+    },
+    {
+        name: 'Vanilla (Bedrock/PE)',
+        uid: '31',
     },
     {
         name: 'Forge',

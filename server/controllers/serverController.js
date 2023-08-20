@@ -1,4 +1,4 @@
-// const User = require("../models/userModel");
+const User = require("../models/userModel");
 const Queue = require("../models/serverQueue");
 const Server = require("../models/servers");
 const { pteroKey, jwtToken } = require('../config.json');

@@ -46,7 +46,6 @@ try{
     })
     const profile = await tokenResponseData.data;
     req.session.discord = profile.id;
-    console.log(profile)
     await fetch(
         `https://discord.com/api/guilds/783416129908899860/members/${profile.id}`,
         {
@@ -63,11 +62,17 @@ try{
 
     const user = await User.findOne({discordId: profile.id});
         if(user){
+          const ip = req.headers['x-forwarded-for'];
+          const checkIP = await User.find({ lastIP: ip }).count();
+          if(checkIP > 1)
+            return res.redirect(bannedUrl);
           if(user.isBanned === false){
+
             await user.updateOne({
                 username: `${profile.username}`,
                 email: profile.email,
                 profilePicture: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=512`,
+                lastIP: ip
             });
             req.session.user = user;
             return res.redirect(successUrl);

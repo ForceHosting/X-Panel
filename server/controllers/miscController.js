@@ -16,14 +16,14 @@ try{
   let refOwner = await User.findOne({refCode: ref}).select([
     "credits",
     "refCode",
-    "refUse"
+    "refUse",
+    "discordId"
   ]);
   if(!refOwner){
     return res.redirect('https://my.forcehost.net/api/auth')
   }else{
     const newUses = refOwner.refUses + 1;
-    const newCoins = refOwner.credits + 75;
-    await User.findOneAndUpdate({refCode: ref},{refUses: newUses, credits: newCoins});
+    await User.findOneAndUpdate({refCode: ref},{refUses: newUses});
     req.session.ref = true;
     return res.redirect('https://my.forcehost.net/api/auth')
   }

@@ -82,6 +82,11 @@ const CreateServerForm = () => {
         brand: 'Minecraft'
     },
     {
+      name: 'Vanilla',
+      uid: '31',
+      brand: 'Minecraft, Bedrock/PE'
+  },
+    {
         name: 'Forge',
         uid: '18',
         brand: 'Minecraft'
