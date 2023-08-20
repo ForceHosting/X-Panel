@@ -82,6 +82,12 @@ export default function Router() {
 
           ],
         },
+        { 
+          path: '/xpanel',
+          children: [
+            { element: <DeployPanel />, index: true }
+          ]
+        },
         {
           path: 'web',
           children: [ 
@@ -144,6 +150,12 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
+
+
+// SAAS
+const DeployPanel = Loadable(lazy(() => import('../pages/dashboard/DeployPanel')));
+
+
 
 const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
 const UserList = Loadable(lazy(() => import('../pages/staff/UserList')));

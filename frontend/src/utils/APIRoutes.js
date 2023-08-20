@@ -26,6 +26,8 @@ export const updateUserProfile = `/api/user/update`
 export const getUserPubProf = `/api/poster`
 export const createNewPost = `/api/post/new`
 
+export const deployXPanel = `/api/xpanel/deploy`
+
 export const getSiteStats = `/api/staff/stats`
 export const getAllUsers = `/api/staff/users`
 export const getUserDetails = `/api/staff/user`
