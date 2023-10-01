@@ -50,7 +50,7 @@ function renewStaff(username, server){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
 	.setTitle('New Registeration')
-	.setDescription(`${username} needs to renew their server ${server}`)
+	.setDescription(`${username} needs to renew their server \`${server}\``)
 	.setTimestamp()
 	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1020508224010592306').send({embeds: [newLoginEmbed]})
@@ -59,7 +59,7 @@ function renewWarn(username, server, timestamp){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
 	.setTitle('Server Alert System')
-	.setDescription(`${username}, you need to renew your server ${server}.\n You have <t:${timestamp}:R> left.`)
+	.setDescription(`${username}, you need to renew your server \`${server}\`.\n You have <t:${timestamp}:R> left.`)
 	.setTimestamp()
 	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1157876401836400691').send({content: `${username}`,embeds: [newLoginEmbed]})
