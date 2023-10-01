@@ -2,12 +2,15 @@
 import { enUS, frFR, zhCN, viVN, arSD } from '@mui/material/locale';
 // routes
 import { PATH_DASHBOARD } from './routes/paths';
+import saas from './saas.json';
 
 // API
 // ----------------------------------------------------------------------
 
-export const serverIP = `https://my.forcehost.net`;
+export const serverIP = `${saas.srvBackend}`;
 export const paypalKey = "";
+export const encryptKey = `${saas.srvEncrypt}`;
+
 export const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
 
 export const FIREBASE_API = {

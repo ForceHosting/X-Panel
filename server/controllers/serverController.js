@@ -129,6 +129,9 @@ module.exports.createServer = async (req, res, next) => {
     })
 
     const pteroData = await pteroCreate.json();
+    if(!pteroData.attributes){
+      return res.status(400).json({status: 500, added: false, msg: "Pterodactyl server creation error."})
+    }
     if(pteroData.attributes.id){
       const pteroAllocs = await fetch('https://control.forcehost.net/api/application/nodes/'+location+'/allocations/?filter[server_id]='+pteroData.attributes.id+'', {
       method: 'get',
@@ -216,6 +219,39 @@ module.exports.addToQueue = async (req, res, next) => {
         next(ex);
       }
   };
+
+
+  module.exports.renewServer = async (req, res, next) => {
+    try{
+      const bearerHeader = req.headers['authorization'];
+      const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+      const userId = jwtVerify._id;
+      const {server} = req.body;
+      const serverData = await Server.findById(server);
+      if(serverData.serverOwner === userId){
+        const beforeExpire = Date.now() + 259200;
+        const afterExpire = Date.now() + 259200;
+const nextRenew = parseInt( Date.now() + 2.592e+9);
+if(!serverData.serverRenewal){
+  await Server.findByIdAndUpdate(serverData._id, {'serverRenewal': nextRenew});
+}
+
+
+// Calculate the timestamp for 3 days ago in milliseconds
+const threeDaysAgo = Date.now() - (3 * 24 * 60 * 60 * 1000);
+
+// Check if the provided timestamp is within the 3-day period
+if (serverData.serverRenewal >= threeDaysAgo && serverData.serverRenewal <= Date.now()) {
+  await Server.findByIdAndUpdate(serverData._id, {'serverRenewal': nextRenew}); 
+  return res.json({status: 200})
+} else {
+  return res.json({status: 401, msg: 'This server is not allowed to be renewed.'})
+}
+    }
+  }catch(ex){
+      next(ex)
+    }
+  }
 
   module.exports.deleteServer = async (req, res, next) => {
     try{

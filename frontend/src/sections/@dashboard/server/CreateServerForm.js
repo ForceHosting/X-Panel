@@ -239,6 +239,7 @@ const CreateServerForm = () => {
   ));
 
   const renderPlans = locations.map((location) => (
+
     <Grid xs={12} md={5} key={location.uid} sx={{mt:3, ml:3}}>
       <Stack
         component={Paper}
@@ -280,7 +281,7 @@ const CreateServerForm = () => {
           sx={{
             typography: 'subtitle2',
             mt: 2,
-            mb: 0.5,
+            mb: 0,
             textTransform: 'capitalize',
           }}
         >

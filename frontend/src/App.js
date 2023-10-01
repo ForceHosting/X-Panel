@@ -1,4 +1,5 @@
 // routes
+import Snowfall from 'react-snowfall'
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
@@ -11,15 +12,20 @@ import NotistackProvider from './components/NotistackProvider';
 import MotionLazyContainer from './components/animate/MotionLazyContainer';
 
 
+
 // ----------------------------------------------------------------------
 
 export default function App() {
   return (
     
     <MotionLazyContainer>
+      
       <ThemeProvider>
+      
         <ThemeSettings>
+        
           <NotistackProvider>
+          <Snowfall />
             <ProgressBarStyle />
             <ChartStyle />
             <ScrollToTop />
@@ -27,7 +33,9 @@ export default function App() {
             <Router />
           </NotistackProvider>
         </ThemeSettings>
+        
       </ThemeProvider>
+      
     </MotionLazyContainer>
   );
 }

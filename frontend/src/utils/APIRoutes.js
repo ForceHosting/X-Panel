@@ -12,7 +12,6 @@ export const getTicketInformationRoute = `/api/ticket/information`
 export const getAllTickets = `/api/ticket/list`
 export const generateDiscordLinkIdRoute = `/api/auth/link/generate`
 export const deleteServerRoute = `/api/server/remove`
-export const renewServerRoute = `/api/server/renew`
 export const createNewWebRoute = `/api/web/create`
 export const createNewPaymentWeb = `/api/payments/paypal/create/web`
 export const fetchAllPaymentsRoute = `/api/payments/fetch`
@@ -25,6 +24,7 @@ export const getJFRServers = `/api/auth/discord/jfr/servers/list`
 export const updateUserProfile = `/api/user/update`
 export const getUserPubProf = `/api/poster`
 export const createNewPost = `/api/post/new`
+export const renewServerRoute =  `/api/server/renew`
 
 export const deployXPanel = `/api/xpanel/deploy`
 
