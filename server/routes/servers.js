@@ -1,5 +1,6 @@
 const {
     createServer,
+    addToQueue,
     getServers,
     deleteServer,
     renewServer,
@@ -8,7 +9,7 @@ const {
   
   const router = require("express").Router();
   
-  router.post("/create", createServer);
+  router.post("/create", addToQueue);
   router.get("/getServers", getServers)
   router.post("/remove", deleteServer)
   router.post("/renew", renewServer)

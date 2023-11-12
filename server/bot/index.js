@@ -142,6 +142,22 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
 	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
 }
+function createdQueuedServer(user, servername, servermem, servercpu, serverdisk, location){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Server Created From Queue')
+	.setDescription(`The user <@${user}> just got their server created from the queue!`)
+    .addFields(
+        { name: 'Name', value: `${servername}`, inline: true},
+        { name: 'Memory', value: `${servermem}`, inline: true},
+        { name: 'CPU', value: `${servercpu}`, inline: true},
+        { name: 'Disk', value: `${serverdisk}`, inline: true},
+		{ name: 'Location', value: `${location}`, inline: true},
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
+}
 
 function createdServer(username, servername, servermem, servercpu, serverdisk, node, pteroId){
     const newLoginEmbed = new EmbedBuilder()
@@ -877,4 +893,4 @@ client.on('guildDelete', guild => {
 })
 require('./JFR')
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog, renewStaff, renewSuspend, renewWarn};
+module.exports =  { createdQueuedServer,userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog, renewStaff, renewSuspend, renewWarn};

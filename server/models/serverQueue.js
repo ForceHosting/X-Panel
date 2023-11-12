@@ -5,30 +5,37 @@ const serversSechma = new mongoose.Schema({
         type: String,
         required: true,
     },
-    serverSoftware: {
-        type: String, 
-        require: true,
-    },
     serverNode: {
         type: String,
         required: true,
     },
     serverMemory: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverCPU: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverDisk: {
+        type: Number,
+        required: true,
+    },
+    serverSoftware: {
         type: String,
         required: true,
     },
     serverOwner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
         required: true,
+    },
+    serverDid: {
+        type: Number,
+        required: true,
+    },
+    ownerPteroId: {
+        type: Number,
+        required: true
     }
 });
 

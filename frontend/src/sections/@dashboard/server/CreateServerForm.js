@@ -40,16 +40,10 @@ const CreateServerForm = () => {
         flag: 'DE',
     },
     {
-        name: 'Curiosity',
-        uid: '2',
-        country: 'Germany',
-        flag: 'DE'
-    },
-    {
-        name: 'Omega',
-        uid: '3',
-        country: 'Germany',
-        flag: 'DE'
+        name: 'Valerius',
+        uid: '6',
+        country: 'Finland',
+        flag: 'FN'
     },
     {
         name: 'Optimus',
@@ -86,6 +80,11 @@ const CreateServerForm = () => {
       uid: '31',
       brand: 'Minecraft, Bedrock/PE'
   },
+  {
+    name: 'PMMP',
+    uid: '32',
+    brand: 'Minecraft, Bedrock/PE'
+},
     {
         name: 'Forge',
         uid: '18',
@@ -274,7 +273,7 @@ const CreateServerForm = () => {
         <Box sx={{ width: 48, height: 48 }}>
           {location.flag === 'US' && <IconFlagUS />}
           {location.flag === 'DE' && <IconFlagDE />}
-          {location.flag === 'FL' && <IconFlagEU />}
+          {location.flag === 'FN' && <IconFlagEU />}
         </Box>
 
         <Box

@@ -37,6 +37,7 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: '/app',
+  controlPanel: 'https://control.forcehost.net',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     earn: path(ROOTS_DASHBOARD, '/app/earn'),

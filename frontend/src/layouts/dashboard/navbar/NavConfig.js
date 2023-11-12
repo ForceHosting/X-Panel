@@ -41,7 +41,8 @@ const navConfig = [
   {
     subheader: 'Information',
     items: [
-      { title: 'Developer Blog', path: PATH_DASHBOARD.blog.root, icon: ICONS.dashboard}
+      { title: 'Developer Blog', path: PATH_DASHBOARD.blog.root, icon: ICONS.dashboard},
+      { title: 'Control Panel', path: PATH_DASHBOARD.controlPanel, icon: ICONS.menuItem}
     ]
   }
 
