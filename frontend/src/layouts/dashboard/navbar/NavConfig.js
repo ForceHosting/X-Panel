@@ -36,7 +36,15 @@ const navConfig = [
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
       { title: 'Global Servers', path: PATH_DASHBOARD.server.global, icon: ICONS.globe},
       { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking},
-      { title: 'Earning', path: PATH_DASHBOARD.general.earn, icon: ICONS.money}
+      {
+        title: 'Coins',
+        path: PATH_DASHBOARD.coins.root,
+        icon: ICONS.money,
+        children: [
+          { title: 'Store', path: PATH_DASHBOARD.general.store },
+          { title: 'Earn', path: PATH_DASHBOARD.general.earn },
+        ],
+      },
     ],
     
   },

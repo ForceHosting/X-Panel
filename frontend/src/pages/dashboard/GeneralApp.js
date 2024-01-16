@@ -1,6 +1,6 @@
 // @mui
 import { useState, useEffect } from 'react';
-import { Container, Grid, Stack, Box, Divider } from '@mui/material';
+import { Container, Grid, Stack, Box, Divider, Typography } from '@mui/material';
 
 // hooks
 import jwtDecode from 'jwt-decode';
@@ -112,6 +112,7 @@ useEffect(() => {
       
                 })
 
+
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
@@ -182,6 +183,7 @@ useEffect(() => {
             <QueueCard key={user.id} server={server} background={serverBG[random]} />
           ))}
         </Box>
+
       </Container>
     </Page>
   );

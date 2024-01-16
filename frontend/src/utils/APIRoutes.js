@@ -36,3 +36,5 @@ export const updateUserDetails = `/api/staff/user/update`
 export const getAllServers = `/api/staff/servers`
 export const getServerDetails = `/api/staff/server`
 export const updateServerDetails = `/api/staff/server/update`
+
+export const purchaseResources = `/api/auth/resources`

@@ -166,7 +166,7 @@ try{
   await User.findByIdAndUpdate(userUid, {lastEarn: Date.now()})
 
   const decryptedRole = CryptoJS.AES.decrypt(userData.role, encryptKey).toString(CryptoJS.enc.Utf8);
-  if("Customer" === decryptedRole){
+  if("Customer" === userData.role){
     const newCredits = userData.credits + 0.25;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
     NewEarn(userData.discordId, newCredits, Date.now())
@@ -560,6 +560,59 @@ module.exports.generateAccLink = async (req, res, next) => {
     let userData = await User.findByIdAndUpdate(accountId, {'linkId': newLinkId });
     return res.json(newLinkId)
   }catch(ex){
+    next(ex);
+  }
+}
+
+module.exports.purchaseResources = async (req, res, next) => {
+  try {
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    const userUid = jwtVerify._id;
+    const userData = await User.findById(userUid)
+    const {itemId} = req.body;
+
+    if(itemId === 1){
+      const newCoins = userData.credits - 2500;
+      console.log(newCoins)
+      if(newCoins < 0){
+        return res.status(400).json({msg:'You do not have enough coins to purchase that.'})
+      }else{
+        const newRam = userData.availMem + 1024;
+        const userD = await User.findByIdAndUpdate(userUid, {availMem: newRam, credits: newCoins})
+        return res.status(200).json({msg: 'Purchase successful!'})
+      }
+    }else if(itemId === 2){
+      const newCoins = userData.credits - 1500;
+      if(newCoins < 0){
+        return res.status(400).json({msg:'You do not have enough coins to purchase that.'})
+      }else{
+        const newDisk = userData.availDisk + 1024;
+        const userD = await User.findByIdAndUpdate(userUid, {availDisk: newDisk, credits: newCoins})
+        return res.status(200).json({msg: 'Purchase successful!'})
+      }
+    }else if(itemId === 3){
+      const newCoins = userData.credits - 2500;
+      if(newCoins < 0){
+        return res.status(400).json({msg:'You do not have enough coins to purchase that.'})
+      }else{
+        const newCPU = userData.availCPU + 50;
+        const userD = await User.findByIdAndUpdate(userUid, {availCPU: newCPU, credits: newCoins})
+        return res.status(200).json({msg: 'Purchase successful!'})
+      }
+    }else if(itemId === 4){
+      const newCoins = userData.credits - 200;
+      if(newCoins < 0){
+        return res.status(400).json({msg:'You do not have enough coins to purchase that.'})
+      }else{
+        const newSlots = userData.availSlots + 1024;
+        const userD = await User.findByIdAndUpdate(userUid, {availSlots: newSlots, credits: newCoins})
+        return res.status(200).json({msg: 'Purchase successful!'})
+      }
+    }else{
+      return res.status(400).json({msg: 'There was an error trying to purchase item: [NO ITEM DEFINED]'})
+    }
+  }catch (ex) {
     next(ex);
   }
 }

@@ -9,7 +9,8 @@ const {
   generateAccLink,
   verifyCodeRegister,
   earningCoins,
-  earningLeaderboard
+  earningLeaderboard,
+  purchaseResources
 } = require("../controllers/userController");
 const {
   initDiscordAuth,
@@ -38,6 +39,7 @@ router.post('/link/generate', generateAccLink);
 router.post('/verify', verifyCodeRegister)
 router.get('/coins', earningCoins)
 router.get('/leaderboard', earningLeaderboard)
+router.post('/resources', purchaseResources)
 
 
 // --------------------------------

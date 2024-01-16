@@ -237,56 +237,53 @@ module.exports.addToQueue = async (req, res, next) => {
       }
   };
 
-  module.exports.getServers = async (req, res, next) => {
-    try {
-      const bearerHeader = req.headers['authorization'];
-      const jwtVerify = jwt.verify(bearerHeader, jwtToken);
-  
-      // Find all servers owned by the user
-      const servers = await Server.find({ serverOwner: jwtVerify._id });
-  
-      // Find the server in the queue owned by the user
-      const queuedServers = await Queue.find({ serverOwner: jwtVerify._id });
-  
-      // If the server is in the queue, find its position based on serverNode
-      if (queuedServers.length > 0) {
-        // Group queuedServers by serverNode
-        const groupedQueuedServers = queuedServers.reduce((acc, server) => {
-          const node = server.serverNode;
-          acc[node] = acc[node] || [];
-          acc[node].push(server);
-          return acc;
-        }, {});
-  
-        // Map queuedServers with positions based on serverNode
-        const queuedWithPositions = Object.values(groupedQueuedServers).flatMap((group) => {
-          const sortedGroup = group.sort((a, b) =>
-            parseInt(a.serverNode, 10) - parseInt(b.serverNode, 10)
-          );
-  
-          const totalInNodeQueue = sortedGroup.length;
-  
-          return sortedGroup.map((queuedServer, index) => {
-            const position = index + 1;
-            return {
-              ...queuedServer.toObject(),
-              position: `${position}/${totalInNodeQueue}`,
-            };
-          });
-        });
-  
-  
-        // Serialize the data including positions
-        const responseData = { servers, queued: queuedWithPositions };
-        return res.json(responseData);
-      }
-  
-      // If no queued servers, send the response with only servers
-      return res.json({ servers, queued: [] });
-    } catch (ex) {
-      next(ex);
-    }
-  };
+module.exports.getServers = async (req, res, next) => {
+  try {
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader, jwtToken);
+
+    // Find all servers owned by the user
+    const userServers = await Server.find({ serverOwner: jwtVerify._id });
+
+    // Find all queue servers owned by the user
+    const userQueuedServers = await Queue.find({ serverOwner: jwtVerify._id });
+
+    // Find all queue servers in the same serverNode
+    const allQueuedServers = await Queue.find();
+
+    // Group all queuedServers by serverNode
+    const groupedQueuedServers = allQueuedServers.reduce((acc, server) => {
+      const node = server.serverNode;
+      acc[node] = acc[node] || [];
+      acc[node].push(server);
+      return acc;
+    }, {});
+
+    // Map userQueuedServers with positions based on serverNode
+    const userQueuedWithPositions = userQueuedServers.map((userQueuedServer) => {
+      const node = userQueuedServer.serverNode;
+      const group = groupedQueuedServers[node];
+
+      const sortedGroup = group.sort((a, b) =>
+        parseInt(a.serverNode, 10) - parseInt(b.serverNode, 10)
+      );
+
+      const totalInNodeQueue = sortedGroup.length;
+      const position = sortedGroup.findIndex(server => server._id.equals(userQueuedServer._id)) + 1;
+
+      return {
+        ...userQueuedServer.toObject(),
+        position: `${position}/${totalInNodeQueue}`,
+      };
+    });
+
+    // Serialize the data including positions
+    const responseData = { servers: userServers, queued: userQueuedWithPositions };
+    return res.json(responseData);
+  } catch (ex) {
+    next(ex);
+  }
+};
   
   
 
@@ -502,7 +499,7 @@ try{
       });
   
       await Queue.deleteOne({ _id: queueItem._id });
-      await Node.findOneAndUpdate({ PteroId: queueItem.serverNode }, { $inc: { nodeSlots: -1 } });
+      await Node.findOneAndUpdate({ pteroId: queueItem.serverNode }, { $inc: { nodeSlots: -1 } });
   
       createdQueuedServer(
         queueItem.ownerDid,
@@ -524,7 +521,7 @@ try{
       for (let i = 0; i < queue.length; i++) {
         await processQueueItem(queue[i]);
       }
-    }, 3.6e+6);
+    }, 300000);
   };
   
   runServerQueue();

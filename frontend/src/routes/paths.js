@@ -40,13 +40,19 @@ export const PATH_DASHBOARD = {
   controlPanel: 'https://control.forcehost.net',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    earn: path(ROOTS_DASHBOARD, '/earn'),
+    earn: path(ROOTS_DASHBOARD, '/coins/earn'),
+    store: path(ROOTS_DASHBOARD, '/coins/store'),
     jfr: path(ROOTS_DASHBOARD, '/join-for-resources'),
   },
   server: {
     root: path(ROOTS_DASHBOARD, '/server'),
     create: path(ROOTS_DASHBOARD, '/server/create'),
     global: path(ROOTS_DASHBOARD, '/servers/global'),
+  },
+  coins: {
+    root: path(ROOTS_DASHBOARD, '/coins'),
+    store: path(ROOTS_DASHBOARD, '/coins/store'),
+    earn: path('/coins/earn')
   },
   invoice: {
     root: path(ROOTS_DASHBOARD, '/invoice'),

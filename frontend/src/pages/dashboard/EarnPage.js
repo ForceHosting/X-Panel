@@ -61,7 +61,7 @@ export default function EarnPage() {
                 });
                     setCoins(data.data.coins);
                   })();
-      }, 1000)
+      }, 60000)
     }, [])
     useEffect(() => {
       setInterval(()=>{
@@ -73,7 +73,7 @@ export default function EarnPage() {
                 });
                     setLeader(data.data.top10)
                   })();
-      }, 1000)
+      }, 10000)
     }, [])
 
 
