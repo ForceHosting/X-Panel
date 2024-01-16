@@ -6,7 +6,7 @@ const serversSechma = new mongoose.Schema({
         required: true,
     },
     serverNode: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverMemory: {

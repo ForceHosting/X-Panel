@@ -40,7 +40,7 @@ export const PATH_DASHBOARD = {
   controlPanel: 'https://control.forcehost.net',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    earn: path(ROOTS_DASHBOARD, '/app/earn'),
+    earn: path(ROOTS_DASHBOARD, '/earn'),
     jfr: path(ROOTS_DASHBOARD, '/join-for-resources'),
   },
   server: {

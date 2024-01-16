@@ -25,6 +25,7 @@ export const updateUserProfile = `/api/user/update`
 export const getUserPubProf = `/api/poster`
 export const createNewPost = `/api/post/new`
 export const renewServerRoute =  `/api/server/renew`
+export const GetLeaderBoardCoins = `/api/auth/leaderboard`
 
 export const deployXPanel = `/api/xpanel/deploy`
 

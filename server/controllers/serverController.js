@@ -219,7 +219,7 @@ module.exports.addToQueue = async (req, res, next) => {
         await User.findByIdAndUpdate(user._id, {'availMem': newTotalMem, 'availDisk': newTotalDisk, 'availCPU': newTotalCPU, 'availSlots': newTotalSlots});
         const server = await Queue.create({
           serverName: name,
-          serverNode: location,
+          serverNode: Number(location),
           serverMemory: memory,
           serverCPU: cpu,
           serverDisk: disk,
@@ -302,9 +302,7 @@ module.exports.addToQueue = async (req, res, next) => {
         const beforeExpire = Date.now() + 259200;
         const afterExpire = Date.now() + 259200;
 const nextRenew = parseInt( Date.now() + 2.592e+9);
-if(!serverData.serverRenewal){
-  await Server.findByIdAndUpdate(serverData._id, {'serverRenewal': nextRenew});
-}
+
 
 
 // Calculate the timestamp for 3 days ago in milliseconds
@@ -383,8 +381,9 @@ try{
 
   const processQueueItem = async (queueItem) => {
     console.log(`\x1b[32m[INFO] Processing Server: ${queueItem.serverName}`);
-  
-    const nodeInfo = await Node.findOne({ PteroId: queueItem.serverNode });
+      console.log(queueItem.serverNode)
+    const nodeInfo = await Node.findOne({ pteroId: queueItem.serverNode });
+      console.log(nodeInfo)
     const nodeSlots = nodeInfo.nodeSlots;
   
     if (nodeSlots <= 0) {
@@ -471,6 +470,7 @@ try{
       })
   
       const pteroData = await pteroCreate.json();
+        console.log(pteroData)
       if (!pteroData.attributes) {
         console.log(`\x1b[31m[INFO] No data back from Pterodactyl.`);
         return;

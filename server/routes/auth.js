@@ -8,7 +8,8 @@ const {
   banUser,
   generateAccLink,
   verifyCodeRegister,
-  earningCoins
+  earningCoins,
+  earningLeaderboard
 } = require("../controllers/userController");
 const {
   initDiscordAuth,
@@ -36,6 +37,7 @@ router.get('/ban/:id', banUser);
 router.post('/link/generate', generateAccLink);
 router.post('/verify', verifyCodeRegister)
 router.get('/coins', earningCoins)
+router.get('/leaderboard', earningLeaderboard)
 
 
 // --------------------------------

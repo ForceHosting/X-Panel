@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
   credits: {
     type: Number,
     required: true,
-    default: 0,
+    default: 0.00,
   },
   availMem: {
     type: Number,
@@ -128,6 +128,9 @@ const userSchema = new mongoose.Schema({
   isBanned: {
     type: Boolean,
     default: false
+  },
+  lastEarn: {
+    type: Number,
   }
 });
 

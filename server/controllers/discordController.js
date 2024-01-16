@@ -217,7 +217,7 @@ module.exports.getDiscordAuth = async (req, res, next) => {
       company: user.company,
       profileCover: user.profileCover,
       aboutMe: user.aboutMe,
-      exp: Math.floor(Date.now() / 1000) + (60 * 60)
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60)
     },
     `${jwtToken}`
   )

@@ -4,12 +4,14 @@ const bcrypt = require("bcrypt");
 const ShortUniqueId = require("short-unique-id");
 const uid = new ShortUniqueId({ length: 10 });
 const { makeid, getIP, sendWelcome, sendVerify } = require('../functions')
-const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
+const { userLogin, userRegister, sendErrorCode, NewEarn } = require('../bot/index');
 const fetch = require('node-fetch');
-const {pteroKey, jwtToken} = require('../config.json');
+const {pteroKey, jwtToken, encryptKey} = require('../config.json');
 const noRegister = false;
 const jwt = require('jsonwebtoken')
 const Verify = require('../models/verifyCodes')
+const CryptoJS = require('crypto-js');
+
 
 module.exports.newEarn = async (req, res, next) => {
 try{
@@ -146,67 +148,120 @@ next(ex);
 
 module.exports.earningCoins = async (req, res, next) => {
 try{
+  if(req.get('referer') !== 'http://localhost:3000/'){
+    return res.status(401).json({msg:'whomp whomp'});
+  }
   const bearerHeader = req.headers['authorization'];
   const jwtVerify = jwt.verify(bearerHeader,jwtToken)
   const userUid = jwtVerify._id;
-  console.log(userUid);
   const userData = await User.findById(userUid).select([
     'credits',
     'role',
-  ]);
-  if(userData.role === 'Customer'){
-    const newCredits = userData.credits + 1;
+    'lastEarn',
+    'discordId'
+  ])
+  const secondsDifference = (Date.now() - userData.lastEarn) / 1000;
+  if (secondsDifference >= 60) {
+    console.log("At least 60 seconds have passed.");
+  await User.findByIdAndUpdate(userUid, {lastEarn: Date.now()})
+
+  const decryptedRole = CryptoJS.AES.decrypt(userData.role, encryptKey).toString(CryptoJS.enc.Utf8);
+  if("Customer" === decryptedRole){
+    const newCredits = userData.credits + 0.25;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
-  }else if(userData.role === 'rt1'){
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
+  }else if("rt1" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
+  }else if("rt2" === decryptedRole){
+    const newCredits = userData.credits + 0.75;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
+  }
+  else if("rt3" === decryptedRole){
+    const newCredits = userData.credits + 1.00;
+    await User.findByIdAndUpdate(userUid, {credits: newCredits});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
+  }
+  else if("rpleg" === decryptedRole){
     const newCredits = userData.credits + 1.25;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
-  }else if(userData.role === 'rt2'){
-    const newCredits = userData.credits + 1.6;
-    await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }
-  else if(userData.role === 'rt3'){
-    const newCredits = userData.credits + 2;
+  else if("sprt" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }
-  else if(userData.role === 'rpleg'){
-    const newCredits = userData.credits + 2;
+  else if("mgmt" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }
-  else if(userData.role === 'sprt'){
-    const newCredits = userData.credits + 1.3;
+  else if("exec" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }
-  else if(userData.role === 'mgmt'){
-    const newCredits = userData.credits + 1.3;
+  else if("fhfound" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }
-  else if(userData.role === 'exec'){
-    const newCredits = userData.credits + 2;
+  else if("sysad" === decryptedRole){
+    const newCredits = userData.credits + 0.5;
     await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
-  }
-  else if(userData.role === 'fhfound'){
-    const newCredits = userData.credits + 3;
-    await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
-  }
-  else if(userData.role === 'sysad'){
-    const newCredits = userData.credits + 1.3;
-    await User.findByIdAndUpdate(userUid, {credits: newCredits});
-    return res.status(200).json({msg: 'Added one coin!'});
+    NewEarn(userData.discordId, newCredits, Date.now())
+    return res.status(200).json({msg: 'Added one coin!', coins: newCredits});
   }else{
     return res.status(500).json({msg: 'Could not find role in database.'})
   }
+} else {
+  return res.status(400).json({ msg: 'Nice try bozo the clown, wait your 60 seconds and try again'})
+}
 }catch(ex) {
   next(ex);
 }
+}
+
+module.exports.earningLeaderboard = async (req, res, next) => {
+  try{
+    const pipeline = [
+      {
+        $addFields: {
+          coinsNumeric: { $toDouble: "$credits" } // Convert credits to a numeric type
+        }
+      },
+      {
+        $sort: { coinsNumeric: -1 }
+      },
+      {
+        $limit: 10
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the _id field
+          username: 1,
+          credits: 1
+        }
+      }
+    ];
+    
+    const top10 = await User.aggregate(pipeline);
+    return res.status(200).json({top10})
+  }catch(ex){
+    next(ex);
+  }
 }
 
 module.exports.register = async (req, res, next) => {

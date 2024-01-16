@@ -207,6 +207,20 @@ function Addedcoins(giver,accepter,coins){
     client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
 }
 
+function NewEarn(user, coins, time){
+    const newTicketEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Coins added')
+	.setDescription('A user earned more coins!')
+	.addFields(
+		{ name: 'User', value: `<@${user}>`, inline: true },
+		{ name: 'Amount', value: `¢${coins}`, inline: true},
+		{ name: 'Time', value: `<t:${Math.floor(time / 1000)}:F>`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1099060583317377056').send({embeds: [newTicketEmbed]})
+}
+
 function createPaymentLog(subId, oId, uId){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor('Green')
@@ -893,4 +907,4 @@ client.on('guildDelete', guild => {
 })
 require('./JFR')
 client.login(token);
-module.exports =  { createdQueuedServer,userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog, renewStaff, renewSuspend, renewWarn};
+module.exports =  { createdQueuedServer,userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, NewEarn, createPaymentLog, renewStaff, renewSuspend, renewWarn};

@@ -23,6 +23,7 @@ const ICONS = {
   dashboard: getIcon('ic_dashboard'),
   menuItem: getIcon('ic_menu_item'),
   globe: getIcon('ic_globe'),
+  money: getIcon('ic_money'),
 };
 
 const navConfig = [
@@ -34,7 +35,8 @@ const navConfig = [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
       { title: 'Global Servers', path: PATH_DASHBOARD.server.global, icon: ICONS.globe},
-      { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking}
+      { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking},
+      { title: 'Earning', path: PATH_DASHBOARD.general.earn, icon: ICONS.money}
     ],
     
   },

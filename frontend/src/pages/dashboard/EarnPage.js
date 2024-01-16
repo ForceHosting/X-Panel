@@ -1,12 +1,19 @@
 // @mui
 import { useState, useEffect } from 'react';
 import { Container, Grid, Stack, Box, Divider } from '@mui/material';
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 // hooks
 import jwtDecode from 'jwt-decode';
 import useSettings from '../../hooks/useSettings';
-import { newEarnCoin } from '../../utils/APIRoutes';
+import { newEarnCoin, GetLeaderBoardCoins } from '../../utils/APIRoutes';
 import axios from '../../utils/axios';
+
 // components
 import Page from '../../components/Page';
 // sections
@@ -30,6 +37,8 @@ const random = Math.floor(Math.random() * serverBG.length);
 
 export default function EarnPage() {
   const [user, setUserInfo] = useState([]);
+  const [leader, setLeader] = useState([]);
+  const [coins, setCoins] = useState('NaN');
   const [timeLeft, setTimeLeft] = useState(60);
   const [timeDone, setTimeDone] = useState(0);
   useEffect(() => {
@@ -40,16 +49,32 @@ export default function EarnPage() {
 
   const { themeStretch } = useSettings();
 
-    setInterval(()=>{
-      (async function getData() {
-              const data = await axios.get(`${newEarnCoin}`,{
-                headers: {
-                  'Authorization': `${localStorage.getItem('token')}`
-                }
-              });
-                  console.log(data)
-                })();
-    }, 60000)
+    
+
+    useEffect(() => {
+      setInterval(()=>{
+        (async function getData() {
+                const data = await axios.get(`${newEarnCoin}`,{
+                  headers: {
+                    'Authorization': `${localStorage.getItem('token')}`
+                  }
+                });
+                    setCoins(data.data.coins);
+                  })();
+      }, 1000)
+    }, [])
+    useEffect(() => {
+      setInterval(()=>{
+        (async function getData() {
+                const data = await axios.get(`${GetLeaderBoardCoins}`,{
+                  headers: {
+                    'Authorization': `${localStorage.getItem('token')}`
+                  }
+                });
+                    setLeader(data.data.top10)
+                  })();
+      }, 1000)
+    }, [])
 
 
 
@@ -69,8 +94,7 @@ export default function EarnPage() {
         }
     }, [timeDone]);
   return (
-    <Page title="Home">
-      <RoleBasedGuard hasContent roles={['fhfound']}>
+    <Page title="Earning">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={8} lg={4}>
@@ -92,29 +116,46 @@ export default function EarnPage() {
           <Grid item xs={12} md={4} lg={4}>
             <Stack spacing={1}>
               <AppWidget title="Time Completed" total={`${timeLeft}`} icon={'fa-solid:clock'} chartData={Math.round(timeDone/60*100)} />
+              <AppWidget title="Coins Earned" total={`$${coins}`} icon={'fa-solid:money-bill'} chartData={12} />
             </Stack>
           </Grid>
         </Grid>
+
+        
         <Divider sx={{mt: 2}}>Leaderboard</Divider>
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 3,
-            mt: '20px',
-            gridTemplateColumns: {
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-            },
-          }}
-        >
-        The leaderboard is currently in the works of being completed.
+        <Box sx={{ py: 4, display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)' }}>
+        <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Rank</TableCell>
+            <TableCell>Username</TableCell>
+            <TableCell align="right">Coins</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {leader.map((row, index) => (
+            <TableRow
+              key={row._id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {index + 1}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.username}
+              </TableCell>
+              <TableCell align="right">{row.credits}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
           
         </Box>
 
 
       </Container>
-      </RoleBasedGuard>
     </Page>
   );
 }
