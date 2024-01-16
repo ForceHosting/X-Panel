@@ -27,7 +27,7 @@ import Iconify from '../../../components/Iconify';
 import Label from "../../../components/Label";
 
 
-const steps = ["Resources", "Location", "Software"];
+const steps = ["Resources", "Location", "Software", "Options"];
 
 const CreateServerForm = () => {
   const navigate = useNavigate();
@@ -40,16 +40,10 @@ const CreateServerForm = () => {
         flag: 'DE',
     },
     {
-        name: 'Curiosity',
-        uid: '2',
-        country: 'Germany',
-        flag: 'DE'
-    },
-    {
-        name: 'Omega',
-        uid: '3',
-        country: 'Germany',
-        flag: 'DE'
+        name: 'Valerius',
+        uid: '6',
+        country: 'Finland',
+        flag: 'FN'
     },
     {
         name: 'Optimus',
@@ -82,6 +76,16 @@ const CreateServerForm = () => {
         brand: 'Minecraft'
     },
     {
+      name: 'Vanilla',
+      uid: '31',
+      brand: 'Minecraft, Bedrock/PE'
+  },
+  {
+    name: 'PMMP',
+    uid: '32',
+    brand: 'Minecraft, Bedrock/PE'
+},
+    {
         name: 'Forge',
         uid: '18',
         brand: 'Minecraft'
@@ -109,10 +113,23 @@ const CreateServerForm = () => {
 
   ];
 
+  const options = [
+    { 
+        name: 'Yes!',
+        desc: "Your server will be publicly shown on our global servers page, with the server name.",
+        val: true,
+    },
+    {
+        name: 'No!',
+        desc: "Your server will not be publicly shown on our global servers page.",
+        val: false,
+    },
+  ];
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [currentLocation, setLocation] = useState(null);
   const [currentSoftware, setSoftware] = useState(null);
+  const [currentOpt, setOpt] = useState(null);
   const [isSubmit, setSubmit] = useState(false)
 
   const handleNext = () => {
@@ -130,6 +147,16 @@ const CreateServerForm = () => {
         setFormData({
           ...formData,
           location: newValue
+        })
+    },
+  );
+  const handleOptChange = useCallback(
+    (newValue) => {
+      console.log(newValue);
+        setOpt(newValue);
+        setFormData({
+          ...formData,
+          global: newValue
         })
     },
   );
@@ -156,9 +183,9 @@ const CreateServerForm = () => {
   const handleSubmit = async () => {
     try {
       setSubmit(true)
-      const { name, cpu, disk, memory, location, software} = formData;
+      const { name, cpu, disk, memory, location, software, global} = formData;
 
-      const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu},{
+      const {data} = await axios.post(addToQueueRoute,{name,location,software,memory,disk,cpu, global},{
           headers: {
             'Authorization': `${localStorage.getItem('token')}`
           }
@@ -224,9 +251,10 @@ const CreateServerForm = () => {
           {soft.brand}
         </Box>
   
-        <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
+        <Stack direction="row" alignItems="center" color="#cbd5e1">
+          <Typography variant="h4" color="#cbd5e1">
           {soft.name || 'Free'}
-  
+          </Typography>
         
         </Stack>
       </Stack>
@@ -234,6 +262,7 @@ const CreateServerForm = () => {
   ));
 
   const renderPlans = locations.map((location) => (
+
     <Grid xs={12} md={5} key={location.uid} sx={{mt:3, ml:3}}>
       <Stack
         component={Paper}
@@ -268,14 +297,14 @@ const CreateServerForm = () => {
         <Box sx={{ width: 48, height: 48 }}>
           {location.flag === 'US' && <IconFlagUS />}
           {location.flag === 'DE' && <IconFlagDE />}
-          {location.flag === 'FL' && <IconFlagEU />}
+          {location.flag === 'FN' && <IconFlagEU />}
         </Box>
 
         <Box
           sx={{
             typography: 'subtitle2',
             mt: 2,
-            mb: 0.5,
+            mb: 0,
             textTransform: 'capitalize',
           }}
         >
@@ -284,6 +313,58 @@ const CreateServerForm = () => {
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
           {location.name || 'Free'}
+
+        
+        </Stack>
+      </Stack>
+    </Grid>
+  ));
+  const renderOpt = options.map((opt) => (
+
+    <Grid xs={12} md={5} key={opt.name} sx={{mt:3, ml:3}}>
+      <Stack
+        component={Paper}
+        variant="outlined"
+        onClick={() => handleOptChange(opt.val)}
+        name="location"
+        value={opt.name}
+        sx={{
+          p: 2.5,
+          position: 'relative',
+          cursor: 'pointer',
+          ...(opt.name && {
+            opacity: 0.48,
+            cursor: 'default',
+          }),
+          
+          ...(opt.name === currentOpt && {
+            boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
+          }),
+        }}
+      >
+        {opt.val === currentOpt && (
+          <Label
+            color="info"
+            startIcon={<Iconify icon="eva:star-fill" />}
+            sx={{ position: 'absolute', top: 8, right: 8 }}
+          >
+            Current
+          </Label>
+        )}
+                <Box
+          sx={{
+            typography: 'subtitle2',
+            mt: 2,
+            textTransform: 'capitalize',
+          }}
+        >
+          {opt.desc}
+        </Box>
+
+        <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
+          {opt.name || 'Free'}
+          
+
 
         
         </Stack>
@@ -315,6 +396,7 @@ const CreateServerForm = () => {
               <TextField
                 label="Name"
                 name="name"
+                value={formData.name}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
@@ -323,6 +405,7 @@ const CreateServerForm = () => {
                 label="Memory"
                 name="memory"
                 type="number"
+                value={formData.memory}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
@@ -331,6 +414,7 @@ const CreateServerForm = () => {
                 label="CPU"
                 type="number"
                 name="cpu"
+                value={formData.cpu}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
@@ -339,6 +423,7 @@ const CreateServerForm = () => {
                 label="Disk"
                 type="number"
                 name="disk"
+                value={formData.disk}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
@@ -357,6 +442,13 @@ const CreateServerForm = () => {
             <>
             <Grid container spacing={2} sx={{ p: 3 }}>
             {renderSoftware}
+            </Grid>
+            </>
+          )}
+          {activeStep === 3 && (
+            <>
+            <Grid container spacing={2} sx={{ p: 3 }}>
+            {renderOpt}
             </Grid>
             </>
           )}

@@ -6,7 +6,7 @@ const serversSechma = new mongoose.Schema({
         required: true,
     },
     pteroId: {
-        type: String,
+        type: Number,
         required: true,
     },
     nodeSlots: {

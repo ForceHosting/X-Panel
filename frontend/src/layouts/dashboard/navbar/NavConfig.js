@@ -23,6 +23,7 @@ const ICONS = {
   dashboard: getIcon('ic_dashboard'),
   menuItem: getIcon('ic_menu_item'),
   globe: getIcon('ic_globe'),
+  money: getIcon('ic_money'),
 };
 
 const navConfig = [
@@ -33,17 +34,25 @@ const navConfig = [
     items: [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'create server', path: PATH_DASHBOARD.server.create, icon: ICONS.server },
-      { title: 'create website', path: PATH_DASHBOARD.web.create, icon: ICONS.analytics },
-      { title: 'View Invoices', path: PATH_DASHBOARD.invoice.root, icon: ICONS.invoice },
       { title: 'Global Servers', path: PATH_DASHBOARD.server.global, icon: ICONS.globe},
-      { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking}
+      { title: 'Join For Resources', path: PATH_DASHBOARD.general.jfr, icon: ICONS.banking},
+      {
+        title: 'Coins',
+        path: PATH_DASHBOARD.coins.root,
+        icon: ICONS.money,
+        children: [
+          { title: 'Store', path: PATH_DASHBOARD.general.store },
+          { title: 'Earn', path: PATH_DASHBOARD.general.earn },
+        ],
+      },
     ],
     
   },
   {
     subheader: 'Information',
     items: [
-      { title: 'Developer Blog', path: PATH_DASHBOARD.blog.root, icon: ICONS.dashboard}
+      { title: 'Developer Blog', path: PATH_DASHBOARD.blog.root, icon: ICONS.dashboard},
+      { title: 'Control Panel', path: PATH_DASHBOARD.controlPanel, icon: ICONS.menuItem}
     ]
   }
 

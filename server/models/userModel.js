@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
+  profilePicture: {
+    type: String,
+    required: true,
+    default: 'https://cdn.discordapp.com/attachments/768247396374544425/1136389322904440904/Force_Host_-_Mascot_no_bg-removebg.png',
+  },
   lastIP: {
     type: String,
   },
@@ -44,7 +49,7 @@ const userSchema = new mongoose.Schema({
   credits: {
     type: Number,
     required: true,
-    default: 0,
+    default: 0.00,
   },
   availMem: {
     type: Number,
@@ -69,7 +74,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    default: "Customer",
+    default: "U2FsdGVkX19xWtkhpv7mz5z/v7+LGCMrA5ZEy07sZOU=",
   },
   linkId: {
     type: String,
@@ -95,6 +100,45 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
+  },
+  aboutMe: {
+    type: String,
+    required: true,
+    default: "No bio yet."
+  },
+  isRocket: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  profileCover: {
+    type: String,
+    required: true, 
+    default: "https://phoenixnap.com/kb/wp-content/uploads/2023/02/data-center-example.jpg"
+  },
+  compRole: {
+    type: String,
+    required: false,
+  },
+  company: {
+    type: String,
+    required: false,
+    default: "No registered company available"
+  },
+  isBanned: {
+    type: Boolean,
+    default: false
+  },
+  lastEarn: {
+    type: Number,
+  },
+  tempEarnRate: {
+    type: Number,
+    default: 0,
+  },
+  tempEarnRateExp: {
+    type: Number,
+    default: 0
   }
 });
 

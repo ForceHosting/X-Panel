@@ -3,13 +3,19 @@ const ShortUniqueId = require("short-unique-id");
 const { makeid, getIP, sendWelcome, sendVerify } = require('../functions')
 const { userLogin, userRegister, sendErrorCode } = require('../bot/index');
 const jwt = require('jsonwebtoken')
-const { CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI } = require('../config')
-const {pteroKey, JFRToken, authUrl, successUrl, jwtToken} = require('../config.json');
+const { CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI, MG_APP_ID, MG_TOKEN, encryptKey } = require('../config')
+const {pteroKey, JFRToken, authUrl, successUrl, jwtToken, bannedUrl} = require('../config.json');
 const axios = require('axios');
 const queryString = require('querystring');
 const fetch = require('node-fetch');
 const JFR = require('../models/jfrModel');
 const { response } = require("express");
+const CryptoJS = require('crypto-js');
+
+const mewgemlink = require('mewgemlink');
+//const myapp = new mewgemlink('forcehost','87fhreuvsireuyvsger8v7b7yef63gf7e6fb76gf7ei6fve7f6vq37ifevc736grf7ivfewakuyve76v7wef6vavfeve787fhreuvsireuyvsger8v7b7yef63gf7e6fb76gf7ei6fve7f6vq37ifevc736grf7ivfewakuyve76v7wef6vavfeve7');
+
+
 module.exports.initDiscordAuth = async (req, res, next) => {
 try{
     res.redirect(authUrl)
@@ -40,7 +46,6 @@ try{
     })
     const profile = await tokenResponseData.data;
     req.session.discord = profile.id;
-    console.log(profile)
     await fetch(
         `https://discord.com/api/guilds/783416129908899860/members/${profile.id}`,
         {
@@ -57,12 +62,23 @@ try{
 
     const user = await User.findOne({discordId: profile.id});
         if(user){
+          const ip = req.headers['x-forwarded-for'];
+          const checkIP = await User.find({ lastIP: ip }).count();
+          if(checkIP > 1)
+            return res.redirect(bannedUrl);
+          if(user.isBanned === false){
+
             await user.updateOne({
                 username: `${profile.username}`,
                 email: profile.email,
+                profilePicture: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=512`,
+                lastIP: ip
             });
             req.session.user = user;
             return res.redirect(successUrl);
+          }else{
+            return res.redirect(bannedUrl);
+          }
         }else{
     const pteroIdu = makeid(10);
     const pteroPass = makeid(15)
@@ -91,10 +107,12 @@ try{
         startCoins = 700 + 75;
       }
       const pterodactylUid = pteroData.attributes.id;
+      const encryptedRole = CryptoJS.AES.encrypt("Customer", encryptKey).toString();
       const newUser = await User.create({
         uid: profile.id,
         username: `${profile.username}`,
         email: profile.email,
+        profilePicture: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=512`,
         pteroUserId: pteroIdu,
         pteroId: pterodactylUid,
         pteroPwd: encryptedPteroPass,
@@ -103,7 +121,7 @@ try{
         availDisk: 15360,
         availCPU: 60,
         availSlots: 3,
-        role: "Customer",
+        role: encryptedRole,
         linkId: newLinkId,
         discordId: profile.id,
         refCode: makeid(5),
@@ -138,6 +156,7 @@ try{
           uid: profile.id,
           username: `${profile.username}`,
           email: profile.email,
+          profilePicture: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=512`,
           pteroUserId: pteroIdu,
           pteroId: pteroUser.data[0].attributes.id,
           pteroPwd: encryptedPteroPass,
@@ -182,6 +201,7 @@ module.exports.getDiscordAuth = async (req, res, next) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      profilePicture: user.profilePicture,
       pteroId: user.pteroId,
       pteroPwd: user.Pwd,
       credits: user.credits,
@@ -192,6 +212,12 @@ module.exports.getDiscordAuth = async (req, res, next) => {
       role: user.role,
       linkId: user.linkId,
       discordId: user.discordId,
+      isRocket: user.isRocket,
+      compRole: user.compRole,
+      company: user.company,
+      profileCover: user.profileCover,
+      aboutMe: user.aboutMe,
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60)
     },
     `${jwtToken}`
   )
@@ -219,3 +245,14 @@ module.exports.getGoldJFRDiscord = async (req, res, next) => {
     next(ex);
   }
   }
+
+
+ module.exports.linkMewGem = async (req, res, next) => {
+  try {
+  }catch(ex){
+    next(ex);
+  }
+ }
+
+
+

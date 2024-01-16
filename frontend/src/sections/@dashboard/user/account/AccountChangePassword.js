@@ -1,67 +1,72 @@
-import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
 // form
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import jwtDecode from 'jwt-decode';
 // @mui
-import { Stack, Card } from '@mui/material';
+
+import { Box, Grid, Card, Stack, Typography, OutlinedInput} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// components
-import { FormProvider, RHFTextField } from '../../../../components/hook-form';
+import {Buffer} from 'buffer';
+import axios from '../../../../utils/axios';
+import { getUserDataRoute } from '../../../../utils/APIRoutes';
 
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
-  const { enqueueSnackbar } = useSnackbar();
+  //  const { enqueueSnackbar } = useSnackbar();
+  const [user, setUserInfo] = useState([]);
+  const [pteroUser, setPteroUser] = useState(null);
+  const [pteroPwd, setPteroPass] = useState(null); 
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+      const decoded = jwtDecode(token);
+      setUserInfo(decoded)
+  }, [])
 
-  const ChangePassWordSchema = Yup.object().shape({
-    oldPassword: Yup.string().required('Old Password is required'),
-    newPassword: Yup.string().min(6, 'Password must be at least 6 characters').required('New Password is required'),
-    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
-  });
-
-  const defaultValues = {
-    oldPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
-  };
-
-  const methods = useForm({
-    resolver: yupResolver(ChangePassWordSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
-  const onSubmit = async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar('Update success!');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    (async function getUData() {
+    const userData = await axios.get(`${getUserDataRoute}`,{
+      headers: {
+        'Authorization': `${localStorage.getItem('token')}`
+      }
+    });
+    const base64ToString = Buffer.from(userData.data.pteroPwd, "base64").toString();
+    setPteroUser(userData.data.pteroUserId);
+    setPteroPass(base64ToString)    
+    console.log(`Hey, ${user.username}! Want a job?`)
+})();
+}, [user]);
 
   return (
-    <Card sx={{ p: 3 }}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={3} alignItems="flex-end">
-          <RHFTextField disabled="true" name="oldPassword" type="password" label="Soon!" />
+      <Grid container spacing={3}>
 
-          <RHFTextField disabled="true" name="newPassword" type="password" label="Soon!" />
 
-          <RHFTextField disabled="true" name="confirmNewPassword" type="password" label="Soon!" />
+        <Grid item xs={12} md={12}>
+          <Card sx={{ p: 3 }}>
+            <Box
+              sx={{
+                display: 'grid',
+                rowGap: 3,
+                columnGap: 2,
+                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+              }}
+            >
+            <Typography>Control Username</Typography>
+            <br/>
+              <OutlinedInput sx={{mt:-3}} disabled={"true"} label={"Control Username"} value={pteroUser} onClick={() => navigator.clipboard.writeText(pteroUser)}/>
+              <br/>
+              <Typography>Control Password</Typography>
+              <br/>
+              <OutlinedInput sx={{mt:-3}} disabled={"true"} label={"Control Username"} value={pteroPwd} onClick={() => navigator.clipboard.writeText(pteroPwd)}/>
+            </Box>
 
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Save Changes
-          </LoadingButton>
-        </Stack>
-      </FormProvider>
-    </Card>
+            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+
+              <LoadingButton type="submit" variant="contained" >
+                Save Changes
+              </LoadingButton>
+            </Stack>
+          </Card>
+        </Grid>
+      </Grid>
   );
 }

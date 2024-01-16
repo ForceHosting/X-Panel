@@ -5,6 +5,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
+import CryptoJS from 'crypto-js'
+import { encryptKey } from '../../../config';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -32,11 +34,13 @@ NavbarAccount.propTypes = {
 export default function NavbarAccount({ isCollapse }) {
 
   const [user, setUserInfo] = useState([]);
+  const [role, setRole] = useState();
 
   useEffect(() => {
     const token = localStorage.getItem('token')
       const decoded = jwtDecode(token);
       setUserInfo(decoded)
+      setRole(CryptoJS.AES.decrypt(decoded.role, encryptKey).toString(CryptoJS.enc.Utf8))
   }, [])
 
   return (
@@ -48,7 +52,7 @@ export default function NavbarAccount({ isCollapse }) {
           }),
         }}
       >
-        <MyAvatar name={user.username}/>
+        <MyAvatar user={user} name={user.username}/>
 
         <Box
           sx={{
@@ -67,7 +71,7 @@ export default function NavbarAccount({ isCollapse }) {
             {user?.username}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.role}
+            {role}
           </Typography>
         </Box>
       </RootStyle>

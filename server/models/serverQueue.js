@@ -5,31 +5,43 @@ const serversSechma = new mongoose.Schema({
         type: String,
         required: true,
     },
-    serverSoftware: {
-        type: String, 
-        require: true,
-    },
     serverNode: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverMemory: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverCPU: {
-        type: String,
+        type: Number,
         required: true,
     },
     serverDisk: {
+        type: Number,
+        required: true,
+    },
+    serverSoftware: {
         type: String,
         required: true,
     },
     serverOwner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
         required: true,
-    }
+    },
+    ownerDid: {
+        type: String,
+        required: true,
+    },
+    ownerPteroId: {
+        type: Number,
+        required: true
+    },
+    isGlobal: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 module.exports = mongoose.model("ServerQueue", serversSechma);

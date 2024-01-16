@@ -1,6 +1,6 @@
 // @mui
 import { useState, useEffect } from 'react';
-import { Container, Grid, Stack, Box, Divider } from '@mui/material';
+import { Container, Grid, Stack, Box, Divider, Typography } from '@mui/material';
 
 // hooks
 import jwtDecode from 'jwt-decode';
@@ -16,7 +16,7 @@ import {
 } from '../../sections/@dashboard/general/app';
 // assets
 import { SeoIllustration } from '../../assets';
-import { UserCard, SiteCard } from '../../sections/@dashboard/user/cards';
+import { UserCard, SiteCard, QueueCard } from '../../sections/@dashboard/user/cards';
 
 const serverBG = [
   "https://wallpaperaccess.com/download/minecraft-121124",
@@ -36,6 +36,7 @@ export default function GeneralApp() {
   const [userServers, setServers] = useState([])
   const [ranOnce, setRanOnce] = useState(false);
   const [userSites, setSites] = useState([]);
+  const [queueServers, setQueue] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -69,7 +70,10 @@ useEffect(() => {
                 'Authorization': `${localStorage.getItem('token')}`
               }
             });
+            console.log(data.data)
                 setServers(data.data.servers);
+                setQueue(data.data.queued)
+
                 
               })();
   }, 120000)
@@ -83,7 +87,9 @@ useEffect(() => {
                 'Authorization': `${localStorage.getItem('token')}`
               }
             });
+            console.log(data.data)
                   setServers(data.data.servers);
+                  setQueue(data.data.queued)
                       setRanOnce(true)
                     })();
                   }
@@ -105,6 +111,7 @@ useEffect(() => {
                       
       
                 })
+
 
   return (
     <Page title="Home">
@@ -158,7 +165,7 @@ useEffect(() => {
             
           
         </Box>
-        <Divider>WEBSITES</Divider>
+        <Divider>QUEUED</Divider>
 
         <Box
           sx={{
@@ -172,10 +179,11 @@ useEffect(() => {
             },
           }}
         >
-          {userSites.map((site) => (
-            <SiteCard key={user.id} server={site} background={serverBG[random]} />
+          {queueServers.map((server) => (
+            <QueueCard key={user.id} server={server} background={serverBG[random]} />
           ))}
         </Box>
+
       </Container>
     </Page>
   );

@@ -31,20 +31,28 @@ export const PATH_PAGE = {
   page403: '/403',
   page404: '/404',
   page500: '/500',
+  banned: '/banned',
   components: '/components',
 };
 
 export const PATH_DASHBOARD = {
   root: '/app',
+  controlPanel: 'https://control.forcehost.net',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    earn: path(ROOTS_DASHBOARD, '/app/earn'),
+    earn: path(ROOTS_DASHBOARD, '/coins/earn'),
+    store: path(ROOTS_DASHBOARD, '/coins/store'),
     jfr: path(ROOTS_DASHBOARD, '/join-for-resources'),
   },
   server: {
     root: path(ROOTS_DASHBOARD, '/server'),
     create: path(ROOTS_DASHBOARD, '/server/create'),
     global: path(ROOTS_DASHBOARD, '/servers/global'),
+  },
+  coins: {
+    root: path(ROOTS_DASHBOARD, '/coins'),
+    store: path(ROOTS_DASHBOARD, '/coins/store'),
+    earn: path('/coins/earn')
   },
   invoice: {
     root: path(ROOTS_DASHBOARD, '/invoice'),
@@ -68,6 +76,12 @@ export const PATH_DASHBOARD = {
     posts: path(ROOTS_DASHBOARD, '/blog/posts'),
     view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
   },
+  staff: {
+    root: path(ROOTS_DASHBOARD, '/staff'),
+    users: path(ROOTS_DASHBOARD, '/staff/users'),
+    udetails: (id) => path(ROOTS_DASHBOARD, `/staff/user/${id}`),
+
+  }
 };
 
 export const PATH_DOCS = 'https://docs-minimals.vercel.app/introduction';

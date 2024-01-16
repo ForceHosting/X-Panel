@@ -68,14 +68,26 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: '/app', element: <GeneralApp /> },
-        { path: '/earn', element: <EarnPage />},
+        { path: '/coins/earn', element: <EarnPage />},
+        { path: '/coins/store', element: <StorePage />},
         { path: '/servers/global', element: <GlobalServers />},
         { path: '/join-for-resources', element: <JFR />},
         {
           path: '/staff',
           children: [
             { element: <GeneralStaff />, index: true},
+            { element: <UserList />, path: '/staff/users' },
+            { element: <ViewUser />, path: '/staff/user/:id' },
+            { element: <ServerList />, path: '/staff/servers' },
+            { element: <ViewServer />, path: '/staff/server/:id' },
+
           ],
+        },
+        { 
+          path: '/xpanel',
+          children: [
+            { element: <DeployPanel />, index: true }
+          ]
         },
         {
           path: 'web',
@@ -88,6 +100,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/user/account" replace />, index: true },
             { path: 'account', element: <UserAccount /> },
+            { path: ':id', element: <UserProfile /> },
           ],
         },
         {
@@ -131,6 +144,7 @@ export default function Router() {
         { path: '500', element: <Page500 /> },
         { path: '404', element: <Page404 /> },
         { path: '403', element: <Page403 /> },
+        { path: 'banned', element: <PageBanned /> },
         { path: '*', element: <Navigate to="/404" replace /> },
       ],
     },
@@ -138,8 +152,17 @@ export default function Router() {
   ]);
 }
 
-const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
 
+// SAAS
+const DeployPanel = Loadable(lazy(() => import('../pages/dashboard/DeployPanel')));
+
+
+
+const GeneralStaff = Loadable(lazy(() => import('../pages/staff/General')));
+const UserList = Loadable(lazy(() => import('../pages/staff/UserList')));
+const ViewUser = Loadable(lazy(() => import('../pages/staff/ViewUser')));
+const ServerList = Loadable(lazy(() => import('../pages/staff/ServerList')))
+const ViewServer = Loadable(lazy(() => import('../pages/staff/ViewServer')));
 // AUTHENTICATION
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
@@ -157,8 +180,10 @@ const CreateWeb = Loadable(lazy(() => import('../pages/dashboard/CreateWeb')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const EarnPage = Loadable(lazy(() => import('../pages/dashboard/EarnPage')));
+const StorePage = Loadable(lazy(() => import('../pages/dashboard/StorePage')));
 const GlobalServers = Loadable(lazy(() => import('../pages/dashboard/GlobalServers')));
 const JFR = Loadable(lazy(() => import('../pages/dashboard/JFR')));
+const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
@@ -173,4 +198,5 @@ const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+const PageBanned = Loadable(lazy(() => import('../pages/PageBanned')));
 const DiscordAuth = Loadable(lazy(() => import('../pages/auth/DiscordAuth')));

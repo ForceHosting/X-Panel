@@ -62,6 +62,21 @@ const fetchUpdate = new SlashCommandBuilder()
 		.setRequired(true)
 	)
 
+	const fetchUserInfo = new SlashCommandBuilder()
+	.setName('userinfo')	
+	.setDescription('Staff command to view basic information about a user.')
+	.addUserOption((option)=> option.setName('user')
+		.setDescription('The user to fetch information about.')
+		.setRequired(true)
+	)
+
+	const fetchUser = new SlashCommandBuilder()
+	.setName('user')	
+	.setDescription('Command to view information about a user.')
+	.addUserOption((option)=> option.setName('user')
+		.setDescription('The user to fetch information about.')
+		.setRequired(true)
+	)	
 const getLicense = new SlashCommandBuilder()
 	.setName('genlicense')
 	.setDescription('Creates an X-Panel license.')
@@ -117,7 +132,7 @@ const getCredits = new SlashCommandBuilder()
 		.setRequired(true)
 	)
 const forceCommands = [
-	announceCmd, updateCmd, getLicense, webhostingCommand, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate
+	announceCmd, updateCmd, getLicense, buyRam, buyCPU, buyDisk, buySlots, getCredits, fetchUpdate, fetchUser, fetchUserInfo
 ]
 
 

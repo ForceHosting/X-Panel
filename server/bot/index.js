@@ -46,13 +46,41 @@ client.once('ready', () => {
 
 })
 
+function renewStaff(username, server){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('New Registeration')
+	.setDescription(`${username} needs to renew their server \`${server}\``)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1020508224010592306').send({embeds: [newLoginEmbed]})
+}
+function renewWarn(username, server, timestamp){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Server Alert System')
+	.setDescription(`${username}, you need to renew your server \`${server}\`.\n You have <t:${timestamp}:R> left.`)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1157876401836400691').send({content: `${username}`,embeds: [newLoginEmbed]})
+}
+function renewSuspend(username){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor('#FF0000')
+	.setTitle('Server Alert System')
+	.setDescription(`${username}, got their server suspended.`)
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1157876401836400691').send({embeds: [newLoginEmbed]})
+}
+
 function userRegister(username){
     const newLoginEmbed = new EmbedBuilder()
 	.setColor(0x0099FF)
 	.setTitle('New Registeration')
 	.setDescription(`${username} just created an account.`)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006678000345026612').send({embeds: [newLoginEmbed]})
 }
 function userLogin(username){
@@ -61,7 +89,7 @@ function userLogin(username){
 	.setTitle('New Login')
 	.setDescription(`${username} just logged in.`)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006667890604388403').send({embeds: [newLoginEmbed]})
 }
 function newWebUser(username, domain){
@@ -70,7 +98,7 @@ function newWebUser(username, domain){
 	.setTitle('New Web Hosting Account')
 	.setDescription(`${username} just created a free webhosting account. Domain: \`${domain}\``)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1012424743347040256').send({embeds: [newLoginEmbed]})
 }
 function sendErrorCode(code, message){
@@ -83,7 +111,7 @@ function sendErrorCode(code, message){
 		{ name: 'Message', value: `${message}`, inline:true},
 	)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1011324472864808980').send({embeds: [newLoginEmbed]})
 }
 function newTicketAlert(ticketid, reason){
@@ -96,7 +124,7 @@ function newTicketAlert(ticketid, reason){
 		{ name: 'Case ID', value: `${ticketid}`, inline: true },
 	)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006669155929436180').send({embeds: [newTicketEmbed]})
 }
 function addedToQueue(username, servername, servermem, servercpu, serverdisk){
@@ -111,8 +139,24 @@ function addedToQueue(username, servername, servermem, servercpu, serverdisk){
         { name: 'Disk', value: `${serverdisk}`, inline: true},
     )
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1006679200159248414').send({embeds: [newLoginEmbed]})
+}
+function createdQueuedServer(user, servername, servermem, servercpu, serverdisk, location){
+    const newLoginEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Server Created From Queue')
+	.setDescription(`The user <@${user}> just got their server created from the queue!`)
+    .addFields(
+        { name: 'Name', value: `${servername}`, inline: true},
+        { name: 'Memory', value: `${servermem}`, inline: true},
+        { name: 'CPU', value: `${servercpu}`, inline: true},
+        { name: 'Disk', value: `${serverdisk}`, inline: true},
+		{ name: 'Location', value: `${location}`, inline: true},
+    )
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
 }
 
 function createdServer(username, servername, servermem, servercpu, serverdisk, node, pteroId){
@@ -129,7 +173,7 @@ function createdServer(username, servername, servermem, servercpu, serverdisk, n
 		{ name: 'Pterodactyl ID', value: `${pteroId}`, inline: true}
     )
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
 }
 
@@ -145,7 +189,7 @@ function deletedServer(username, servermem, servercpu, serverdisk, node){
 		{ name: 'Node', value: `${node}`, inline: true},
     )
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1008535854760857601').send({embeds: [newLoginEmbed]})
 }
 
@@ -159,8 +203,22 @@ function Addedcoins(giver,accepter,coins){
 		{ name: 'Accepter', value: `<@${accepter}>`, inline: true},
 		{ name: 'Coins given', value: `${coins}`, inline: true})
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1011765385588121760').send({embeds: [newTicketEmbed]})
+}
+
+function NewEarn(user, coins, time){
+    const newTicketEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Coins added')
+	.setDescription('A user earned more coins!')
+	.addFields(
+		{ name: 'User', value: `<@${user}>`, inline: true },
+		{ name: 'Amount', value: `¢${coins}`, inline: true},
+		{ name: 'Time', value: `<t:${Math.floor(time / 1000)}:F>`, inline: true})
+	.setTimestamp()
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+    client.channels.cache.get('1099060583317377056').send({embeds: [newTicketEmbed]})
 }
 
 function createPaymentLog(subId, oId, uId){
@@ -173,7 +231,7 @@ function createPaymentLog(subId, oId, uId){
         { name: 'Order Id', value: `${oId}`, inline: true},
     )
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
     client.channels.cache.get('1008535882002878504').send({embeds: [newLoginEmbed]})
 }
 
@@ -194,13 +252,13 @@ console.log('test')
 		{ name: 'Invite', value: `${invite.code}`, inline: true},
 		{ name: 'Invite Uses', value: `${invite.uses}`, inline: true})
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 const noInviteFound = new EmbedBuilder()
 	.setColor(0x0099FF)
 	.setTitle('JFR Claimed')
 	.description(`${member.user.tag} joined but I couldn't find what invite was used. JFR claim was not processed properly.`)
 	.setTimestamp()
-	.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+	.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	inviter
 	  ? jfrLogs.send({ embeds: [jfrLogEmbed]})
 	  : jfrLogs.send({ embeds: [noInviteFound]})
@@ -222,7 +280,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`An error occured. Please contact support.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 		const userInfo = await User.findByIdAndUpdate(longId._id, {'discordId': userid});
@@ -232,7 +290,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Account Linked!')
 			.setDescription(`Your account is now linked! You can now run commands to view your resources, servers, etc.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		await interaction.editReply({ content: '', embeds: [newEmbed]})
 			}else {
 			const newEmbed = new EmbedBuilder()
@@ -240,7 +298,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`An error occured. Please contact support.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}
 	}
@@ -264,7 +322,7 @@ client.on('interactionCreate', async interaction => {
 				{ name: 'Role', value: `${userInfo.role}`, inline: true}
 			)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		await interaction.editReply({ content: '', embeds: [newEmbed]})
 			}else {
 			const newEmbed = new EmbedBuilder()
@@ -272,7 +330,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}
 		  
@@ -285,7 +343,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Servers')
 			.setDescription(`\`Force Host\` is currently in ${client.guilds.cache.size} servers.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})  
 	}
 
@@ -300,7 +358,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
@@ -342,7 +400,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
@@ -386,7 +444,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
@@ -429,7 +487,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const userCredits = parseInt(userInfo.credits);
@@ -472,7 +530,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}else{
 			const code = interaction.options.getString('code');
@@ -484,7 +542,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`That code was not found in the database. Please try again later, or contact a system administrator.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 
 			}else{
@@ -494,7 +552,7 @@ client.on('interactionCreate', async interaction => {
 					.setTitle('Error!')
 					.setDescription(`That code has already exeeded the maximum claims. Please try again later, or contact a system administrator.`)
 					.setTimestamp()
-					.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+					.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 					await interaction.editReply({ content: '', embeds: [newEmbed]})
 				}
 				const findIfUsed = await creditClaims.find({ 'claimCode': code, 'userClaimed': userInfo._id}).count();
@@ -514,7 +572,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Success!')
 			.setDescription(`You have successfully claimed the code ${code}! You now have ${addCredits} credits!`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			interaction.editReply({ content: '', embeds: [newEmbed]});
 			const purchaseEmbed = new EmbedBuilder()
 				.setTitle('Code Claimed!')
@@ -528,7 +586,7 @@ client.on('interactionCreate', async interaction => {
 					.setTitle('Error!')
 					.setDescription(`You've already claimed that code. Please try again later, or contact a system administrator.`)
 					.setTimestamp()
-					.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+					.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 					await interaction.editReply({ content: '', embeds: [newEmbed]})
 				}
 			}
@@ -546,7 +604,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}
 		const domain = interaction.options.getString('domain');
@@ -580,7 +638,7 @@ client.on('interactionCreate', async interaction => {
 			.addFields({name: 'Accont Password', value: `||${newRandomPass}||`})
 			.addFields({name: 'Dashboard', value: 'web.forcehost.net:2222'})
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed], ephemeral: true})  
 	}else{
 		newWebUser(userInfo.username, domain)
@@ -589,7 +647,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Generation Error')
 			.setDescription(`There was an error generating your account. Please contact support. Err Code: \n\n\`${data}\``)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed], ephemeral: true})  
 	}}
 	if (interaction.commandName === 'servers') {
@@ -604,13 +662,46 @@ client.on('interactionCreate', async interaction => {
 				.setTitle(title+" 📢")
 				.setDescription(`${description} \n\nHapiest Hosting,\n~ The Force Team\n*Hosting Tomorrow for The Worlds Today*`)
 				.setTimestamp()
-				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
 				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
 			client.channels.cache.get('797953387534483476').send({embeds: [newAnnouncementEmbed]})
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}else {
 			await interaction.reply({content: 'You have improper information.', ephemeral: true});
 		}
+	}
+	if(interaction.commandName === 'userinfo'){
+		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '875410970367897630');
+		if(hasAnnouncePerm === true){
+			const target = interaction.options.getUser('user');
+			const infoUser = await User.findOne({ discordId: target.id })
+			const newUserInfo = new EmbedBuilder()
+				.setTitle(`${target.username}'s Information`)
+				.addFields(
+					{ name: 'User Id', value: `${infoUser._id}`},
+					{ name: "Public Profile", value: `https://my.forcehost.net/user/${infoUser._id}`},
+					{ name: "Staff Page", value: `https://my.forcehost.net/staff/user/${infoUser._id}`},
+					{ name: "About Me", value: `${infoUser.aboutMe}`}
+				)
+				
+				.setFooter({ text: '©️ Force Host 2023', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				await interaction.reply({content:'',embeds: [newUserInfo], ephemeral: true})
+		}else {
+			await interaction.reply({content: 'You have improper information.', ephemeral: true});
+		}
+	}
+	if(interaction.commandName === 'user'){
+			const target = interaction.options.getUser('user');
+			const infoUser = await User.findOne({ discordId: target.id })
+			const newUserInfo = new EmbedBuilder()
+				.setTitle(`${target.username}'s Information`)
+				.addFields(
+					{ name: 'User Id', value: `${infoUser._id}`},
+					{ name: "Public Profile", value: `https://my.forcehost.net/user/${infoUser._id}`},
+				)
+				
+				.setFooter({ text: '©️ Force Host 2023', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				await interaction.reply({content:'',embeds: [newUserInfo], ephemeral: true})
 	}
 	if(interaction.commandName === 'update'){
 		const hasAnnouncePerm = interaction.member.roles.cache.some(r => r.id === '797952995806543902');
@@ -621,7 +712,7 @@ client.on('interactionCreate', async interaction => {
 				.setTitle(title+" ⬆️")
 				.setDescription(`${description} \n\nHapiest Hosting,\n~ The Force Team\n*Hosting Tomorrow for The Worlds Today*`)
 				.setTimestamp()
-				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
 				.setAuthor({name: interaction.user.username, iconURL: interaction.user.displayAvatarURL()})
 			client.channels.cache.get('916572067619557407').send({embeds: [newAnnouncementEmbed]})
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
@@ -654,7 +745,7 @@ client.on('interactionCreate', async interaction => {
 				)
 				.setThumbnail(lookUpPost.postImage)
 				.setTimestamp()
-				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
+				.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' })
 			client.channels.cache.get('797953387534483476').send({embeds: [newAnnouncementEmbed]})
 			await interaction.reply({content: 'Announcement sent!', ephemeral: true});
 		}
@@ -671,7 +762,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`Sorry, it seems you have two valid licenses at the moment. If you need another license key, please contact support.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 			}else{
 			const generatedLicenseKey = makeid(20)
@@ -690,7 +781,7 @@ client.on('interactionCreate', async interaction => {
 					{ name: 'License State', value: `${createLicense.licenseValid}`, inline: true},
 				)
 				.setTimestamp()
-				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+				.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 			}else{
 				const newEmbed = new EmbedBuilder()
@@ -698,7 +789,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`Something went wrong. Please try again later.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 			}}
 			
@@ -708,7 +799,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error!')
 			.setDescription(`It seems you don't have your account linked to Discord! You can link your account by running \`/acclink\`. That command will give you a special code to put into the \`Your Account\` page on the client area.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.editReply({ content: '', embeds: [newEmbed]})
 		}
 	}
@@ -731,7 +822,7 @@ client.on('interactionCreate', async interaction => {
 				.setTitle('Error')
 				.setDescription(`This user isnt linked to the panel, so you cant give them coins`)
 				.setTimestamp()
-				.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+				.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 			await interaction.Reply({ content: '', embeds: [newEmbed]})	
 			}
 			const modal = new ModalBuilder()
@@ -765,7 +856,7 @@ client.on('interactionCreate', async interaction => {
 			.setTitle('Error')
 			.setDescription(`This user isnt linked to the panel, so you cant give them coins`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 		await interaction.Reply({ content: '', embeds: [newEmbed]})
 		}
 			
@@ -802,7 +893,7 @@ client.on('guildCreate', guild => {
 			.setTitle('New Guild')
 			.setDescription(`The bot has now joined \`${guild.name}\`. Guild has \`${guild.memberCount}\` members.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	client.channels.cache.get('1041066838341189723').send({embeds: [newEmbed]})
 })
 
@@ -811,9 +902,9 @@ client.on('guildDelete', guild => {
 			.setTitle('Left Guild')
 			.setDescription(`The bot has now left \`${guild.name}\`. Guild has \`${guild.memberCount}\` members.`)
 			.setTimestamp()
-			.setFooter({ text: '©️ Force Host 2022', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
+			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	client.channels.cache.get('1041066863792246794').send({embeds: [newEmbed]})
 })
 require('./JFR')
 client.login(token);
-module.exports =  { userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, createPaymentLog };
+module.exports =  { createdQueuedServer,userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, NewEarn, createPaymentLog, renewStaff, renewSuspend, renewWarn};

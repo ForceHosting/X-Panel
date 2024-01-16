@@ -3,6 +3,7 @@ export { default as SeoIllustration } from './illustration_seo';
 export { default as UploadIllustration } from './illustration_upload';
 export { default as ForbiddenIllustration } from './illustration_403';
 export { default as SeverErrorIllustration } from './illustration_500';
+export { default as BannedIllustration } from './illustration_banned';
 export { default as BookingIllustration } from './illustration_booking';
 export { default as CheckInIllustration } from './illustration_checkin';
 export { default as PageNotFoundIllustration } from './illustration_404';

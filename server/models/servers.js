@@ -25,6 +25,10 @@ const serversSechma = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    serverRenewal: {
+        type: Number,
+        required: true,
+    },
     serverStatus: {
         type: String,
         required: true,

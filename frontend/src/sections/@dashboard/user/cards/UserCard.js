@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 // @mui
 import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography, Button } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Button, Badge } from '@mui/material';
 // utils
-import { deleteServerRoute } from '../../../../utils/APIRoutes';
+import { deleteServerRoute, renewServerRoute } from '../../../../utils/APIRoutes';
 import axios from '../../../../utils/axios';
 import cssStyles from '../../../../utils/cssStyles';
 // components
@@ -33,7 +33,7 @@ UserCard.propTypes = {
 
 
 export default function UserCard({ server, background }) {
-  const { serverName, serverMemory, serverCPU, serverDisk, serverId } = server;
+  const { serverName, serverMemory, serverCPU, serverDisk, serverId, serverRenewal, serverStatus } = server;
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -48,6 +48,20 @@ export default function UserCard({ server, background }) {
       enqueueSnackbar(getDeleteData.data.msg, {variant: 'error'});
     }else{
       enqueueSnackbar('Server deleted successfully')
+    }
+
+  }
+  const renewServer = async (event,server) => {
+    console.log(server.id)
+    const getRenewData = await axios.post(`${renewServerRoute}`,{server: server._id},
+    {headers:
+      {'Authorization': `${localStorage.getItem('token')}`
+    }}
+    );
+    if(getRenewData.data.status !== 200){
+      enqueueSnackbar(getRenewData.data.msg, {variant: 'error'});
+    }else{
+      enqueueSnackbar('Server renewed successfully')
     }
 
   }
@@ -89,7 +103,12 @@ export default function UserCard({ server, background }) {
         <Image src={background} alt={"cover"} ratio="16/9" />
         
       </Box>
-      <Typography variant="subtitle1" sx={{ mt: 6 }}>
+      {serverStatus === "Active" ? 
+        <Badge badgeContent={'Active'} color="success" sx={{mt:6}}/>
+        :
+<Badge badgeContent={'Suspended'} color="warning" sx={{mt:6}}/>
+      }
+      <Typography variant="subtitle1" sx={{ mt: 2 }}>
         {serverName}
       </Typography>
 
@@ -100,10 +119,13 @@ export default function UserCard({ server, background }) {
       <Button variant="outlined" sx={{ mt: 1}} color="error" onClick={(event) => deleteServer(event, server)}>
   Delete Server
 </Button>
+<Button variant="outlined" sx={{ ml: 1,mt:1}} color="warning" onClick={(event) => renewServer(event, server)}>
+  Renew Server
+</Button>
 
       <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />
 
-      <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <Box sx={{ py: 4, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
             Memory
@@ -123,6 +145,12 @@ export default function UserCard({ server, background }) {
             Disk
           </Typography>
           <Typography variant="subtitle1">{serverDisk}</Typography>
+        </div>
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
+            Next Renewal
+          </Typography>
+          <Typography variant="subtitle1">{new Date(serverRenewal).toLocaleDateString()}</Typography>
         </div>
       </Box>
     </Card>
