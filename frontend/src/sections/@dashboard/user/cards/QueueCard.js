@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react'
 // @mui
 import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
@@ -32,9 +33,15 @@ QueueCard.propTypes = {
 
 
 
+
 export default function QueueCard({ server, background }) {
   const { serverName, serverMemory, serverCPU, serverDisk, position, serverNode, serverStatus } = server;
+  const Dialogue = () => {
+    // Your dialogue content goes here
+    return <Typography sx={{marginTop: 2}}>Here is how the queue works. When a node does not have enough resources to create your server, your server is placed in the queue. When someone deletes a server that is on that node, it frees up resources. After this, the node will automatically create the next server in the queue. This means that in order for your server to be created, someone needs to delete their server on that node.
 
+    Not all nodes fill up at the same time! There may be another node that has enough resources to make your server.</Typography>;
+  };
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteServer = async (event,server) => {
@@ -65,6 +72,16 @@ export default function QueueCard({ server, background }) {
     }
 
   }
+
+  const [isHovered, setHovered] = useState(false);
+
+  const handleHover = () => {
+    setHovered(true);
+  };
+
+  const handleLeave = () => {
+    setHovered(false);
+  };
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -103,8 +120,16 @@ export default function QueueCard({ server, background }) {
         <Image src={background} alt={"cover"} ratio="16/9" />
         
       </Box>
-        <Badge badgeContent={'QUEUED'} color="primary" sx={{mt:6}}/>
-      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+      <div>
+      <Badge
+        badgeContent={'QUEUED'}
+        color="primary"
+        sx={{ mt: 6 }}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+      />
+      {isHovered && <Dialogue />}
+    </div>      <Typography variant="subtitle1" sx={{ mt: 2 }}>
         {serverName}
       </Typography>
       <Typography variant="caption" sx={{ mt: 2 }}>

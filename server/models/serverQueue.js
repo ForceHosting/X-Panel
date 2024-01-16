@@ -29,14 +29,19 @@ const serversSechma = new mongoose.Schema({
         type: String,
         required: true,
     },
-    serverDid: {
-        type: Number,
+    ownerDid: {
+        type: String,
         required: true,
     },
     ownerPteroId: {
         type: Number,
         required: true
-    }
+    },
+    isGlobal: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 module.exports = mongoose.model("ServerQueue", serversSechma);

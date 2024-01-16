@@ -180,6 +180,7 @@ module.exports.addToQueue = async (req, res, next) => {
       const userUid = jwtVerify._id;
   
       const { name, location, software, memory, disk, cpu, global } = req.body;
+      console.log(global)
       const user = await User.findById(userUid);
       if(location == "" || location == null){
   
@@ -225,8 +226,9 @@ module.exports.addToQueue = async (req, res, next) => {
           serverDisk: disk,
           serverSoftware: software,
           serverOwner: userUid,
-          serverDid: user.discordId,
-          ownerPteroId: userPtero
+          ownerDid: user.discordId,
+          ownerPteroId: userPtero,
+          isGlobal: global
         });
         delete user.password
         addedToQueue(user.username, name, memory, cpu, disk)
@@ -493,7 +495,7 @@ try{
         serverDisk: queueItem.serverDisk,
         serverSuspended: false,
         serverOwner: queueItem.serverOwner,
-        isGlobal: false,
+        isGlobal: queueItem.isGlobal,
         serverIP: pteroAlloc.data[0].attributes.alias+':'+pteroAlloc.data[0].attributes.port,
         serverRenewal: parseInt( Date.now() + 2.592e+9)
       });
@@ -521,7 +523,7 @@ try{
       for (let i = 0; i < queue.length; i++) {
         await processQueueItem(queue[i]);
       }
-    }, 300000);
+    }, 10000);
   };
   
   runServerQueue();

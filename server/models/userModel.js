@@ -131,6 +131,14 @@ const userSchema = new mongoose.Schema({
   },
   lastEarn: {
     type: Number,
+  },
+  tempEarnRate: {
+    type: Number,
+    default: 0,
+  },
+  tempEarnRateExp: {
+    type: Number,
+    default: 0
   }
 });
 

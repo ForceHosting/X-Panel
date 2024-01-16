@@ -58,7 +58,7 @@ export default function StorePage() {
 
   const { themeStretch } = useSettings();
   return (
-    <Page title="Earning">
+    <Page title="Store">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={8} lg={4}>
