@@ -33,6 +33,7 @@ export default function AccountGeneral() {
   const [quickBanner, setQuickBanner] = useState();
   const [refCode, setRefCode] = useState(null);
   const [refUses, setRefUses] = useState(null); 
+  const [coins, setCoins] = useState(null); 
   useEffect(() => {
     const token = localStorage.getItem('token')
       const decoded = jwtDecode(token);
@@ -50,6 +51,7 @@ export default function AccountGeneral() {
     });
     setRefCode(userData.data.refCode);
     setRefUses(userData.data.refUses);
+    setCoins(userData.data.credits)
     console.log(`Hey, ${user.username}! Want a job?`)
 })();
 }, [user]);
@@ -66,7 +68,7 @@ export default function AccountGeneral() {
     () => ({
       name: user?.username || '',
       email: user?.email || '',
-      credits: user?.credits || '0',
+      credits: coins || '0',
       avatarUrl: user?.profilePicture || '',
       aboutMe: user?.aboutMe || '',
       userUid: user?._id || '',

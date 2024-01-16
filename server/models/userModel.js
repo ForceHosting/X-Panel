@@ -74,7 +74,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    default: "U2FsdGVkX19xWtkhpv7mz5z/v7+LGCMrA5ZEy07sZOU=",
+    default: "Customer",
   },
   linkId: {
     type: String,
