@@ -43,6 +43,7 @@ import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 // https://docs-minimals.vercel.app/authentication/ts-version
 
 import { AuthProvider } from './contexts/JWTContext';
+import OverheadBanner from './OverheadBanner';
 // import { AuthProvider } from './contexts/Auth0Context';
 // import { AuthProvider } from './contexts/FirebaseContext';
 // import { AuthProvider } from './contexts/AwsCognitoContext';
@@ -57,6 +58,8 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
+  <>
+  <OverheadBanner/>
   <AuthProvider>
     <HelmetProvider>
       <ReduxProvider store={store}>
@@ -74,6 +77,7 @@ root.render(
       </ReduxProvider>
     </HelmetProvider>
   </AuthProvider>
+  </>
 );
 
 // If you want your app to work offline and load faster, you can change
