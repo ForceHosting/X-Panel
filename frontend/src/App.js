@@ -64,8 +64,10 @@ export default function App() {
   fetchCommitId();
 }, []);
 
+
+
   return (
-    
+    <>
     <MotionLazyContainer>
       
       <ThemeProvider>
@@ -117,5 +119,6 @@ export default function App() {
 
 
     </MotionLazyContainer>
+    </>
   );
 }

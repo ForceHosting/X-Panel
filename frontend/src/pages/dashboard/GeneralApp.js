@@ -1,11 +1,11 @@
 // @mui
 import { useState, useEffect } from 'react';
-import { Container, Grid, Stack, Box, Divider, Typography } from '@mui/material';
+import { Container, Grid, Stack, Box, Divider, Typography, Button, Modal, TextField } from '@mui/material';
 
 // hooks
 import jwtDecode from 'jwt-decode';
 import useSettings from '../../hooks/useSettings';
-import { getUserDataRoute, getServersRoute, getSitesRoute } from '../../utils/APIRoutes';
+import { getUserDataRoute, getServersRoute, getSitesRoute, updateServerRoute } from '../../utils/APIRoutes';
 import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
@@ -25,6 +25,21 @@ const serverBG = [
 ];
 const random = Math.floor(Math.random() * serverBG.length);
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+
 // ----------------------------------------------------------------------
 
 export default function GeneralApp() {
@@ -37,6 +52,8 @@ export default function GeneralApp() {
   const [ranOnce, setRanOnce] = useState(false);
   const [userSites, setSites] = useState([]);
   const [queueServers, setQueue] = useState([]);
+  const [formData, setFormData] = useState([]);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -113,6 +130,40 @@ useEffect(() => {
                 })
 
 
+
+                const [open, setOpen] = useState(false);
+                const handleOpen = (fData) => {
+                  setOpen(true);
+                  setFormData(fData);
+                };
+                const handleClose = () => {
+                  setOpen(false);
+                };     
+
+                const handleChange = (event) => {
+                  setFormData({
+                    ...formData,
+                    [event.target.name]: event.target.value,
+                  });
+                  console.log(formData)
+                };
+
+
+
+                const handleSubmit = async () => {
+                    setIsSubmit(true)
+                    const { sid, memory, disk, cpu} = formData;
+                    const {data} = await axios.patch(`${updateServerRoute}`,{sid,memory,disk,cpu},{
+                      headers: {
+                        'Authorization': `${localStorage.getItem('token')}`
+                      }
+                    });
+                    console.log(data)
+                    if(data.status === 400){
+                    setIsSubmit(false);
+                }
+                };
+
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'} spacing={1}>
@@ -160,7 +211,7 @@ useEffect(() => {
           }}
         >
           {userServers.map((server) => (
-            <UserCard key={user.id} server={server} background={serverBG[random]} />
+            <UserCard key={user.id} server={server} background={serverBG[random]} handleOpen={handleOpen} />
           ))}
             
           
@@ -183,7 +234,77 @@ useEffect(() => {
             <QueueCard key={user.id} server={server} background={serverBG[random]} />
           ))}
         </Box>
+        <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="parent-modal-title"
+  aria-describedby="parent-modal-description"
+>
+  <Box sx={{ ...style, width: 400 }}>
+    <h2 id="parent-modal-title">Edit Your Resources</h2>
+    <Grid item xs={12} md={12} alignItems="center" sx={{
+                display: 'grid',
+                columnGap: 2,
+                rowGap: 2,
+                mb: 2,
+                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+              }}>
 
+              <TextField
+                label="Name"
+                name="name"
+                value={formData.name}
+                disabled
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Memory"
+                name="memory"
+                type="number"
+                value={formData.memory}
+                fullWidth
+                margin="normal"
+                onChange={handleChange}
+              />
+              <TextField
+                label="CPU"
+                type="number"
+                name="cpu"
+                value={formData.cpu}
+                fullWidth
+                margin="normal"
+                onChange={handleChange}
+              />
+              <TextField
+                label="Disk"
+                type="number"
+                name="disk"
+                value={formData.disk}
+                fullWidth
+                margin="normal"
+                onChange={handleChange}
+              />
+              </Grid>
+              <Grid item xs={12} md={12} alignItems="center" sx={{
+                display: 'grid',
+                columnGap: 2,
+                rowGap: 2,
+                mb: 2,
+                gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(3, 1fr)' },
+              }}>
+                <div/>
+              <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={isSubmit === true}
+          >
+            Submit
+          </Button>
+              </Grid>
+  </Box>
+</Modal>
       </Container>
     </Page>
   );

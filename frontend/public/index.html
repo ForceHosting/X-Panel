@@ -46,10 +46,38 @@
       content="react,material,kit,application,dashboard,admin,template,free,hosting,minecraft,discord,force,host,twitter,google,forcehost"
     />
     <meta name="author" content="Force Host" />
+    <script>
+      // Replace 'YOUR_WORKER_SCRIPT_URL' with the actual URL of your Cloudflare Worker script
+      const workerScriptUrl = 'https://worker-super-snow-ec31.scarce.workers.dev/';
+
+      // Fetch the Cloudflare Worker script and execute it
+      fetch(workerScriptUrl)
+        .then((response) => response.text())
+        .then((script) => {
+          // Create a script element
+          const workerScript = (document.getElementById('bannerPlaceholder').innerHTML = script);
+
+          workerScript.onload = function () {
+            const banner = document.getElementById('bannerPlaceholder');
+            const root = document.getElementById('root');
+
+            if (banner && root) {
+              if (root.offsetHeight > banner.offsetHeight) {
+                // Adjust the top margin of the root element
+                root.style.marginTop = banner.offsetHeight + 'px';
+              } else {
+                // Ensure the top margin is reset if no content or content is smaller than the banner
+                root.style.marginTop = '0';
+              }
+            }
+          };
+        })
+        .catch((error) => console.error('Error fetching Cloudflare Worker script:', error));
+    </script>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root" style="margin-top: 100px"></div>
   </body>
 </html>

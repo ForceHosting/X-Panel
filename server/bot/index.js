@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits, EmbedBuilder, ModalBuilder, ActivityType, TextInputBuilder, TextInputStyle, ActionRowBuilder, InteractionType, Embed, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { token, directAdminAuth } = require("../config.json");
+const { token, directAdminAuth, pteroKey } = require("../config.json");
 const mongoose = require("mongoose")
 const User = require("../models/userModel");
 const Server = require("../models/servers");
@@ -8,9 +8,11 @@ const License = require('../models/licenseModel');
 const Credits = require('../models/creditCodes');
 const Posts = require('../models/blogPostModel');
 const creditClaims = require('../models/creditClaims');
+const Queue = require('../models/serverQueue');
 const { makeid, makeWebUser } = require('../functions');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const fetch = require('node-fetch');
+const world = true;
 client.once('ready', () => {
     console.log("Controller bot is online and ready to play on some servers...");
 	
@@ -264,6 +266,8 @@ const noInviteFound = new EmbedBuilder()
 	  : jfrLogs.send({ embeds: [noInviteFound]})
 
 });
+
+
 
 client.on('interactionCreate', async interaction => {
 
@@ -905,6 +909,7 @@ client.on('guildDelete', guild => {
 			.setFooter({ text: '©️ Force Host 2024', iconURL: 'https://media.discordapp.net/attachments/998356098165788672/1005994905253970050/force_png.png' });
 	client.channels.cache.get('1041066863792246794').send({embeds: [newEmbed]})
 })
+
 require('./JFR')
 client.login(token);
 module.exports =  { createdQueuedServer,userLogin, newTicketAlert, userRegister, addedToQueue, sendErrorCode, newWebUser, createdServer, deletedServer, NewEarn, createPaymentLog, renewStaff, renewSuspend, renewWarn};

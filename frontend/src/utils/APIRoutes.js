@@ -38,3 +38,4 @@ export const getServerDetails = `/api/staff/server`
 export const updateServerDetails = `/api/staff/server/update`
 
 export const purchaseResources = `/api/auth/resources`
+export const updateServerRoute = `/api/server/update`

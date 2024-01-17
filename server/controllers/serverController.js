@@ -7,6 +7,82 @@ const Node = require("../models/nodes");
 const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken')
 
+module.exports.updateServer = async (req,res,next) => {
+  try{
+    const bearerHeader = req.headers['authorization'];
+    const jwtVerify = jwt.verify(bearerHeader,jwtToken)
+    const userUid = jwtVerify._id;
+    const userData = await User.findById(userUid);
+    const { sid, memory, disk, cpu } = req.body;
+    const serverData = await Server.findById(sid);
+    const currentMem = userData.availMem + serverData.serverMemory
+    const currentDisk = userData.availDisk + serverData.serverDisk
+    const currentCpu = userData.availCPU + serverData.serverCPU
+
+    const newUserMem = currentMem - memory;
+    const newUserDisk = currentDisk - disk;
+    const newUserCPU = currentCpu - cpu;
+    if(memory < 500){
+      return res.json({ added: false, msg: "You need to have more than 499mb of memory on a server."});
+    }else if(disk < 1000){
+      return res.json({ added: false, msg: "You need to have more than 1000mb of disk space on a server."});
+    }else if(cpu < 25){
+      return res.json({ added: false, msg: "You need to have more than 24% of CPU on a server."});
+    }
+    if(newUserMem < 0){
+      return res.json({ added: false, msg: "You can't use more memory than your account has."})
+    }else if(newUserDisk < 0){
+      return res.json({ added: false, msg: "You can't use more disk space than your account has."})
+    }else if(newUserCPU < 0){
+      return res.json({ added: false, msg: "You can't use more CPU than your account has."})
+    }
+    const pteroInfoR = await fetch('https://control.forcehost.net/api/application/servers/'+serverData?.serverId, {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+    })
+    const pteroInfo = await pteroInfoR.json();
+    if(pteroInfoR.status === 200){
+      const pteroUpdateR = await fetch('https://control.forcehost.net/api/application/servers/'+serverData?.serverId+'/build', {
+      method: 'patch',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer `+pteroKey
+      },
+      body: JSON.stringify({
+        allocation: pteroInfo.attributes.allocation,
+        memory: memory,
+        swap: 0,
+        disk: disk,
+        io: 500,
+        cpu: cpu,
+        threads: null,
+        feature_limits: {
+          databases: 5,
+          allocations: 1,
+          backups: 10,
+        }
+      })
+    })
+    if(pteroUpdateR.status === 200){
+      const newServerData = await Server.findByIdAndUpdate(sid, {serverMemory: memory, serverDisk: disk, serverCPU: cpu});
+      const newUserData = await User.findByIdAndUpdate(userUid, {availMem: newUserMem, availDisk: newUserDisk, availCPU: newUserCPU});
+      return res.status(200).json({newServerData, newUserData});
+    }else{
+        return res.status(400).json({msg: 'No update'})
+    }
+    }else{
+      return res.status(400).json({msg: 'Pterodactyl err'})
+    }
+  }catch(ex){
+    next(ex);
+  }
+}
+
 
 module.exports.createServer = async (req, res, next) => {
   try {

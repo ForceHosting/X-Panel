@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
+import { useState } from 'react'
 import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
 import { Box, Card, Avatar, Divider, Typography, Button, Badge } from '@mui/material';
@@ -28,14 +29,22 @@ const OverlayStyle = styled('div')(({ theme }) => ({
 UserCard.propTypes = {
   server: PropTypes.object.isRequired,
   background: PropTypes.object.isRequired,
+  handleOpen: PropTypes.object
 };
 
 
 
-export default function UserCard({ server, background }) {
-  const { serverName, serverMemory, serverCPU, serverDisk, serverId, serverRenewal, serverStatus } = server;
+export default function UserCard({ server, background, handleOpen }) {
+  const { _id, serverName, serverMemory, serverCPU, serverDisk, serverId, serverRenewal, serverStatus } = server;
 
   const { enqueueSnackbar } = useSnackbar();
+  const [fData, setFData] = useState({
+    sid: _id,
+    name: serverName,
+    memory: serverMemory,
+    cpu: serverCPU,
+    disk: serverDisk,
+  })
 
   const deleteServer = async (event,server) => {
     console.log(server.id)
@@ -121,6 +130,9 @@ export default function UserCard({ server, background }) {
 </Button>
 <Button variant="outlined" sx={{ ml: 1,mt:1}} color="warning" onClick={(event) => renewServer(event, server)}>
   Renew Server
+</Button>
+<Button variant="outlined" sx={{ ml: 1,mt:1}} color="warning" onClick={(event) => handleOpen(fData)}>
+  Edit Server
 </Button>
 
       <Divider sx={{ borderStyle: 'dashed', mt: '10px' }} />
